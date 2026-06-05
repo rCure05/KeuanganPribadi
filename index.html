@@ -46,7 +46,13 @@
 
         button { width: 100%; padding: 14px; background-color: var(--pastel-purple); color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 5px; }
         button:active { transform: scale(0.97); }
+        
         .btn-excel { background-color: var(--pastel-yellow); color: #9A8022; }
+        
+        /* Tombol Toggle Transparan */
+        .btn-toggle { background-color: transparent; border: 2px dashed #EAEAEA; color: var(--text-sub); box-shadow: none; margin-bottom: 20px; }
+        .btn-toggle:hover { background-color: #FAFAFA; color: var(--text-main); }
+        .btn-toggle:active { transform: none; }
 
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed #EAEAEA; }
         .list-item:last-child { border-bottom: none; }
@@ -55,20 +61,10 @@
         .l-title { font-size: 14px; font-weight: 600; }
         .l-date { font-size: 11px; color: var(--text-sub); }
         
-        /* CSS Baru untuk area Nominal dan Tombol Hapus */
         .l-right { display: flex; align-items: center; gap: 12px; }
         .l-amount { font-size: 14px; font-weight: 700; }
         .btn-hapus { 
-            background: none; 
-            border: none; 
-            padding: 5px; 
-            font-size: 16px; 
-            cursor: pointer; 
-            width: auto;
-            margin: 0;
-            box-shadow: none;
-            opacity: 0.5;
-            transition: opacity 0.2s;
+            background: none; border: none; padding: 5px; font-size: 16px; cursor: pointer; width: auto; margin: 0; box-shadow: none; opacity: 0.5; transition: opacity 0.2s;
         }
         .btn-hapus:hover { opacity: 1; }
     </style>
@@ -77,7 +73,7 @@
 
 <div class="container">
     <div class="header">
-        <h1>✨ RekapKur</h1>
+        <h1>✨ RekapKu</h1>
         <div id="db-status" class="status-badge">Memeriksa Database...</div>
     </div>
 
@@ -123,7 +119,9 @@
         </form>
     </div>
 
-    <div class="card">
+    <button id="btn-toggle-excel" class="btn-toggle">📂 Tampilkan Menu Unduh Excel</button>
+
+    <div class="card" id="card-excel" style="display: none;">
         <div class="card-header">Unduh Rekap Excel</div>
         <div class="row">
             <div class="form-group">
@@ -147,26 +145,23 @@
 </div>
 
 <script>
-    // 1. SETUP KONEKSI LANGSUNG
+    // 1. SETUP KONEKSI
     const supabaseUrl = 'https://jgjixdbnbzfpnvooczew.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
     const supa = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Default Tanggal Hari Ini (WIB)
     const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
     document.getElementById('f-tgl').value = today;
 
-    // Format Uang
     const rp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
 
-    // Tampilan Warna
     const getUI = (j) => {
         if(j === 'Pemasukan') return { i:'💰', bg:'rgba(87,166,115,0.2)', c:'#57A673', s:'+' };
         if(j === 'Pengeluaran') return { i:'💸', bg:'rgba(224,108,108,0.2)', c:'#E06C6C', s:'-' };
         return { i:'🏦', bg:'rgba(91,139,227,0.2)', c:'#5B8BE3', s:'+' };
     };
 
-    // 2. FUNGSI LOAD DATA SEKALIGUS CEK KONEKSI
+    // 2. LOAD DATA
     async function loadData() {
         const statusEl = document.getElementById('db-status');
         const listEl = document.getElementById('list-data');
@@ -198,7 +193,6 @@
                     let ui = getUI(x.jenis);
                     let dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
 
-                    // Fitur hapus memanggil onClick="hapusData(id)"
                     listEl.innerHTML += `
                         <div class="list-item">
                             <div class="l-left">
@@ -226,7 +220,7 @@
         }
     }
 
-    // 3. FUNGSI SIMPAN
+    // 3. SIMPAN DATA
     document.getElementById('app-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         let btn = document.getElementById('btn-save');
@@ -250,24 +244,35 @@
         btn.innerText = 'Simpan Transaksi 🚀'; btn.disabled = false;
     });
 
-    // 4. FUNGSI HAPUS (BARU)
+    // 4. HAPUS DATA (Sandi: 050901)
     async function hapusData(id) {
-        // Konfirmasi agar tidak terhapus jika tidak sengaja kepencet
-        const yakin = confirm("Apakah Anda yakin ingin menghapus data ini?");
-        if (!yakin) return;
+        const sandi = prompt("Masukkan sandi untuk menghapus transaksi ini:");
+        if (sandi === null) return;
 
-        // Proses menghapus data berdasarkan ID
-        const { error } = await supa.from('transaksi').delete().eq('id', id);
-
-        if (error) {
-            alert("Gagal menghapus data: " + error.message);
-        } else {
-            // Muat ulang data setelah berhasil dihapus
-            await loadData();
+        if (sandi !== "050901") {
+            alert("Sandi salah! Gagal menghapus transaksi.");
+            return;
         }
+
+        const { error } = await supa.from('transaksi').delete().eq('id', id);
+        if (error) alert("Gagal menghapus data: " + error.message);
+        else await loadData();
     }
 
-    // 5. FUNGSI EXCEL
+    // 5. FITUR TOGGLE TAMPILKAN/SEMBUNYIKAN EXCEL
+    document.getElementById('btn-toggle-excel').addEventListener('click', function() {
+        const cardExcel = document.getElementById('card-excel');
+        
+        if (cardExcel.style.display === 'none') {
+            cardExcel.style.display = 'block';
+            this.innerText = '📂 Sembunyikan Menu Unduh Excel';
+        } else {
+            cardExcel.style.display = 'none';
+            this.innerText = '📂 Tampilkan Menu Unduh Excel';
+        }
+    });
+
+    // 6. EXPORT EXCEL
     document.getElementById('btn-excel').addEventListener('click', async () => {
         const s = document.getElementById('ex-start').value;
         const e = document.getElementById('ex-end').value;
