@@ -3,338 +3,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pencatat Keuangan Pribadi</title>
+    <title>Rekap Financial Pastel</title>
     
-    <meta name="theme-color" content="#F2F2F7">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        * { -webkit-tap-highlight-color: transparent; }
-
-        @keyframes popIn {
-            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-            60% { opacity: 1; transform: translateY(-3px) scale(1.02); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script> <style>
+        /* --- TEMA PASTEL & MODERN --- */
+        :root {
+            --bg-color: #FDF9F1; 
+            --card-bg: #FFFFFF;
+            --text-main: #4A4A4A; 
+            --text-sub: #A0A0A0;
+            --pastel-green: #A8D5BA;
+            --pastel-red: #F2A6A6;
+            --pastel-blue: #AECBFA;
+            --pastel-purple: #BDB2FF; 
+            --pastel-yellow: #FBE7A1; /* Warna tombol baru untuk excel */
         }
 
-        .animate-pop { opacity: 0; animation: popIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-400 { animation-delay: 0.4s; }
-        .delay-500 { animation-delay: 0.5s; }
-        .smooth-transition { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        /* --- KARTU (CARDS) --- */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 24px; 
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .summary-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .summary-box {
+            background: #FAFAFA;
+            padding: 16px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .summary-title {
+            font-size: 13px;
+            color: var(--text-sub);
+            font-weight: 500;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-amount {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .text-green { color: var(--pastel-green); }
+        .text-red { color: var(--pastel-red); }
+        .text-blue { color: var(--pastel-blue); }
+
+        /* --- FORM INPUT --- */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #F0F0F0;
+            border-radius: 16px; 
+            font-size: 15px;
+            background-color: #F9F9F9;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--pastel-purple);
+            background-color: #FFF;
+            box-shadow: 0 0 0 4px rgba(189, 178, 255, 0.15);
+        }
+
+        /* --- TOMBOL ICONIC --- */
+        button {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--pastel-purple);
+            color: white;
+            border: none;
+            border-radius: 50px; 
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 15px rgba(189, 178, 255, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.97); 
+            box-shadow: 0 2px 8px rgba(189, 178, 255, 0.4);
+        }
+
+        .btn-excel {
+            background-color: var(--pastel-yellow);
+            color: #B59B3C;
+            box-shadow: 0 6px 15px rgba(251, 231, 161, 0.5);
+        }
+
+        /* --- LIST TRANSAKSI --- */
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px dashed #EAEAEA;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .t-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .t-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .icon-masuk { background-color: rgba(168, 213, 186, 0.2); }
+        .icon-keluar { background-color: rgba(242, 166, 166, 0.2); }
+        .icon-tabung { background-color: rgba(174, 203, 250, 0.2); }
+
+        .t-info p {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .t-date {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .t-amount {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .card-header {
+            font-size: 18px; 
+            font-weight: 700; 
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
     </style>
 </head>
-<body class="bg-[#F2F2F7] text-[#1C1C1E] min-h-screen flex justify-center sm:py-10">
+<body>
 
-    <div class="w-full max-w-md p-5 space-y-5">
-        
-        <div class="text-center pt-2 sm:pt-0 animate-pop">
-            <h1 class="text-2xl font-bold tracking-tight">Keuangan Pribadi</h1>
-            <p class="text-sm text-gray-500 mt-1" id="statusKoneksi">Menghubungkan ke server...</p>
-        </div>
-
-        <div class="bg-[#334155] text-white rounded-[24px] p-6 shadow-lg animate-pop delay-100 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
-            
-            <p class="text-sm text-gray-300 mb-1 font-medium">Total Saldo Aktif</p>
-            <h2 id="teksSaldo" class="text-3xl font-bold mb-5 tracking-tight">Rp 0</h2>
-            
-            <div class="flex justify-between text-sm border-t border-white/20 pt-4">
-                <div>
-                    <p class="text-gray-300 text-xs mb-1">Pemasukan</p>
-                    <p id="teksTotalPemasukan" class="text-[#A7C957] font-bold">+ Rp 0</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-gray-300 text-xs mb-1">Pengeluaran</p>
-                    <p id="teksTotalPengeluaran" class="text-[#E07A5F] font-bold">- Rp 0</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-[20px] p-5 shadow-sm animate-pop delay-200">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-semibold text-lg tracking-tight">Tabungan</h3>
-                <button class="text-sm text-[#81B29A] font-semibold hover:text-green-700 transition active:scale-95 bg-green-50 px-3 py-1 rounded-full">+ Target</button>
-            </div>
-            <div>
-                <div class="flex justify-between items-end mb-2">
-                    <div>
-                        <h4 class="text-[15px] font-semibold text-[#1C1C1E]">Dana Darurat</h4>
-                        <p class="text-xs text-gray-500 mt-1">Terkumpul: Rp 2.000.000</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Target 10Jt</p>
-                        <p class="text-sm text-[#81B29A] font-bold">20%</p>
-                    </div>
-                </div>
-                <div class="w-full bg-[#F2F2F7] rounded-full h-2.5 mb-4 overflow-hidden">
-                    <div id="progressBar" class="bg-[#81B29A] h-2.5 rounded-full w-0 smooth-transition" style="transition-duration: 1.5s;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-[20px] p-5 shadow-sm animate-pop delay-300">
-            <h3 class="font-semibold text-lg tracking-tight text-center mb-3">Arus Kas</h3>
-            <div class="relative w-full h-44 flex justify-center">
-                <canvas id="financeChart"></canvas>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-[20px] p-5 shadow-sm animate-pop delay-400">
-            <h3 class="font-semibold text-lg tracking-tight mb-4">Transaksi Baru</h3>
-            <form id="formTransaksi" class="space-y-4">
-                
-                <div class="flex bg-[#F2F2F7] p-1 rounded-xl relative">
-                    <input type="hidden" id="inputTipe" value="pengeluaran">
-                    
-                    <button type="button" id="btnPengeluaran" onclick="setTipe('pengeluaran')" 
-                        class="w-1/2 py-2 text-sm font-semibold rounded-lg smooth-transition bg-white text-[#E07A5F] shadow-sm transform scale-100">
-                        Pengeluaran
-                    </button>
-                    <button type="button" id="btnPemasukan" onclick="setTipe('pemasukan')" 
-                        class="w-1/2 py-2 text-sm font-semibold rounded-lg smooth-transition text-gray-500 bg-transparent transform scale-95">
-                        Pemasukan
-                    </button>
-                </div>
-
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-400 font-medium">Rp</span>
-                    <input type="number" id="inputNominal" placeholder="0" inputmode="numeric" required class="w-full bg-[#F2F2F7] rounded-xl p-3.5 pl-11 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-[#334155]/20 smooth-transition">
-                </div>
-
-                <div class="flex gap-3">
-                    <input type="text" id="inputKategori" placeholder="Kategori" required class="w-1/2 bg-[#F2F2F7] rounded-xl p-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#334155]/20 smooth-transition">
-                    <input type="date" id="inputTanggal" required class="w-1/2 bg-[#F2F2F7] rounded-xl p-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#334155]/20 smooth-transition">
-                </div>
-                
-                <input type="text" id="inputCatatan" placeholder="Catatan Singkat (Opsional)" class="w-full bg-[#F2F2F7] rounded-xl p-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#334155]/20 smooth-transition">
-                
-                <button type="button" onclick="simpanTransaksi()" id="btnSimpan" class="w-full bg-[#334155] text-white font-semibold rounded-xl p-4 mt-2 transition-transform active:scale-[0.96] shadow-md">
-                    Tambah Transaksi
-                </button>
-            </form>
-        </div>
-
-        <div class="pb-10 animate-pop delay-500">
-            <div class="flex justify-between items-center mb-3 px-1">
-                <h3 class="font-semibold text-lg tracking-tight">Semua Riwayat</h3>
-            </div>
-            
-            <div id="containerRiwayat" class="bg-white rounded-[20px] overflow-hidden shadow-sm">
-                <div class="p-4 text-center text-sm text-gray-500">Memuat data...</div>
-            </div>
-        </div>
-
+<div class="container">
+    <div class="header">
+        <h1>✨ RekapKu</h1>
     </div>
 
-    <script>
-        // ==========================================
-        // 1. KONFIGURASI SUPABASE (UBAH BAGIAN INI)
-        // ==========================================
-        const SUPABASE_URL = 'https://jgjixdbnbzfpnvooczew.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
+    <div class="card">
+        <div class="summary-container">
+            <div class="summary-box">
+                <p class="summary-title">Pemasukan</p>
+                <p class="summary-amount text-green" id="tot-pemasukan">Rp 0</p>
+            </div>
+            <div class="summary-box">
+                <p class="summary-title">Pengeluaran</p>
+                <p class="summary-amount text-red" id="tot-pengeluaran">Rp 0</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-header">Catat Transaksi</h2>
+        <form id="form-transaksi">
+            <div class="form-group">
+                <label>Jenis Transaksi</label>
+                <select id="jenis" required>
+                    <option value="Pemasukan">Pemasukan 💰</option>
+                    <option value="Pengeluaran">Pengeluaran 💸</option>
+                    <option value="Tabungan">Tabungan 🏦</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Kategori / Keterangan</label>
+                <input type="text" id="kategori" placeholder="Cth: Gaji, Kopi, Nonton" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>Nominal (Rp)</label>
+                <input type="number" id="nominal" placeholder="0" required>
+            </div>
+            <div class="form-group">
+                <label>Tanggal Transaksi</label>
+                <input type="date" id="tanggal-input" required>
+            </div>
+            <button type="submit" id="btn-simpan">Simpan Data 🚀</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2 class="card-header">Unduh Rekap Excel 📊</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Dari Tanggal</label>
+                <input type="date" id="export-start" required>
+            </div>
+            <div class="form-group">
+                <label>Sampai Tanggal</label>
+                <input type="date" id="export-end" required>
+            </div>
+        </div>
+        <button id="btn-export" class="btn-excel">Unduh Excel</button>
+    </div>
+
+    <div class="card">
+        <h2 class="card-header">Riwayat Terbaru</h2>
+        <div id="list-transaksi">
+            <p style="color: #A0A0A0; font-size: 14px; text-align: center; padding: 20px 0;">Memuat data mutasi...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 1. KONEKSI SUPABASE ---
+    const supabaseUrl = 'https://fbetpczzpwbutmgxmqqy.supabase.co'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZiZXRwY3p6cHdidXRtZ3htcXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMjc4OTgsImV4cCI6MjA5NTcwMzg5OH0.4X5va5WwRTPN-HkWD4uHWBzR680NrTTNKCy4PwjNKak';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Set Default Tanggal Input ke Hari Ini (WIB)
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }); // Format YYYY-MM-DD sesuai zona waktu Jakarta
+    document.getElementById('tanggal-input').value = today;
+
+    // Format Rupiah
+    const formatRp = (angka) => {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+    };
+
+    // Fungsi Mendapatkan Emoji & Class Warna
+    const getStyleData = (jenis) => {
+        if(jenis === 'Pemasukan') return { icon: '💰', bgClass: 'icon-masuk', textClass: 'text-green', sign: '+' };
+        if(jenis === 'Pengeluaran') return { icon: '💸', bgClass: 'icon-keluar', textClass: 'text-red', sign: '-' };
+        return { icon: '🏦', bgClass: 'icon-tabung', textClass: 'text-blue', sign: '+' };
+    };
+
+    // --- 2. FUNGSI MENGAMBIL DATA UNTUK TAMPILAN ---
+    async function loadData() {
+        const listEl = document.getElementById('list-transaksi');
         
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data, error } = await supabase
+            .from('transaksi')
+            .select('*')
+            .order('tanggal', { ascending: false }) // Urutkan dari tanggal terbaru
+            .order('created_at', { ascending: false });
 
-        let myChart = null; // Menyimpan instance chart
-
-        // Format Rupiah
-        const formatRupiah = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-
-        // ==========================================
-        // 2. FUNGSI MENGAMBIL DATA DARI SUPABASE
-        // ==========================================
-        async function muatData() {
-            document.getElementById('statusKoneksi').innerText = 'Sinkronisasi data...';
-
-            // Ambil semua data dari tabel 'transactions', urutkan dari yang terbaru
-            const { data, error } = await supabase
-                .from('transactions')
-                .select('*')
-                .order('tanggal', { ascending: false });
-
-            if (error) {
-                console.error(error);
-                document.getElementById('statusKoneksi').innerText = 'Gagal terhubung ke server ❌';
-                return;
-            }
-
-            document.getElementById('statusKoneksi').innerText = 'Data tersinkronisasi ✅';
-            
-            renderDataUI(data);
+        if (error) {
+            listEl.innerHTML = '<p style="color: var(--pastel-red); text-align:center;">Gagal memuat data!</p>';
+            return;
         }
 
-        // ==========================================
-        // 3. FUNGSI MENYIMPAN KE SUPABASE
-        // ==========================================
-        async function simpanTransaksi() {
-            const tipe = document.getElementById('inputTipe').value;
-            const nominal = document.getElementById('inputNominal').value;
-            const kategori = document.getElementById('inputKategori').value;
-            const tanggal = document.getElementById('inputTanggal').value;
-            const catatan = document.getElementById('inputCatatan').value;
-            const btnSimpan = document.getElementById('btnSimpan');
+        listEl.innerHTML = ''; 
+        let totMasuk = 0;
+        let totKeluar = 0;
 
-            if(!nominal || !kategori || !tanggal) {
-                alert("Harap isi Nominal, Kategori, dan Tanggal!");
-                return;
-            }
-
-            btnSimpan.innerText = "Menyimpan...";
-            btnSimpan.disabled = true;
-
-            // Simpan ke database
-            const { data, error } = await supabase
-                .from('transactions')
-                .insert([
-                    { tipe: tipe, nominal: parseFloat(nominal), kategori: kategori, tanggal: tanggal, catatan: catatan }
-                ]);
-
-            if (error) {
-                alert("Gagal menyimpan data!");
-                console.error(error);
-            } else {
-                // Reset form
-                document.getElementById('inputNominal').value = '';
-                document.getElementById('inputKategori').value = '';
-                document.getElementById('inputCatatan').value = '';
+        if (data.length === 0) {
+            listEl.innerHTML = '<p style="color: var(--text-sub); font-size: 14px; text-align: center; padding: 20px 0;">Belum ada catatan 📭</p>';
+        } else {
+            data.forEach(item => {
+                let style = getStyleData(item.jenis);
                 
-                // Muat ulang data
-                muatData();
-            }
+                if(item.jenis === 'Pemasukan') totMasuk += Number(item.nominal);
+                if(item.jenis === 'Pengeluaran') totKeluar += Number(item.nominal);
 
-            btnSimpan.innerText = "Tambah Transaksi";
-            btnSimpan.disabled = false;
-        }
+                // Format Tanggal untuk Tampilan
+                const displayDate = new Date(item.tanggal).toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                });
 
-        // ==========================================
-        // 4. MENGUBAH TAMPILAN BERDASARKAN DATA (UI)
-        // ==========================================
-        function renderDataUI(transaksiData) {
-            let totalMasuk = 0;
-            let totalKeluar = 0;
-            const container = document.getElementById('containerRiwayat');
-            container.innerHTML = ''; // Bersihkan kontainer
-
-            if(transaksiData.length === 0) {
-                container.innerHTML = '<div class="p-4 text-center text-sm text-gray-500">Belum ada transaksi</div>';
-            }
-
-            transaksiData.forEach((trx) => {
-                // Hitung Saldo
-                if(trx.tipe === 'pemasukan') totalMasuk += parseFloat(trx.nominal);
-                else totalKeluar += parseFloat(trx.nominal);
-
-                // Buat Elemen Daftar (List) Khas iOS
-                const isMasuk = trx.tipe === 'pemasukan';
-                const warnaTeks = isMasuk ? 'text-[#A7C957]' : 'text-[#E07A5F]';
-                const simbol = isMasuk ? '+' : '-';
-                const ikonBg = isMasuk ? 'bg-green-50' : 'bg-red-50';
-                const emoji = isMasuk ? '💰' : '💸';
-
-                const htmlItem = `
-                <div class="flex justify-between items-center p-4 border-b border-gray-50 active:bg-gray-50 smooth-transition">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full ${ikonBg} flex items-center justify-center text-xl">${emoji}</div>
-                        <div>
-                            <p class="text-[15px] font-semibold text-[#1C1C1E] capitalize">${trx.kategori}</p>
-                            <p class="text-[13px] text-gray-400 mt-0.5">${trx.tanggal} ${trx.catatan ? '• '+trx.catatan : ''}</p>
+                let div = document.createElement('div');
+                div.className = 'transaction-item';
+                div.innerHTML = `
+                    <div class="t-left">
+                        <div class="t-icon ${style.bgClass}">${style.icon}</div>
+                        <div class="t-info">
+                            <p>${item.kategori}</p>
+                            <p class="t-date">${displayDate} • ${item.jenis}</p>
                         </div>
                     </div>
-                    <p class="text-[15px] font-bold ${warnaTeks}">${simbol} ${formatRupiah(trx.nominal)}</p>
-                </div>
+                    <div class="t-amount ${style.textClass}">
+                        ${style.sign} ${formatRp(item.nominal)}
+                    </div>
                 `;
-                container.innerHTML += htmlItem;
-            });
-
-            // Update Teks Ringkasan
-            document.getElementById('teksSaldo').innerText = formatRupiah(totalMasuk - totalKeluar);
-            document.getElementById('teksTotalPemasukan').innerText = '+ ' + formatRupiah(totalMasuk);
-            document.getElementById('teksTotalPengeluaran').innerText = '- ' + formatRupiah(totalKeluar);
-
-            // Update Grafik (Chart)
-            renderChart(totalMasuk, totalKeluar);
-        }
-
-        // ==========================================
-        // 5. RENDER GRAFIK CHART.JS
-        // ==========================================
-        function renderChart(pemasukan, pengeluaran) {
-            const ctx = document.getElementById('financeChart').getContext('2d');
-            
-            // Hancurkan chart lama jika ada agar tidak menumpuk
-            if(myChart !== null) myChart.destroy();
-
-            // Cegah error jika data kosong (0)
-            const dataToRender = (pemasukan === 0 && pengeluaran === 0) ? [1, 1] : [pemasukan, pengeluaran];
-            const warnaBackground = (pemasukan === 0 && pengeluaran === 0) ? ['#E5E7EB', '#E5E7EB'] : ['#A7C957', '#E07A5F'];
-
-            Chart.defaults.animation.easing = 'easeOutBounce';
-            myChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Pemasukan', 'Pengeluaran'],
-                    datasets: [{
-                        data: dataToRender,
-                        backgroundColor: warnaBackground,
-                        borderWidth: 4, borderColor: '#FFFFFF', hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false, cutout: '75%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(28, 28, 30, 0.8)', padding: 12, cornerRadius: 10,
-                            callbacks: {
-                                label: function(context) {
-                                    if(pemasukan === 0 && pengeluaran === 0) return " Belum ada data";
-                                    return ' ' + formatRupiah(context.raw);
-                                }
-                            }
-                        }
-                    }
-                }
+                listEl.appendChild(div);
             });
         }
 
-        // ==========================================
-        // 6. UI LOGIC TAMBAHAN (Warna Tombol, dll)
-        // ==========================================
-        function setTipe(tipe) {
-            const btnPengeluaran = document.getElementById('btnPengeluaran');
-            const btnPemasukan = document.getElementById('btnPemasukan');
-            document.getElementById('inputTipe').value = tipe;
+        // Update Saldo
+        document.getElementById('tot-pemasukan').innerText = formatRp(totMasuk);
+        document.getElementById('tot-pengeluaran').innerText = formatRp(totKeluar);
+    }
 
-            if (tipe === 'pengeluaran') {
-                btnPengeluaran.className = "w-1/2 py-2 text-sm font-semibold rounded-lg smooth-transition bg-white text-[#E07A5F] shadow-sm transform scale-100";
-                btnPemasukan.className = "w-1/2 py-2 text-sm font-semibold rounded-lg smooth-transition text-gray-500 bg-transparent transform scale-95 hover:text-gray-700";
-            } else {
-                btnPemasukan.className = "w-1/2 py-2 text-sm font-semibold rounded-lg smooth-transition bg-white text-[#A7C957] shadow-sm transform scale-100";
-                btnPengeluaran.className = "w-1/2 py-2 text-sm font-semibold rounded-lg smooth-transition text-gray-500 bg-transparent transform scale-95 hover:text-gray-700";
-            }
+    // --- 3. FUNGSI MENYIMPAN DATA ---
+    document.getElementById('form-transaksi').addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        
+        const btn = document.getElementById('btn-simpan');
+        btn.innerText = 'Menyimpan... ⏳';
+        btn.disabled = true;
+
+        const jenis = document.getElementById('jenis').value;
+        const kategori = document.getElementById('kategori').value;
+        const nominal = document.getElementById('nominal').value;
+        const tanggal = document.getElementById('tanggal-input').value; // Mengambil tanggal inputan
+
+        const { error } = await supabase
+            .from('transaksi')
+            .insert([{ jenis, kategori, nominal, tanggal }]);
+
+        if (error) {
+            alert('Gagal menyimpan data!');
+        } else {
+            document.getElementById('kategori').value = '';
+            document.getElementById('nominal').value = '';
+            await loadData();
         }
 
-        // Dijalankan saat halaman pertama kali dibuka
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set input tanggal ke hari ini secara default
-            document.getElementById('inputTanggal').valueAsDate = new Date();
-            
-            // Animasi Progress Bar Tabungan
-            setTimeout(() => { document.getElementById('progressBar').style.width = '20%'; }, 300);
+        btn.innerText = 'Simpan Data 🚀';
+        btn.disabled = false;
+    });
 
-            // MULAI TARIK DATA DARI SUPABASE!
-            muatData();
+    // --- 4. FUNGSI EXPORT EXCEL (REALTIME WIB) ---
+    document.getElementById('btn-export').addEventListener('click', async () => {
+        const start = document.getElementById('export-start').value;
+        const end = document.getElementById('export-end').value;
+
+        if(!start || !end) {
+            alert('Mohon pilih tanggal awal dan tanggal akhir terlebih dahulu!');
+            return;
+        }
+
+        const btn = document.getElementById('btn-export');
+        btn.innerText = 'Memproses... ⏳';
+
+        // Mengambil data dari Supabase berdasarkan range tanggal (>= start DAN <= end)
+        const { data, error } = await supabase
+            .from('transaksi')
+            .select('*')
+            .gte('tanggal', start)
+            .lte('tanggal', end)
+            .order('tanggal', { ascending: true }); // Diurutkan dari tanggal terlama ke terbaru untuk laporan
+
+        if (error) {
+            alert('Gagal menarik data untuk excel!');
+            btn.innerText = 'Unduh Excel';
+            return;
+        }
+
+        if(data.length === 0) {
+            alert('Tidak ada transaksi pada rentang tanggal tersebut.');
+            btn.innerText = 'Unduh Excel';
+            return;
+        }
+
+        // Format Data untuk Excel dengan Zona Waktu WIB
+        const excelData = data.map((item, index) => {
+            // Mengubah format waktu sistem (created_at) ke WIB (Waktu Indonesia Barat)
+            const wibSystemTime = new Intl.DateTimeFormat('id-ID', {
+                timeZone: 'Asia/Jakarta',
+                dateStyle: 'medium',
+                timeStyle: 'medium'
+            }).format(new Date(item.created_at));
+
+            // Menambahkan prefix + atau - pada nominal
+            let nominalPrefix = item.jenis === 'Pengeluaran' ? -Math.abs(item.nominal) : Math.abs(item.nominal);
+
+            return {
+                "No": index + 1,
+                "Tanggal Transaksi": item.tanggal,
+                "Jenis": item.jenis,
+                "Kategori/Keterangan": item.kategori,
+                "Nominal (Rp)": nominalPrefix,
+                "Waktu Tersimpan (WIB)": wibSystemTime
+            };
         });
-    </script>
+
+        // Proses Pembuatan File Excel menggunakan SheetJS
+        const ws = XLSX.utils.json_to_sheet(excelData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Rekap_Keuangan");
+
+        // Mengunduh file
+        XLSX.writeFile(wb, `Rekap_${start}_sampai_${end}.xlsx`);
+
+        btn.innerText = 'Unduh Excel';
+    });
+
+    // Jalankan saat pertama dibuka
+    loadData();
+</script>
+
 </body>
 </html>
