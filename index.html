@@ -7,7 +7,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script> <style>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <style>
         /* --- TEMA PASTEL & MODERN --- */
         :root {
             --bg-color: #FDF9F1; 
@@ -18,7 +20,7 @@
             --pastel-red: #F2A6A6;
             --pastel-blue: #AECBFA;
             --pastel-purple: #BDB2FF; 
-            --pastel-yellow: #FBE7A1; /* Warna tombol baru untuk excel */
+            --pastel-yellow: #FBE7A1; 
         }
 
         * {
@@ -65,36 +67,38 @@
             border: 1px solid rgba(0,0,0,0.02);
         }
 
+        /* Tampilan Grid Ringkasan Menjadi 3 Kolom */
         .summary-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
         }
 
         .summary-box {
             background: #FAFAFA;
-            padding: 16px;
+            padding: 12px 8px;
             border-radius: 20px;
             text-align: center;
         }
 
         .summary-title {
-            font-size: 13px;
+            font-size: 11px;
             color: var(--text-sub);
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .summary-amount {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 700;
+            word-break: break-all;
         }
 
-        .text-green { color: var(--pastel-green); }
-        .text-red { color: var(--pastel-red); }
-        .text-blue { color: var(--pastel-blue); }
+        .text-green { color: #57A673; }
+        .text-red { color: #E06C6C; }
+        .text-blue { color: #5B8BE3; }
 
         /* --- FORM INPUT --- */
         .form-group {
@@ -194,9 +198,9 @@
             font-size: 18px;
         }
 
-        .icon-masuk { background-color: rgba(168, 213, 186, 0.2); }
-        .icon-keluar { background-color: rgba(242, 166, 166, 0.2); }
-        .icon-tabung { background-color: rgba(174, 203, 250, 0.2); }
+        .icon-masuk { background-color: rgba(168, 213, 186, 0.3); }
+        .icon-keluar { background-color: rgba(242, 166, 166, 0.3); }
+        .icon-tabung { background-color: rgba(174, 203, 250, 0.3); }
 
         .t-info p {
             font-size: 15px;
@@ -212,7 +216,7 @@
 
         .t-amount {
             font-weight: 700;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .card-header {
@@ -233,12 +237,16 @@
     <div class="card">
         <div class="summary-container">
             <div class="summary-box">
-                <p class="summary-title">Pemasukan</p>
+                <p class="summary-title">Masuk</p>
                 <p class="summary-amount text-green" id="tot-pemasukan">Rp 0</p>
             </div>
             <div class="summary-box">
-                <p class="summary-title">Pengeluaran</p>
+                <p class="summary-title">Keluar</p>
                 <p class="summary-amount text-red" id="tot-pengeluaran">Rp 0</p>
+            </div>
+            <div class="summary-box">
+                <p class="summary-title">Tabungan</p>
+                <p class="summary-amount text-blue" id="tot-tabungan">Rp 0</p>
             </div>
         </div>
     </div>
@@ -256,7 +264,7 @@
             </div>
             <div class="form-group">
                 <label>Kategori / Keterangan</label>
-                <input type="text" id="kategori" placeholder="Cth: Gaji, Kopi, Nonton" required autocomplete="off">
+                <input type="text" id="kategori" placeholder="Cth: Gaji, Kopi, Simpanan" required autocomplete="off">
             </div>
             <div class="form-group">
                 <label>Nominal (Rp)</label>
@@ -264,7 +272,7 @@
             </div>
             <div class="form-group">
                 <label>Tanggal Transaksi</label>
-                <input type="date" id="tanggal-input" required>
+                <input type="date" id="tanggal" required>
             </div>
             <button type="submit" id="btn-simpan">Simpan Data 🚀</button>
         </form>
@@ -299,33 +307,34 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZiZXRwY3p6cHdidXRtZ3htcXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMjc4OTgsImV4cCI6MjA5NTcwMzg5OH0.4X5va5WwRTPN-HkWD4uHWBzR680NrTTNKCy4PwjNKak';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Set Default Tanggal Input ke Hari Ini (WIB)
-    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }); // Format YYYY-MM-DD sesuai zona waktu Jakarta
-    document.getElementById('tanggal-input').value = today;
+    // Set Default Tanggal ke Hari Ini (Zona Waktu Jakarta/WIB)
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+    document.getElementById('tanggal').value = today;
 
-    // Format Rupiah
+    // Format Rupiah Singkat agar muat di kotak kecil
     const formatRp = (angka) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
 
-    // Fungsi Mendapatkan Emoji & Class Warna
+    // Fungsi Mendapatkan Gaya Visual berdasarkan Jenis Transaksi
     const getStyleData = (jenis) => {
         if(jenis === 'Pemasukan') return { icon: '💰', bgClass: 'icon-masuk', textClass: 'text-green', sign: '+' };
         if(jenis === 'Pengeluaran') return { icon: '💸', bgClass: 'icon-keluar', textClass: 'text-red', sign: '-' };
         return { icon: '🏦', bgClass: 'icon-tabung', textClass: 'text-blue', sign: '+' };
     };
 
-    // --- 2. FUNGSI MENGAMBIL DATA UNTUK TAMPILAN ---
+    // --- 2. FUNGSI MENGAMBIL DATA ---
     async function loadData() {
         const listEl = document.getElementById('list-transaksi');
         
         const { data, error } = await supabase
             .from('transaksi')
             .select('*')
-            .order('tanggal', { ascending: false }) // Urutkan dari tanggal terbaru
+            .order('tanggal', { ascending: false })
             .order('created_at', { ascending: false });
 
         if (error) {
+            console.error(error);
             listEl.innerHTML = '<p style="color: var(--pastel-red); text-align:center;">Gagal memuat data!</p>';
             return;
         }
@@ -333,6 +342,7 @@
         listEl.innerHTML = ''; 
         let totMasuk = 0;
         let totKeluar = 0;
+        let totTabungan = 0;
 
         if (data.length === 0) {
             listEl.innerHTML = '<p style="color: var(--text-sub); font-size: 14px; text-align: center; padding: 20px 0;">Belum ada catatan 📭</p>';
@@ -342,8 +352,8 @@
                 
                 if(item.jenis === 'Pemasukan') totMasuk += Number(item.nominal);
                 if(item.jenis === 'Pengeluaran') totKeluar += Number(item.nominal);
+                if(item.jenis === 'Tabungan') totTabungan += Number(item.nominal);
 
-                // Format Tanggal untuk Tampilan
                 const displayDate = new Date(item.tanggal).toLocaleDateString('id-ID', {
                     day: 'numeric', month: 'short', year: 'numeric'
                 });
@@ -366,9 +376,10 @@
             });
         }
 
-        // Update Saldo
+        // Update Tampilan Saldo Atas
         document.getElementById('tot-pemasukan').innerText = formatRp(totMasuk);
         document.getElementById('tot-pengeluaran').innerText = formatRp(totKeluar);
+        document.getElementById('tot-tabungan').innerText = formatRp(totTabungan);
     }
 
     // --- 3. FUNGSI MENYIMPAN DATA ---
@@ -382,14 +393,15 @@
         const jenis = document.getElementById('jenis').value;
         const kategori = document.getElementById('kategori').value;
         const nominal = document.getElementById('nominal').value;
-        const tanggal = document.getElementById('tanggal-input').value; // Mengambil tanggal inputan
+        const tanggal = document.getElementById('tanggal').value; // Perbaikan ID di sini (sebelumnya tanggal-input)
 
         const { error } = await supabase
             .from('transaksi')
             .insert([{ jenis, kategori, nominal, tanggal }]);
 
         if (error) {
-            alert('Gagal menyimpan data!');
+            alert('Gagal menyimpan data ke database!');
+            console.error(error);
         } else {
             document.getElementById('kategori').value = '';
             document.getElementById('nominal').value = '';
@@ -413,13 +425,12 @@
         const btn = document.getElementById('btn-export');
         btn.innerText = 'Memproses... ⏳';
 
-        // Mengambil data dari Supabase berdasarkan range tanggal (>= start DAN <= end)
         const { data, error } = await supabase
             .from('transaksi')
             .select('*')
             .gte('tanggal', start)
             .lte('tanggal', end)
-            .order('tanggal', { ascending: true }); // Diurutkan dari tanggal terlama ke terbaru untuk laporan
+            .order('tanggal', { ascending: true });
 
         if (error) {
             alert('Gagal menarik data untuk excel!');
@@ -433,16 +444,13 @@
             return;
         }
 
-        // Format Data untuk Excel dengan Zona Waktu WIB
         const excelData = data.map((item, index) => {
-            // Mengubah format waktu sistem (created_at) ke WIB (Waktu Indonesia Barat)
             const wibSystemTime = new Intl.DateTimeFormat('id-ID', {
                 timeZone: 'Asia/Jakarta',
                 dateStyle: 'medium',
                 timeStyle: 'medium'
             }).format(new Date(item.created_at));
 
-            // Menambahkan prefix + atau - pada nominal
             let nominalPrefix = item.jenis === 'Pengeluaran' ? -Math.abs(item.nominal) : Math.abs(item.nominal);
 
             return {
@@ -455,18 +463,15 @@
             };
         });
 
-        // Proses Pembuatan File Excel menggunakan SheetJS
         const ws = XLSX.utils.json_to_sheet(excelData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Rekap_Keuangan");
 
-        // Mengunduh file
         XLSX.writeFile(wb, `Rekap_${start}_sampai_${end}.xlsx`);
-
         btn.innerText = 'Unduh Excel';
     });
 
-    // Jalankan saat pertama dibuka
+    // Jalankan otomatis saat web dibuka
     loadData();
 </script>
 
