@@ -17,95 +17,194 @@
             --text-sub: #A0A0A0;
             --pastel-purple: #BDB2FF; 
             --pastel-yellow: #FBE7A1; 
+            --pastel-blue-grad: linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%);
+            --active-wallet-grad: linear-gradient(135deg, #FFF6E5 0%, #FFE9C9 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); padding: 20px; padding-bottom: 80px; }
-        .container { max-width: 480px; margin: 0 auto; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 20px; padding-bottom: 80px; overflow-x: hidden; }
+        .container { max-width: 480px; margin: 0 auto; position: relative; }
         
         .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .header h1 { font-size: 22px; font-weight: 700; }
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #FFE5E5; color: #D80000; }
-        .status-badge.connected { background: #E5F8ED; color: #00A344; }
+        .header h1 { font-size: 22px; font-weight: 700; animation: twist 2s infinite ease-in-out; transform-origin: left bottom; }
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #FFE5E5; color: #D80000; transition: all 0.3s ease; }
+        .status-badge.connected { background: #E5F8ED; color: #00A344; animation: pulse 2s infinite; }
 
-        .card { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .card { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
         .card-header { font-size: 16px; font-weight: 700; margin-bottom: 15px; }
 
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .summary-box { background: #FAFAFA; padding: 12px 5px; border-radius: 16px; text-align: center; }
+        /* ANIMASI FLOAT */
+        @keyframes float {
+            0% { transform: translateY(0px); box-shadow: 0 8px 25px rgba(142, 197, 252, 0.4); }
+            50% { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(142, 197, 252, 0.55); }
+            100% { transform: translateY(0px); box-shadow: 0 8px 25px rgba(142, 197, 252, 0.4); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        @keyframes twist {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        /* 1. BRANKAS TABUNGAN (HIGHLIGHT MANDIRI) */
+        .savings-highlight-card {
+            background: var(--pastel-blue-grad);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 15px;
+            color: #333333;
+            position: relative;
+            overflow: hidden;
+            animation: float 4s infinite ease-in-out;
+        }
+        .savings-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 12px; }
+        .savings-info { display: flex; flex-direction: column; gap: 4px; z-index: 1; }
+        .savings-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #5A607F; }
+        .savings-amount { font-size: 26px; font-weight: 800; color: #1E293B; letter-spacing: -0.5px; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .savings-icon { font-size: 36px; background: rgba(255, 255, 255, 0.4); width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); transition: transform 0.3s ease; }
+        .savings-highlight-card:hover .savings-icon { transform: scale(1.15) rotate(10deg); }
+
+        .progress-container { background: rgba(255, 255, 255, 0.35); padding: 4px; border-radius: 20px; backdrop-filter: blur(2px); }
+        .progress-bar { height: 10px; background: linear-gradient(90deg, #BDB2FF, #FFC6FF); border-radius: 20px; width: 0%; transition: width 0.8s cubic-bezier(0.1, 0.8, 0.25, 1); }
+        .progress-text { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: #3A4161; margin-top: 6px; }
+
+        /* 2. DOMPET AKTIF (PENYIMPANAN SEMENTARA) */
+        .wallet-active-card {
+            background: var(--active-wallet-grad);
+            border-radius: 20px;
+            padding: 16px 20px;
+            margin-bottom: 15px;
+            color: #5C4A33;
+            box-shadow: 0 4px 12px rgba(224, 180, 108, 0.15);
+        }
+        .wallet-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #8A7150; }
+        .wallet-amount { font-size: 20px; font-weight: 700; color: #40321F; margin-top: 2px; }
+
+        /* GRID UTILITY MASUK & KELUAR */
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .summary-box { background: #FAFAFA; padding: 12px 10px; border-radius: 16px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.01); transition: transform 0.2s; }
+        .summary-box:hover { transform: scale(1.02); }
         .s-title { font-size: 11px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; }
         .s-amount { font-size: 14px; font-weight: 700; word-break: break-all; margin-top: 4px; }
 
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #F0F0F0; border-radius: 12px; font-size: 14px; background: #F9F9F9; outline: none; }
-        input:focus, select:focus { border-color: var(--pastel-purple); background: #FFF; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #F0F0F0; border-radius: 12px; font-size: 14px; background: #F9F9F9; outline: none; transition: all 0.2s ease; }
+        input:focus, select:focus { border-color: var(--pastel-purple); background: #FFF; transform: scale(1.01); }
         
         .row { display: flex; gap: 10px; }
         .row .form-group { flex: 1; }
 
-        button { width: 100%; padding: 14px; background-color: var(--pastel-purple); color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 5px; }
+        button { width: 100%; padding: 14px; background-color: var(--pastel-purple); color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s ease; margin-top: 5px; box-shadow: 0 4px 10px rgba(189, 178, 255, 0.3); }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
         button:active { transform: scale(0.97); }
         
-        .btn-excel { background-color: var(--pastel-yellow); color: #9A8022; }
+        .btn-excel { background-color: var(--pastel-yellow); color: #9A8022; box-shadow: 0 4px 10px rgba(251, 231, 161, 0.3); }
         
-        /* Tombol Toggle Transparan */
         .btn-toggle { background-color: transparent; border: 2px dashed #EAEAEA; color: var(--text-sub); box-shadow: none; margin-bottom: 20px; }
-        .btn-toggle:hover { background-color: #FAFAFA; color: var(--text-main); }
+        .btn-toggle:hover { background-color: #FAFAFA; color: var(--text-main); transform: none; }
         .btn-toggle:active { transform: none; }
 
-        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed #EAEAEA; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed #EAEAEA; transition: background 0.2s ease; }
+        .list-item:hover { background-color: rgba(0,0,0,0.01); }
         .list-item:last-child { border-bottom: none; }
         .l-left { display: flex; align-items: center; gap: 10px; }
-        .l-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .l-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: transform 0.2s; }
+        .list-item:hover .l-icon { transform: scale(1.1) rotate(-5deg); }
         .l-title { font-size: 14px; font-weight: 600; }
         .l-date { font-size: 11px; color: var(--text-sub); }
         
         .l-right { display: flex; align-items: center; gap: 12px; }
         .l-amount { font-size: 14px; font-weight: 700; }
         .btn-hapus { 
-            background: none; border: none; padding: 5px; font-size: 16px; cursor: pointer; width: auto; margin: 0; box-shadow: none; opacity: 0.5; transition: opacity 0.2s;
+            background: none; border: none; padding: 5px; font-size: 16px; cursor: pointer; width: auto; margin: 0; box-shadow: none; opacity: 0.5; transition: opacity 0.2s, transform 0.2s;
         }
-        .btn-hapus:hover { opacity: 1; }
+        .btn-hapus:hover { opacity: 1; transform: scale(1.2); }
+
+        .pop-effect {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            font-weight: bold;
+            color: #1E293B;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            pointer-events: none;
+            z-index: 10;
+            animation: popUpGo 1.5s ease-out forwards;
+        }
+        @keyframes popUpGo {
+            0% { transform: translate(-50%, 0px) scale(0.5); opacity: 0; }
+            15% { transform: translate(-50%, -60px) scale(1.2); opacity: 1; }
+            30% { transform: translate(-50%, -50px) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -120px) scale(0.9); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="main-container">
     <div class="header">
-        <h1>✨ RekapKu</h1>
+        <h1>✨ RekapKur</h1>
         <div id="db-status" class="status-badge">Memeriksa Database...</div>
     </div>
 
-    <div class="card summary-grid">
+    <div class="savings-highlight-card">
+        <div class="savings-top-row">
+            <div class="savings-info">
+                <div class="savings-title">🎯 Total Tabungan Utama</div>
+                <div class="savings-amount" id="t-tabung">Rp 0</div>
+            </div>
+            <div class="savings-icon" id="savings-emoji">🏦</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="p-bar"></div>
+        </div>
+        <div class="progress-text">
+            <span id="t-motivasi">Memuat target... 💪</span>
+            <span id="p-percent">0%</span>
+        </div>
+    </div>
+
+    <div class="wallet-active-card">
+        <div class="wallet-title">💼 Dompet Aktif (Penyimpanan Sementara)</div>
+        <div class="wallet-amount" id="t-dompet-aktif">Rp 0</div>
+    </div>
+
+    <div class="summary-grid">
         <div class="summary-box">
-            <div class="s-title">Masuk</div>
+            <div class="s-title">Total Masuk 🟢</div>
             <div class="s-amount" style="color:#57A673" id="t-masuk">Rp 0</div>
         </div>
         <div class="summary-box">
-            <div class="s-title">Keluar</div>
+            <div class="s-title">Total Keluar 🔴</div>
             <div class="s-amount" style="color:#E06C6C" id="t-keluar">Rp 0</div>
-        </div>
-        <div class="summary-box">
-            <div class="s-title">Tabungan</div>
-            <div class="s-amount" style="color:#5B8BE3" id="t-tabung">Rp 0</div>
         </div>
     </div>
 
     <div class="card">
-        <div class="card-header">Catat Transaksi Baru</div>
+        <div class="card-header">Catat Transaksi Baru ✏️</div>
         <form id="app-form">
             <div class="form-group">
                 <label>Jenis Transaksi</label>
                 <select id="f-jenis" required>
-                    <option value="Pemasukan">Pemasukan</option>
-                    <option value="Pengeluaran">Pengeluaran</option>
-                    <option value="Tabungan">Tabungan</option>
+                    <option value="Pemasukan">Pemasukan 💰</option>
+                    <option value="Pengeluaran">Pengeluaran 💸</option>
+                    <option value="Tabungan">Tabungan 🏦 (Brankas Khusus)</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Keterangan / Kategori</label>
-                <input type="text" id="f-ket" placeholder="Contoh: Makan, Gaji" required autocomplete="off">
+                <input type="text" id="f-ket" placeholder="Contoh: Gaji, Jajan Kopi, Tabungan Investasi" required autocomplete="off">
             </div>
             <div class="form-group">
                 <label>Nominal (Angka saja)</label>
@@ -122,7 +221,7 @@
     <button id="btn-toggle-excel" class="btn-toggle">📂 Tampilkan Menu Unduh Excel</button>
 
     <div class="card" id="card-excel" style="display: none;">
-        <div class="card-header">Unduh Rekap Excel</div>
+        <div class="card-header">Unduh Rekap Excel 📊</div>
         <div class="row">
             <div class="form-group">
                 <label>Dari</label>
@@ -133,11 +232,11 @@
                 <input type="date" id="ex-end">
             </div>
         </div>
-        <button id="btn-excel" class="btn-excel">Download Data .xlsx</button>
+        <button id="btn-excel" class="btn-excel">Download Data .xlsx 📥</button>
     </div>
 
     <div class="card">
-        <div class="card-header">Riwayat Mutasi</div>
+        <div class="card-header">Riwayat Mutasi ⏳</div>
         <div id="list-data">
             <p style="text-align:center; font-size:13px; color:#A0A0A0;">Memuat...</p>
         </div>
@@ -158,10 +257,61 @@
     const getUI = (j) => {
         if(j === 'Pemasukan') return { i:'💰', bg:'rgba(87,166,115,0.2)', c:'#57A673', s:'+' };
         if(j === 'Pengeluaran') return { i:'💸', bg:'rgba(224,108,108,0.2)', c:'#E06C6C', s:'-' };
-        return { i:'🏦', bg:'rgba(91,139,227,0.2)', c:'#5B8BE3', s:'+' };
+        return { i:'🔒', bg:'rgba(142,197,252,0.3)', c:'#4A7BB0', s:'⭐' };
     };
 
-    // 2. LOAD DATA
+    // TARGET TABUNGAN
+    const TARGET_TABUNGAN = 5000000; 
+
+    const updateMotivasiDanProgress = (totalTabungan) => {
+        const motEl = document.getElementById('t-motivasi');
+        const emojiEl = document.getElementById('savings-emoji');
+        const barEl = document.getElementById('p-bar');
+        const percentEl = document.getElementById('p-percent');
+        
+        let persen = Math.floor((totalTabungan / TARGET_TABUNGAN) * 100);
+        if (persen > 100) persen = 100;
+        if (persen < 0) persen = 0;
+        
+        barEl.style.width = persen + '%';
+        percentEl.innerText = persen + '%';
+
+        if (totalTabungan <= 0) {
+            motEl.innerText = "Mari mulai isi brankas tabunganmu! 🚀";
+            emojiEl.innerText = "🏦";
+        } else if (persen < 25) {
+            motEl.innerText = "Pengisian awal berhasil! Semangat! 🐷";
+            emojiEl.innerText = "🐷";
+        } else if (persen < 60) {
+            motEl.innerText = "Target tabungan sudah melesat naik! 🔥";
+            emojiEl.innerText = "💎";
+        } else if (persen < 100) {
+            motEl.innerText = "Sikit lagi brankasmu penuh! 👑";
+            emojiEl.innerText = "✨";
+        } else {
+            motEl.innerText = "Selamat! Target impianmu sudah LUNAS! 👑🎉";
+            emojiEl.innerText = "👑";
+        }
+    };
+
+    const triggerCelebration = (jenis) => {
+        const container = document.getElementById('main-container');
+        const pop = document.createElement('div');
+        pop.className = 'pop-effect';
+        
+        if (jenis === 'Tabungan') {
+            pop.innerText = '🔒 Tabungan Berhasil Dikunci di Brankas!';
+        } else if (jenis === 'Pemasukan') {
+            pop.innerText = '💰 Dompet Sementara Terisi Cuan!';
+        } else {
+            pop.innerText = '💸 Saldo Dompet Sementara Berkurang!';
+        }
+        
+        container.appendChild(pop);
+        setTimeout(() => pop.remove(), 1500);
+    };
+
+    // 2. LOAD & CALCULATE DATA
     async function loadData() {
         const statusEl = document.getElementById('db-status');
         const listEl = document.getElementById('list-data');
@@ -179,16 +329,23 @@
             statusEl.textContent = "Koneksi Aktif ✅";
             statusEl.className = "status-badge connected";
 
-            let masuk=0, keluar=0, tabung=0;
+            let totalMasuk=0, totalKeluar=0, totalTabungan=0;
             listEl.innerHTML = '';
 
             if (data.length === 0) {
                 listEl.innerHTML = '<p style="text-align:center; color:#A0A0A0; font-size:13px;">Belum ada transaksi bulan ini.</p>';
             } else {
                 data.forEach(x => {
-                    if(x.jenis === 'Pemasukan') masuk += Number(x.nominal);
-                    if(x.jenis === 'Pengeluaran') keluar += Number(x.nominal);
-                    if(x.jenis === 'Tabungan') tabung += Number(x.nominal);
+                    // SEPARASI LOGIKA MATEMATIKA SESUAI PERMINTAAN
+                    if(x.jenis === 'Pemasukan') {
+                        totalMasuk += Number(x.nominal);
+                    }
+                    else if(x.jenis === 'Pengeluaran') {
+                        totalKeluar += Number(x.nominal);
+                    }
+                    else if(x.jenis === 'Tabungan') {
+                        totalTabungan += Number(x.nominal); // Masuk ke brankas mandiri, tidak menyentuh Masuk/Keluar sementara
+                    }
 
                     let ui = getUI(x.jenis);
                     let dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
@@ -211,9 +368,21 @@
                 });
             }
 
-            document.getElementById('t-masuk').innerText = rp(masuk);
-            document.getElementById('t-keluar').innerText = rp(keluar);
-            document.getElementById('t-tabung').innerText = rp(tabung);
+            // Dompet Aktif = Pemasukan Sementara - Pengeluaran Sementara
+            let saldoDompetAktif = totalMasuk - totalKeluar;
+
+            // Render ke UI
+            document.getElementById('t-masuk').innerText = rp(totalMasuk);
+            document.getElementById('t-keluar').innerText = rp(totalKeluar);
+            document.getElementById('t-dompet-aktif').innerText = rp(saldoDompetAktif);
+            
+            // Render Tabungan Utama (Highlight)
+            const tabungEl = document.getElementById('t-tabung');
+            tabungEl.style.transform = 'scale(1.15)';
+            tabungEl.innerText = rp(totalTabungan);
+            setTimeout(() => tabungEl.style.transform = 'scale(1)', 300);
+
+            updateMotivasiDanProgress(totalTabungan);
 
         } catch (err) {
             console.error(err);
@@ -224,7 +393,7 @@
     document.getElementById('app-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         let btn = document.getElementById('btn-save');
-        btn.innerText = 'Tunggu...'; btn.disabled = true;
+        btn.innerText = 'Memproses... ⏳'; btn.disabled = true;
 
         const p_jenis = document.getElementById('f-jenis').value;
         const p_ket = document.getElementById('f-ket').value;
@@ -236,6 +405,7 @@
         if (error) {
             alert("Gagal Simpan: " + error.message);
         } else {
+            triggerCelebration(p_jenis);
             document.getElementById('f-ket').value = '';
             document.getElementById('f-nom').value = '';
             await loadData();
@@ -259,7 +429,7 @@
         else await loadData();
     }
 
-    // 5. FITUR TOGGLE TAMPILKAN/SEMBUNYIKAN EXCEL
+    // 5. FITUR TOGGLE EXCEL
     document.getElementById('btn-toggle-excel').addEventListener('click', function() {
         const cardExcel = document.getElementById('card-excel');
         
@@ -287,8 +457,9 @@
             "Tanggal": x.tanggal,
             "Jenis": x.jenis,
             "Keterangan": x.kategori,
-            "Pemasukan (Rp)": x.jenis !== 'Pengeluaran' ? Number(x.nominal) : 0,
-            "Pengeluaran (Rp)": x.jenis === 'Pengeluaran' ? Number(x.nominal) : 0
+            "Pemasukan (Rp)": x.jenis === 'Pemasukan' ? Number(x.nominal) : 0,
+            "Pengeluaran (Rp)": x.jenis === 'Pengeluaran' ? Number(x.nominal) : 0,
+            "Tabungan (Rp)": x.jenis === 'Tabungan' ? Number(x.nominal) : 0
         }));
 
         const ws = XLSX.utils.json_to_sheet(excelData);
