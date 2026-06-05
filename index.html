@@ -54,7 +54,23 @@
         .l-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .l-title { font-size: 14px; font-weight: 600; }
         .l-date { font-size: 11px; color: var(--text-sub); }
+        
+        /* CSS Baru untuk area Nominal dan Tombol Hapus */
+        .l-right { display: flex; align-items: center; gap: 12px; }
         .l-amount { font-size: 14px; font-weight: 700; }
+        .btn-hapus { 
+            background: none; 
+            border: none; 
+            padding: 5px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            width: auto;
+            margin: 0;
+            box-shadow: none;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+        .btn-hapus:hover { opacity: 1; }
     </style>
 </head>
 <body>
@@ -156,19 +172,15 @@
         const listEl = document.getElementById('list-data');
 
         try {
-            // Tarik data dari supabase
             const { data, error } = await supa.from('transaksi').select('*').order('tanggal', { ascending: false }).order('created_at', { ascending: false });
 
-            // Jika ada error dari Supabase (misal tabel belum dibuat)
             if (error) {
                 statusEl.textContent = "Koneksi Gagal ❌";
                 statusEl.className = "status-badge";
-                listEl.innerHTML = `<p style="text-align:center; color:red; font-size:12px;">Error: ${error.message}<br>Pastikan Anda sudah menjalankan SQL di Supabase baru.</p>`;
-                alert(`Pesan Error Supabase:\n\n${error.message}`);
+                listEl.innerHTML = `<p style="text-align:center; color:red; font-size:12px;">Error: ${error.message}</p>`;
                 return;
             }
 
-            // Jika Sukses Terkoneksi
             statusEl.textContent = "Koneksi Aktif ✅";
             statusEl.className = "status-badge connected";
 
@@ -186,6 +198,7 @@
                     let ui = getUI(x.jenis);
                     let dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
 
+                    // Fitur hapus memanggil onClick="hapusData(id)"
                     listEl.innerHTML += `
                         <div class="list-item">
                             <div class="l-left">
@@ -195,7 +208,10 @@
                                     <div class="l-date">${dStr} • ${x.jenis}</div>
                                 </div>
                             </div>
-                            <div class="l-amount" style="color:${ui.c}">${ui.s} ${rp(x.nominal)}</div>
+                            <div class="l-right">
+                                <div class="l-amount" style="color:${ui.c}">${ui.s} ${rp(x.nominal)}</div>
+                                <button class="btn-hapus" onclick="hapusData(${x.id})" title="Hapus Data">🗑️</button>
+                            </div>
                         </div>
                     `;
                 });
@@ -206,7 +222,7 @@
             document.getElementById('t-tabung').innerText = rp(tabung);
 
         } catch (err) {
-            alert('Aplikasi gagal berjalan: ' + err.message);
+            console.error(err);
         }
     }
 
@@ -234,7 +250,24 @@
         btn.innerText = 'Simpan Transaksi 🚀'; btn.disabled = false;
     });
 
-    // 4. FUNGSI EXCEL
+    // 4. FUNGSI HAPUS (BARU)
+    async function hapusData(id) {
+        // Konfirmasi agar tidak terhapus jika tidak sengaja kepencet
+        const yakin = confirm("Apakah Anda yakin ingin menghapus data ini?");
+        if (!yakin) return;
+
+        // Proses menghapus data berdasarkan ID
+        const { error } = await supa.from('transaksi').delete().eq('id', id);
+
+        if (error) {
+            alert("Gagal menghapus data: " + error.message);
+        } else {
+            // Muat ulang data setelah berhasil dihapus
+            await loadData();
+        }
+    }
+
+    // 5. FUNGSI EXCEL
     document.getElementById('btn-excel').addEventListener('click', async () => {
         const s = document.getElementById('ex-start').value;
         const e = document.getElementById('ex-end').value;
