@@ -10,7 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
     <style>
-        /* --- TEMA PASTEL & MODERN --- */
         :root {
             --bg-color: #FDF9F1; 
             --card-bg: #FFFFFF;
@@ -42,7 +41,6 @@
             margin: 0 auto;
         }
 
-        /* --- HEADER --- */
         .header {
             display: flex;
             align-items: center;
@@ -57,7 +55,6 @@
             letter-spacing: -0.5px;
         }
 
-        /* --- KARTU (CARDS) --- */
         .card {
             background-color: var(--card-bg);
             border-radius: 24px; 
@@ -67,7 +64,6 @@
             border: 1px solid rgba(0,0,0,0.02);
         }
 
-        /* Tampilan Grid Ringkasan Menjadi 3 Kolom */
         .summary-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -100,7 +96,6 @@
         .text-red { color: #E06C6C; }
         .text-blue { color: #5B8BE3; }
 
-        /* --- FORM INPUT --- */
         .form-group {
             margin-bottom: 16px;
         }
@@ -141,7 +136,6 @@
             box-shadow: 0 0 0 4px rgba(189, 178, 255, 0.15);
         }
 
-        /* --- TOMBOL ICONIC --- */
         button {
             width: 100%;
             padding: 16px;
@@ -168,7 +162,6 @@
             box-shadow: 0 6px 15px rgba(251, 231, 161, 0.5);
         }
 
-        /* --- LIST TRANSAKSI --- */
         .transaction-item {
             display: flex;
             justify-content: space-between;
@@ -302,28 +295,24 @@
 </div>
 
 <script>
-    // --- 1. KONEKSI SUPABASE ---
+    // --- 1. KONEKSI SUPABASE PROJECT BARU ---
     const supabaseUrl = 'https://jgjixdbnbzfpnvooczew.supabase.co'; 
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Set Default Tanggal ke Hari Ini (Zona Waktu Jakarta/WIB)
     const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
     document.getElementById('tanggal').value = today;
 
-    // Format Rupiah Singkat agar muat di kotak kecil
     const formatRp = (angka) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
 
-    // Fungsi Mendapatkan Gaya Visual berdasarkan Jenis Transaksi
     const getStyleData = (jenis) => {
         if(jenis === 'Pemasukan') return { icon: '💰', bgClass: 'icon-masuk', textClass: 'text-green', sign: '+' };
         if(jenis === 'Pengeluaran') return { icon: '💸', bgClass: 'icon-keluar', textClass: 'text-red', sign: '-' };
         return { icon: '🏦', bgClass: 'icon-tabung', textClass: 'text-blue', sign: '+' };
     };
 
-    // --- 2. FUNGSI MENGAMBIL DATA ---
     async function loadData() {
         const listEl = document.getElementById('list-transaksi');
         
@@ -376,13 +365,11 @@
             });
         }
 
-        // Update Tampilan Saldo Atas
         document.getElementById('tot-pemasukan').innerText = formatRp(totMasuk);
         document.getElementById('tot-pengeluaran').innerText = formatRp(totKeluar);
         document.getElementById('tot-tabungan').innerText = formatRp(totTabungan);
     }
 
-    // --- 3. FUNGSI MENYIMPAN DATA ---
     document.getElementById('form-transaksi').addEventListener('submit', async (e) => {
         e.preventDefault(); 
         
@@ -393,7 +380,7 @@
         const jenis = document.getElementById('jenis').value;
         const kategori = document.getElementById('kategori').value;
         const nominal = document.getElementById('nominal').value;
-        const tanggal = document.getElementById('tanggal').value; // Perbaikan ID di sini (sebelumnya tanggal-input)
+        const tanggal = document.getElementById('tanggal').value; 
 
         const { error } = await supabase
             .from('transaksi')
@@ -412,7 +399,6 @@
         btn.disabled = false;
     });
 
-    // --- 4. FUNGSI EXPORT EXCEL (REALTIME WIB) ---
     document.getElementById('btn-export').addEventListener('click', async () => {
         const start = document.getElementById('export-start').value;
         const end = document.getElementById('export-end').value;
@@ -471,7 +457,6 @@
         btn.innerText = 'Unduh Excel';
     });
 
-    // Jalankan otomatis saat web dibuka
     loadData();
 </script>
 
