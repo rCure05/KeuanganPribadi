@@ -2,165 +2,173 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekap Financial Personal - Interactive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" id="meta-theme-color" content="#FBFDFB">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Rekap Financial - Premium Edition</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            --bg-color: #FBFDFB; 
-            --card-bg: #FFFFFF;
-            --text-main: #2D3748; 
-            --text-sub: #718096;
-            --pastel-purple: #C3B5FD; 
-            --pastel-yellow: #FEF3C7; 
-            --pastel-blue-grad: linear-gradient(135deg, #E9D5FF 0%, #BFDBFE 100%);
-            --active-wallet-grad: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
-            --shadow-md: 0 4px 15px rgba(0,0,0,0.03);
-            --shadow-lg: 0 10px 25px rgba(0,0,0,0.05);
-            --shadow-float: 0 15px 30px rgba(0,0,0,0.08); /* Bayangan saat melayang tinggi */
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-color: #F8FAFC; 
+            --card-bg: rgba(255, 255, 255, 0.65); 
+            --text-main: #1E293B; 
+            --text-sub: #64748B;
+            --input-bg: rgba(255, 255, 255, 0.8);
+            --input-border: rgba(226, 232, 240, 0.8);
+            --pastel-blue-grad: linear-gradient(135deg, rgba(233,213,255,0.85) 0%, rgba(191,219,254,0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(255,251,235,0.85) 0%, rgba(254,243,199,0.85) 100%);
+            --shadow-md: 0 8px 32px rgba(31, 38, 135, 0.05);
+            --shadow-lg: 0 10px 40px rgba(31, 38, 135, 0.08);
+            --shadow-float: 0 20px 40px rgba(31, 38, 135, 0.12);
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --item-hover: rgba(255, 255, 255, 0.9);
+            --glass-blur: blur(16px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); padding: 20px; padding-bottom: 80px; overflow-x: hidden; -webkit-font-smoothing: antialiased; position: relative; z-index: 1;}
+        body.dark-mode {
+            --bg-color: #0F172A; 
+            --card-bg: rgba(30, 41, 59, 0.65); 
+            --text-main: #F8FAFC; 
+            --text-sub: #94A3B8;
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(51, 65, 85, 0.8);
+            --pastel-blue-grad: linear-gradient(135deg, rgba(55,48,163,0.85) 0%, rgba(29,78,216,0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(120,53,15,0.85) 0%, rgba(146,64,14,0.85) 100%);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --shadow-float: 0 20px 40px rgba(0, 0, 0, 0.5);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --item-hover: rgba(51, 65, 85, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            padding: calc(20px + env(safe-area-inset-top)) 20px calc(80px + env(safe-area-inset-bottom)) 20px; 
+            overflow-x: hidden; -webkit-font-smoothing: antialiased; position: relative; z-index: 1; transition: background-color 0.5s ease, color 0.5s ease;
+        }
         
         .container { max-width: 480px; margin: 0 auto; position: relative; z-index: 10; }
         
-        /* === KEYFRAMES ANIMASI MELAYANG === */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes floatBubble1 { 0%, 100% { transform: translateY(0) scale(1) rotate(0deg); } 50% { transform: translateY(-80px) scale(1.1) rotate(20deg); } }
+        @keyframes floatBubble2 { 0%, 100% { transform: translateY(0) scale(1) rotate(0deg); } 50% { transform: translateY(-60px) scale(1.15) rotate(-15deg); } }
+        @keyframes floatOrganic { 0%, 100% { transform: translateY(0px); box-shadow: var(--shadow-md); } 50% { transform: translateY(-8px); box-shadow: var(--shadow-float); } }
+        @keyframes floatIcon { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-6px) rotate(8deg); } }
         @keyframes slideUpIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes staggeredIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Animasi Melayang untuk Kartu */
-        @keyframes floatOrganic {
-            0%, 100% { transform: translateY(0px); box-shadow: var(--shadow-md); }
-            50% { transform: translateY(-8px); box-shadow: var(--shadow-float); }
-        }
-        /* Animasi Melayang untuk Ikon */
-        @keyframes floatIcon {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-5px) rotate(6deg); }
-        }
-        /* Animasi Gelembung Background */
-        @keyframes floatBubble {
-            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
-            50% { transform: translateY(-40px) scale(1.05) rotate(10deg); }
-        }
-
-        /* GELEMBUNG LATAR BELAKANG */
-        .bg-bubble { position: fixed; border-radius: 50%; background: linear-gradient(135deg, rgba(195, 181, 253, 0.2), rgba(191, 219, 254, 0.3)); z-index: -1; filter: blur(8px); }
-        .bubble-1 { width: 250px; height: 250px; top: -50px; left: -100px; animation: floatBubble 12s ease-in-out infinite; }
-        .bubble-2 { width: 200px; height: 200px; bottom: 10%; right: -80px; animation: floatBubble 15s ease-in-out infinite 2s; background: linear-gradient(135deg, rgba(254, 243, 199, 0.3), rgba(252, 211, 77, 0.1)); }
+        .bg-bubble { position: fixed; border-radius: 50%; z-index: -1; filter: blur(30px); transition: opacity 0.5s; }
+        .bubble-1 { width: 300px; height: 300px; top: -50px; left: -100px; animation: floatBubble1 15s ease-in-out infinite; background: linear-gradient(135deg, rgba(192, 132, 252, 0.4), rgba(96, 165, 250, 0.3)); }
+        .bubble-2 { width: 250px; height: 250px; bottom: 15%; right: -80px; animation: floatBubble2 18s ease-in-out infinite 2s; background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(248, 113, 113, 0.2)); }
+        body.dark-mode .bubble-1 { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.2)); }
+        body.dark-mode .bubble-2 { background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(220, 38, 38, 0.2)); }
 
         .ani-fade-in { animation: fadeIn 0.5s ease-out forwards; }
 
         /* LAYAR LOGIN */
-        #login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(251, 253, 251, 0.95); backdrop-filter: blur(10px); z-index: 9999;
-            display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px;
-            transition: opacity 0.5s ease;
-        }
-        .login-box {
-            background: white; padding: 40px; border-radius: 24px;
-            box-shadow: var(--shadow-lg); width: 100%; max-width: 400px; text-align: center;
-            opacity: 0; transform: scale(0.9);
-            animation: floatOrganic 6s ease-in-out infinite, fadeInScale 0.5s ease-out forwards 0.2s; /* Box login melayang */
-        }
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; transition: opacity 0.5s ease, background-color 0.4s ease; }
+        .login-box { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); padding: 40px 25px; border-radius: 28px; box-shadow: var(--shadow-lg); width: 100%; max-width: 400px; text-align: center; opacity: 0; transform: scale(0.9); border: 1px solid var(--card-border); animation: floatOrganic 6s ease-in-out infinite, fadeInScale 0.5s ease-out forwards 0.2s; }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        /* CONTAINER UTAMA */
         #main-container { transition: var(--transition); opacity: 0; transform: translateY(10px); }
         #main-container.show { opacity: 1; transform: translateY(0); }
 
         /* HEADER */
         .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;}
-        .header h1 { font-size: 22px; font-weight: 700; color: #1A202C; text-shadow: 0 2px 4px rgba(0,0,0,0.05);}
-        .user-badge { background: #EDF2F7; color: var(--text-main); padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition); box-shadow: var(--shadow-md);}
-        .user-badge:hover { background: #E2E8F0; transform: translateY(-2px); }
-        .btn-logout { background: #FEB2B2; color: #9B2C2C; border: none; padding: 4px 10px; border-radius: 8px; font-size: 11px; cursor: pointer; transition: var(--transition); width: auto; margin: 0; }
-        .btn-logout:hover { background: #FC8181; }
+        .header-title-area h1 { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 2px;}
+        .month-selector { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); font-size: 13px; font-weight: 600; color: #7C3AED; cursor: pointer; outline: none; padding: 6px 12px; border-radius: 12px; transition: var(--transition); backdrop-filter: blur(5px); }
+        body.dark-mode .month-selector { color: #C4B5FD; border-color: rgba(196, 181, 253, 0.3); }
 
-        /* KARTU BIASA */
-        .card { background-color: var(--card-bg); border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-md); transition: var(--transition); border: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(10px); }
-        .card-header { font-size: 16px; font-weight: 700; margin-bottom: 18px; color: #1A202C; }
-
-        /* BRANKAS TABUNGAN (MELAYANG TERUS) */
-        .savings-highlight-card { 
-            background: var(--pastel-blue-grad); border-radius: 28px; padding: 28px; margin-bottom: 20px; color: #333333; position: relative; overflow: hidden; 
-            animation: floatOrganic 5s ease-in-out infinite; /* EFEK MELAYANG UTAMA */
-            border: 1px solid rgba(255,255,255,0.4);
-        }
-        .savings-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px; }
-        .savings-info { display: flex; flex-direction: column; gap: 4px; z-index: 1; }
-        .savings-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280; }
-        .savings-amount { font-size: 28px; font-weight: 800; color: #111827; }
-        .savings-icon { font-size: 38px; background: rgba(255, 255, 255, 0.5); width: 60px; height: 60px; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); animation: floatIcon 4s ease-in-out infinite 0.5s; /* IKON MELAYANG BERBEDA RITME */ }
-
-        .progress-container { background: rgba(255, 255, 255, 0.4); padding: 5px; border-radius: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
-        .progress-bar { height: 12px; background: linear-gradient(90deg, #B5A4FD, #FCD1A2); border-radius: 20px; width: 0%; transition: width 1s cubic-bezier(0.1, 0.8, 0.25, 1); position: relative; overflow: hidden;}
-        .progress-bar::after { content:''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); animation: shine 2s infinite; }
-        @keyframes shine { 100% { left: 100%; } }
-        .progress-text { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: #4B5563; margin-top: 8px; }
-
-        /* DOMPET AKTIF (MELAYANG DENGAN DELAY) */
-        .wallet-active-card { 
-            background: var(--active-wallet-grad); border-radius: 20px; padding: 18px 24px; margin-bottom: 20px; color: #5C4A33; border: 1px solid rgba(255,255,255,0.6); 
-            animation: floatOrganic 6s ease-in-out infinite 1s; /* EFEK MELAYANG DELAY */
-        }
-        .wallet-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #927D60; }
-        .wallet-amount { font-size: 22px; font-weight: 700; color: #40321F; margin-top: 3px; }
-
-        /* GRID RINGKASAN (MELAYANG DENGAN RITME BERBEDA) */
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .summary-box { background: rgba(255,255,255,0.8); padding: 16px; border-radius: 20px; text-align: center; border: 1px solid white; backdrop-filter: blur(5px); }
-        .summary-box:nth-child(1) { animation: floatOrganic 5.5s ease-in-out infinite 0.3s; }
-        .summary-box:nth-child(2) { animation: floatOrganic 5.5s ease-in-out infinite 0.8s; }
-        .s-title { font-size: 11px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; }
-        .s-amount { font-size: 15px; font-weight: 700; margin-top: 5px; }
-
-        /* FORM INPUT */
-        .form-group { margin-bottom: 15px; position: relative; }
-        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #4B5563; transition: var(--transition); }
-        input, select { width: 100%; padding: 14px 16px; border: 2px solid #EDF2F7; border-radius: 16px; font-size: 14px; background: #F8FAFC; outline: none; color: var(--text-main); transition: var(--transition); }
-        input:focus, select:focus { border-color: #B5A4FD; background: #FFF; box-shadow: 0 0 0 4px rgba(181, 164, 253, 0.15); transform: translateY(-1px); }
-        input:focus + label { color: #805AD5; }
-        .row { display: flex; gap: 12px; }
-        .row .form-group { flex: 1; }
-
-        button { width: 100%; padding: 16px; background-color: #A084E8; color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 10px; box-shadow: 0 4px 10px rgba(160, 132, 232, 0.3); }
-        button:hover { background-color: #8D73DB; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(160, 132, 232, 0.4); }
-        button:active { transform: translateY(0) scale(0.98); }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
         
-        .btn-excel { background-color: #FBBF24; color: #92400E; box-shadow: 0 4px 10px rgba(251, 191, 36, 0.2); }
-        .btn-excel:hover { background-color: #F59E0B; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3); }
-
-        .btn-toggle { background-color: transparent; border: 2px dashed #E2E8F0; color: var(--text-sub); margin-bottom: 25px; box-shadow: none; padding: 12px; }
-        .btn-toggle:hover { background-color: rgba(255,255,255,0.5); color: var(--text-main); border-color: #B5A4FD; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(181, 164, 253, 0.1); }
-
-        /* LIST MUTASI */
-        #list-data { min-height: 50px; position: relative; }
-        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px dashed #EDF2F7; transition: var(--transition); border-radius: 16px; opacity: 0; animation: staggeredIn 0.4s ease-out forwards; }
-        .list-item:hover { background-color: white; transform: translateX(5px) scale(1.01); box-shadow: var(--shadow-md); border-bottom-color: transparent; }
-        .list-item:last-child { border-bottom: none; }
+        .btn-theme, .btn-export { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
+        .btn-theme:active, .btn-export:active { transform: scale(0.9); }
         
+        .user-badge { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--text-main); padding: 6px 6px 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-md); border: 1px solid var(--card-border);}
+        .btn-logout { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
+        .btn-logout:hover, .btn-logout:active { background: #EF4444; color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+
+        /* KARTU */
+        .card { background-color: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow-md); transition: var(--transition); border: 1px solid var(--card-border); }
+        .card-header { font-size: 16px; font-weight: 700; margin-bottom: 18px; color: var(--text-main); }
+        
+        .savings-highlight-card { background: var(--pastel-blue-grad); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 28px; padding: 28px; margin-bottom: 20px; color: #FFFFFF; position: relative; overflow: hidden; animation: floatOrganic 5s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.2); box-shadow: var(--shadow-md); }
+        body:not(.dark-mode) .savings-highlight-card { color: #1E293B; } 
+        .savings-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .savings-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; }
+        .savings-amount { font-size: 30px; font-weight: 800; letter-spacing: -1px; }
+        .savings-icon { font-size: 34px; background: rgba(255, 255, 255, 0.4); width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); animation: floatIcon 4s ease-in-out infinite 0.5s; border: 1px solid rgba(255,255,255,0.5); }
+
+        .progress-container { background: rgba(0, 0, 0, 0.1); padding: 5px; border-radius: 20px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        body:not(.dark-mode) .progress-container { background: rgba(255,255,255,0.5); }
+        .progress-bar { height: 12px; background: linear-gradient(90deg, #8B5CF6, #F59E0B); border-radius: 20px; width: 0%; transition: width 1.5s cubic-bezier(0.1, 0.8, 0.25, 1); position: relative; overflow: hidden;}
+        .progress-text { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; opacity: 0.9; margin-top: 8px; }
+
+        .wallet-active-card { background: var(--active-wallet-grad); backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 20px 24px; margin-bottom: 20px; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.2); animation: floatOrganic 6s ease-in-out infinite 1s; box-shadow: var(--shadow-md); }
+        body:not(.dark-mode) .wallet-active-card { color: #5C4A33; }
+        .wallet-title { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
+        .wallet-amount { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
+
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .summary-box { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); padding: 18px; border-radius: 20px; text-align: center; border: 1px solid var(--card-border); box-shadow: var(--shadow-md); }
+        .s-title { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; }
+        .s-amount { font-size: 16px; font-weight: 800; margin-top: 6px; }
+
+        /* FORM */
+        .form-group { margin-bottom: 16px; position: relative; }
+        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text-sub); }
+        input, select { width: 100%; padding: 15px 18px; border: 2px solid var(--input-border); border-radius: 16px; font-size: 16px !important; background: var(--input-bg); color: var(--text-main); outline: none; transition: var(--transition); -webkit-appearance: none; }
+        input:focus, select:focus { border-color: #8B5CF6; background: var(--card-bg); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); transform: translateY(-2px); }
+        .row { display: flex; gap: 12px; flex-wrap: wrap; } .row .form-group { flex: 1; min-width: 45%; }
+
+        button { width: 100%; padding: 18px; background: linear-gradient(135deg, #8B5CF6, #6D28D9); color: white; border: none; border-radius: 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: var(--transition); margin-top: 8px; box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3); text-transform: uppercase; letter-spacing: 1px; }
+        button:active { transform: scale(0.95); box-shadow: 0 4px 10px rgba(109, 40, 217, 0.2); }
+        
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--input-bg); border-radius: 16px; margin-bottom: 10px; transition: var(--transition); border: 1px solid var(--card-border); }
         .l-left { display: flex; align-items: center; gap: 12px; }
-        .l-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: var(--transition); }
-        .list-item:hover .l-icon { transform: scale(1.15) rotate(-5deg); }
-        .l-title { font-size: 14px; font-weight: 600; color: #1A202C; }
-        .l-date { font-size: 11px; color: var(--text-sub); }
+        .l-icon { width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: inset 0 2px 4px rgba(255,255,255,0.5); }
+        .l-title { font-size: 14px; font-weight: 700; color: var(--text-main); }
+        .l-date { font-size: 11px; color: var(--text-sub); margin-top: 2px;}
+        .l-amount { font-size: 14px; font-weight: 800; }
         
-        .l-right { display: flex; align-items: center; gap: 15px; }
-        .l-amount { font-size: 14px; font-weight: 700; transition: var(--transition); }
-        
-        .btn-hapus { background: none; border: none; padding: 6px; font-size: 16px; cursor: pointer; width: auto; margin: 0; opacity: 0; box-shadow: none; transition: var(--transition); color: transparent; text-shadow: 0 0 0 rgba(220, 38, 38, 0); transform: scale(0.8); }
-        .list-item:hover .btn-hapus { opacity: 0.7; color: transparent; text-shadow: 0 0 0 rgba(220, 38, 38, 1); transform: scale(1); }
-        .btn-hapus:hover { opacity: 1 !important; transform: scale(1.3) !important; text-shadow: 0 4px 8px rgba(220, 38, 38, 0.4); }
+        .btn-hapus { background: none; border: none; padding: 8px; font-size: 18px; cursor: pointer; width: auto; margin: 0; opacity: 0.5; box-shadow: none; filter: grayscale(1); transition: var(--transition);}
+        .btn-hapus:active { filter: grayscale(0); opacity: 1; transform: scale(1.1); }
 
+        /* MODAL EXCEL (POPUP) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 10000; display: flex; align-items: center; justify-content: center;
+            padding: 20px; transition: opacity 0.3s ease;
+        }
+        .modal-box {
+            background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border); border-radius: 24px;
+            width: 100%; max-width: 400px; padding: 25px;
+            box-shadow: var(--shadow-lg); animation: slideUpIn 0.4s ease-out;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h3 { font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+        .btn-close { background: rgba(239, 68, 68, 0.1); border: none; width: 32px; height: 32px; border-radius: 50%; color: #EF4444; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: var(--transition); margin: 0; padding: 0; box-shadow: none; }
+        .btn-close:hover, .btn-close:active { background: #EF4444; color: white; transform: scale(1.1); }
+        .radio-group { display: flex; gap: 15px; margin-bottom: 20px; background: var(--input-bg); padding: 5px; border-radius: 12px; border: 1px solid var(--input-border);}
+        .radio-group label { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-sub); padding: 10px; border-radius: 8px; transition: var(--transition); margin: 0;}
+        .radio-group input[type="radio"] { display: none; }
+        .radio-group input[type="radio"]:checked + span { color: #8B5CF6; }
+        .radio-group label:has(input[type="radio"]:checked) { background: var(--card-bg); box-shadow: var(--shadow-md); }
+        .btn-excel { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 20px;}
+        .btn-excel:active { box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
     </style>
 </head>
 <body>
@@ -170,107 +178,163 @@
 
 <div id="login-overlay">
     <div class="login-box">
-        <h2 style="font-size: 24px; color: #1A202C;">Halo, Selamat Datang! 👋</h2>
-        <p style="font-size:13px; color:#718096; margin-bottom:25px; margin-top:8px; line-height: 1.5;">Masukkan nama untuk membuka dashboard finansial khusus milikmu.</p>
-        <input type="text" id="login-name" placeholder="Ketik namamu di sini..." style="margin-bottom:18px; text-align:center;">
-        <button onclick="masukDashboard()">Buka Brankas 🚀</button>
+        <h2 style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Selamat Datang! 👋</h2>
+        <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Masukkan namamu untuk membuka rekap keuangan khusus milikmu.</p>
+        <input type="text" id="login-name" placeholder="Ketik namamu..." style="margin-bottom:20px; text-align:center; font-weight: 600;">
+        <button onclick="masukDashboard()">Buka Aplikasi 🚀</button>
+    </div>
+</div>
+
+<div id="excel-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>📄 Unduh Laporan</h3>
+            <button class="btn-close" onclick="closeExcelModal()">✖</button>
+        </div>
+        <div class="modal-body">
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="export_type" value="month" checked onchange="toggleExportType()">
+                    <span>Per Bulan</span>
+                </label>
+                <label>
+                    <input type="radio" name="export_type" value="date" onchange="toggleExportType()">
+                    <span>Pilih Tanggal</span>
+                </label>
+            </div>
+            
+            <div id="export-month-view" class="form-group">
+                <label>Pilih Bulan Rekapan</label>
+                <select id="ex-month"></select>
+            </div>
+            
+            <div id="export-date-view" class="row" style="display: none;">
+                <div class="form-group"><label>Dari Tanggal</label><input type="date" id="ex-start"></div>
+                <div class="form-group"><label>Sampai Tanggal</label><input type="date" id="ex-end"></div>
+            </div>
+            
+            <button class="btn-excel" onclick="executeExcelDownload()">Unduh File (.xlsx) 📥</button>
+        </div>
     </div>
 </div>
 
 <div class="container ani-fade-in" id="main-container" style="display: none;">
     <div class="header">
-        <h1>✨ RekapKu</h1>
-        <div class="user-badge">
-            👤 <span id="display-username">User</span>
-            <button class="btn-logout" onclick="keluarDashboard()">Keluar</button>
+        <div class="header-title-area">
+            <h1>✨ RekapKu</h1>
+            <select id="filter-bulan" class="month-selector" onchange="applyFilter()" title="Pilih Bulan"></select>
+        </div>
+        
+        <div class="header-actions">
+            <button id="btn-export" class="btn-export" onclick="openExcelModal()" title="Unduh Data Excel">📄</button>
+            <button id="btn-theme" class="btn-theme" onclick="toggleTheme()" title="Ganti Tema">🌙</button>
+            <div class="user-badge">
+                👤 <span id="display-username">User</span>
+                <button class="btn-logout" onclick="keluarDashboard()" title="Keluar dari Akun">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                        <line x1="12" y1="2" x2="12" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="savings-highlight-card">
         <div class="savings-top-row">
             <div class="savings-info">
-                <div class="savings-title">🎯 Total Tabunganku</div>
+                <div class="savings-title">🎯 Tabungan Utama</div>
                 <div class="savings-amount" id="t-tabung">Rp 0</div>
             </div>
             <div class="savings-icon" id="savings-emoji">🏦</div>
         </div>
-        
-        <div class="progress-container">
-            <div class="progress-bar" id="p-bar"></div>
-        </div>
-        <div class="progress-text">
-            <span id="t-motivasi">Memuat target... 💪</span>
-            <span id="p-percent">0%</span>
-        </div>
+        <div class="progress-container"><div class="progress-bar" id="p-bar"></div></div>
+        <div class="progress-text"><span id="t-motivasi">Memuat...</span><span id="p-percent">0%</span></div>
     </div>
 
     <div class="wallet-active-card">
-        <div class="wallet-title">💼 Dompet Sementara (Saldo)</div>
+        <div class="wallet-title">💼 Saldo Dompet (<span id="label-bulan-dompet">Bulan Ini</span>)</div>
         <div class="wallet-amount" id="t-dompet-aktif">Rp 0</div>
     </div>
 
     <div class="summary-grid">
-        <div class="summary-box">
-            <div class="s-title">Total Masuk 🟢</div>
-            <div class="s-amount" style="color:#48BB78" id="t-masuk">Rp 0</div>
-        </div>
-        <div class="summary-box">
-            <div class="s-title">Total Keluar 🔴</div>
-            <div class="s-amount" style="color:#F56565" id="t-keluar">Rp 0</div>
+        <div class="summary-box"><div class="s-title">Pemasukan 🟢</div><div class="s-amount" style="color:#10B981" id="t-masuk">Rp 0</div></div>
+        <div class="summary-box"><div class="s-title">Pengeluaran 🔴</div><div class="s-amount" style="color:#EF4444" id="t-keluar">Rp 0</div></div>
+    </div>
+
+    <div class="card" id="card-chart">
+        <div class="card-header">Statistik Keuangan 📊</div>
+        <div style="position: relative; height: 180px; width: 100%; display: flex; justify-content: center; align-items: center;">
+            <canvas id="myChart"></canvas>
         </div>
     </div>
 
     <div class="card">
-        <div class="card-header">Catat Transaksi Baru ✏️</div>
+        <div class="card-header">Catat Transaksi ✏️</div>
         <form id="app-form">
             <div class="form-group">
                 <label>Jenis Transaksi</label>
                 <select id="f-jenis" required>
                     <option value="Pemasukan">Pemasukan 💰</option>
                     <option value="Pengeluaran">Pengeluaran 💸</option>
-                    <option value="Tabungan">Tabungan 🏦 (Simpan di Brankas)</option>
+                    <option value="Tabungan">Tabungan (Simpan di Brankas) 🏦</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Keterangan / Kategori</label>
-                <input type="text" id="f-ket" placeholder="Contoh: Gaji, Jajan Kopi, Tabungan" required autocomplete="off">
-            </div>
-            <div class="form-group">
-                <label>Nominal (Angka saja)</label>
-                <input type="number" id="f-nom" placeholder="0" required>
-            </div>
-            <div class="form-group">
-                <label>Tanggal</label>
-                <input type="date" id="f-tgl" required>
-            </div>
+            <div class="form-group"><label>Keterangan</label><input type="text" id="f-ket" placeholder="Cth: Gaji, Jajan Kopi, Belanja..." required autocomplete="off"></div>
+            <div class="form-group"><label>Nominal (Hanya Angka)</label><input type="number" id="f-nom" placeholder="0" required inputmode="numeric"></div>
+            <div class="form-group"><label>Tanggal</label><input type="date" id="f-tgl" required></div>
             <button type="submit" id="btn-save">Simpan Transaksi 🚀</button>
         </form>
     </div>
 
-    <button id="btn-toggle-excel" class="btn-toggle">📂 Tampilkan Menu Unduh Excel</button>
-
-    <div class="card" id="card-excel" style="display: none;">
-        <div class="card-header">Unduh Dataku (Excel) 📊</div>
-        <div class="row">
-            <div class="form-group"><label>Dari</label><input type="date" id="ex-start"></div>
-            <div class="form-group"><label>Sampai</label><input type="date" id="ex-end"></div>
-        </div>
-        <button id="btn-excel" class="btn-excel">Download Data .xlsx 📥</button>
-    </div>
-
     <div class="card">
-        <div class="card-header">Riwayat Mutasiku ⏳</div>
-        <div id="list-data"><p style="text-align:center; font-size:13px; color:#A0A0A0; padding: 20px;">Memuat...</p></div>
+        <div class="card-header">Riwayat Transaksi ⏳</div>
+        <div id="list-data"><p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Memuat data...</p></div>
     </div>
 </div>
 
 <script>
-    // SETUP KONEKSI SUPABASE
     const supabaseUrl = 'https://jgjixdbnbzfpnvooczew.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
     const supa = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+    const btnTheme = document.getElementById('btn-theme');
+    const metaThemeColor = document.getElementById('meta-theme-color');
+    let chartInstance = null;
+    let allData = []; 
     let currentUser = localStorage.getItem('rekapku_user');
+
+    function playSound(type) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            
+            if(type === 'Pemasukan') { osc.frequency.setValueAtTime(600, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1); osc.type = 'sine'; } 
+            else if(type === 'Pengeluaran') { osc.frequency.setValueAtTime(300, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2); osc.type = 'triangle'; } 
+            else if(type === 'Tabungan') { osc.frequency.setValueAtTime(800, ctx.currentTime); osc.frequency.setValueAtTime(1200, ctx.currentTime + 0.1); osc.type = 'square'; }
+            
+            osc.start(); gain.gain.setValueAtTime(0.1, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.3); osc.stop(ctx.currentTime + 0.3);
+        } catch (e) {}
+    }
+
+    function updateMetaColor(isDark) { metaThemeColor.setAttribute("content", isDark ? "#0F172A" : "#F8FAFC"); }
+
+    function initTheme() {
+        if(localStorage.getItem('rekapku_theme') === 'dark') {
+            document.body.classList.add('dark-mode'); btnTheme.innerText = '☀️'; updateMetaColor(true);
+        }
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('rekapku_theme', isDark ? 'dark' : 'light');
+        btnTheme.innerText = isDark ? '☀️' : '🌙'; updateMetaColor(isDark);
+        if(chartInstance) { chartInstance.options.plugins.legend.labels.color = isDark ? '#F8FAFC' : '#1E293B'; chartInstance.update(); }
+    }
+    initTheme();
 
     function cekLogin() {
         if (currentUser) {
@@ -281,8 +345,7 @@
                 setTimeout(() => document.getElementById('main-container').classList.add('show'), 50);
             }, 500);
             document.getElementById('display-username').innerText = currentUser;
-            const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
-            document.getElementById('f-tgl').value = today;
+            document.getElementById('f-tgl').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
             loadData();
         } else {
             document.getElementById('login-overlay').style.display = 'flex';
@@ -295,137 +358,208 @@
     function masukDashboard() {
         const inputNama = document.getElementById('login-name').value.trim();
         if (inputNama === "") return;
-        localStorage.setItem('rekapku_user', inputNama);
-        currentUser = inputNama;
-        cekLogin();
+        localStorage.setItem('rekapku_user', inputNama); currentUser = inputNama; cekLogin();
     }
-
     function keluarDashboard() {
-        if(!confirm("Yakin ingin keluar?")) return;
-        localStorage.removeItem('rekapku_user');
-        currentUser = null;
-        document.getElementById('list-data').innerHTML = '';
-        cekLogin();
+        if(!confirm("Yakin ingin keluar dari akunmu?")) return;
+        localStorage.removeItem('rekapku_user'); currentUser = null; document.getElementById('list-data').innerHTML = '';
+        if(chartInstance) chartInstance.destroy(); cekLogin();
     }
 
     const rp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
     const getUI = (j) => {
-        if(j === 'Pemasukan') return { i:'💰', bg:'rgba(72,187,120,0.15)', c:'#48BB78', s:'+' };
-        if(j === 'Pengeluaran') return { i:'💸', bg:'rgba(245,101,101,0.15)', c:'#F56565', s:'-' };
-        return { i:'🔒', bg:'rgba(181,164,253,0.2)', c:'#805AD5', s:'⭐' };
+        if(j === 'Pemasukan') return { i:'💰', bg:'rgba(16, 185, 129, 0.2)', c:'#10B981', s:'+' };
+        if(j === 'Pengeluaran') return { i:'💸', bg:'rgba(239, 68, 68, 0.2)', c:'#EF4444', s:'-' };
+        return { i:'🔒', bg:'rgba(139, 92, 246, 0.2)', c:'#8B5CF6', s:'⭐' };
     };
 
-    function animateNumber(elementId, targetValue) {
-        const el = document.getElementById(elementId);
-        const startValue = parseInt(el.innerText.replace(/[^0-9-]/g, '')) || 0;
-        const duration = 1000;
-        let startTime = null;
-
-        function animation(currentTime) {
-            if (!startTime) startTime = currentTime;
-            const progress = currentTime - startTime;
-            const currentCount = Math.min(Math.floor((progress / duration) * (targetValue - startValue) + startValue), targetValue);
-            el.innerText = rp(currentCount);
-            if (progress < duration) requestAnimationFrame(animation);
-            else el.innerText = rp(targetValue);
+    function animateNumber(id, target) {
+        const el = document.getElementById(id); const start = parseInt(el.innerText.replace(/[^0-9-]/g, '')) || 0;
+        const dur = 1000; let st = null;
+        function anim(t) {
+            if (!st) st = t; const p = t - st;
+            const cur = Math.min(Math.floor((p / dur) * (target - start) + start), target);
+            el.innerText = rp(cur);
+            if (p < dur) requestAnimationFrame(anim); else el.innerText = rp(target);
         }
-        requestAnimationFrame(animation);
+        requestAnimationFrame(anim);
     }
 
-    const TARGET_TABUNGAN = 5000000; 
-    const updateMotivasiDanProgress = (totalTabungan) => {
-        const motEl = document.getElementById('t-motivasi');
-        const emojiEl = document.getElementById('savings-emoji');
-        let persen = Math.floor((totalTabungan / TARGET_TABUNGAN) * 100);
-        if (persen > 100) persen = 100; if (persen < 0) persen = 0;
-        document.getElementById('p-bar').style.width = persen + '%';
-        document.getElementById('p-percent').innerText = persen + '%';
-        if (totalTabungan <= 0) { motEl.innerText = "Mulai isi brankasmu! 🚀"; emojiEl.innerText = "🏦"; }
-        else if (persen < 50) { motEl.innerText = "Tabungan berjalan lancar! 🔥"; emojiEl.innerText = "🐷"; }
-        else if (persen < 100) { motEl.innerText = "Sikit lagi brankas penuh! ✨"; emojiEl.innerText = "💎"; }
-        else { motEl.innerText = "Target LUNAS! 👑🎉"; emojiEl.innerText = "👑"; }
+    const TARGET = 5000000; 
+    const updateProgress = (tot) => {
+        let p = Math.floor((tot / TARGET) * 100); if (p > 100) p = 100; if (p < 0) p = 0;
+        document.getElementById('p-bar').style.width = p + '%'; document.getElementById('p-percent').innerText = p + '%';
+        const mot = document.getElementById('t-motivasi'), em = document.getElementById('savings-emoji');
+        
+        if (tot <= 0) { mot.innerText = "Yuk, mulai menabung!"; em.innerText = "🏦"; }
+        else if (p < 50) { mot.innerText = "Awal yang bagus! Terus semangat! 🔥"; em.innerText = "📈"; }
+        else if (p < 100) { mot.innerText = "Keren! Dikit lagi targetmu tercapai! ✨"; em.innerText = "💎"; }
+        else { mot.innerText = "Luar biasa! Target tabunganmu terpenuhi! 🎉"; em.innerText = "👑"; }
     };
 
+    function renderChart(masuk, keluar, tabung) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const isDark = document.body.classList.contains('dark-mode');
+        if (chartInstance) chartInstance.destroy();
+        
+        const hasData = (masuk + keluar + tabung) > 0;
+        chartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: hasData ? ['Pemasukan', 'Pengeluaran', 'Tabungan'] : ['Belum ada data'], datasets: [{ data: hasData ? [masuk, keluar, tabung] : [1], backgroundColor: hasData ? ['#10B981', '#EF4444', '#8B5CF6'] : ['#CBD5E1'], borderWidth: 0, hoverOffset: 4 }] },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { color: isDark ? '#F8FAFC' : '#1E293B', font: { family: 'Poppins', size: 11, weight: 'bold' } } }, tooltip: { enabled: hasData } } }
+        });
+    }
+
+    // --- FITUR MODAL EXCEL BARU ---
+    function openExcelModal() {
+        const select = document.getElementById('ex-month');
+        let months = [...new Set(allData.map(x => x.tanggal.substring(0, 7)))];
+        const thisMonth = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }).substring(0, 7);
+        if (!months.includes(thisMonth)) months.push(thisMonth); months.sort().reverse(); 
+
+        select.innerHTML = '';
+        months.forEach(m => {
+            const dateObj = new Date(m + '-01'); const monthName = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+            select.innerHTML += `<option value="${m}">${monthName}</option>`;
+        });
+        
+        document.getElementById('excel-modal').style.display = 'flex';
+        // Delay dikit buat animasi fade in
+        setTimeout(() => { document.getElementById('excel-modal').style.opacity = '1'; }, 10);
+    }
+
+    function closeExcelModal() {
+        document.getElementById('excel-modal').style.opacity = '0';
+        setTimeout(() => { document.getElementById('excel-modal').style.display = 'none'; }, 300);
+    }
+
+    function toggleExportType() {
+        const type = document.querySelector('input[name="export_type"]:checked').value;
+        document.getElementById('export-month-view').style.display = type === 'month' ? 'block' : 'none';
+        document.getElementById('export-date-view').style.display = type === 'date' ? 'flex' : 'none';
+    }
+
+    async function executeExcelDownload() {
+        const type = document.querySelector('input[name="export_type"]:checked').value;
+        let query = supa.from('transaksi').select('*').eq('nama_user', currentUser);
+        let fileName = '';
+
+        if (type === 'month') {
+            const m = document.getElementById('ex-month').value;
+            if(!m) return alert('Pilih bulan yang ingin diunduh!');
+            
+            const [year, month] = m.split('-');
+            const lastDay = new Date(year, month, 0).getDate();
+            
+            query = query.gte('tanggal', `${m}-01`).lte('tanggal', `${m}-${lastDay}`).order('tanggal', { ascending: true });
+            fileName = `Rekap_${currentUser}_Bulan_${m}.xlsx`;
+        } else {
+            const s = document.getElementById('ex-start').value, e = document.getElementById('ex-end').value;
+            if(!s || !e) return alert('Pilih rentang tanggal (Dari & Sampai)!');
+            query = query.gte('tanggal', s).lte('tanggal', e).order('tanggal', { ascending: true });
+            fileName = `Rekap_${currentUser}_${s}_sd_${e}.xlsx`;
+        }
+
+        const btn = document.querySelector('.btn-excel');
+        btn.innerText = "Memproses... ⏳"; btn.disabled = true;
+
+        const { data, error } = await query;
+        btn.innerText = "Unduh File (.xlsx) 📥"; btn.disabled = false;
+
+        if (error) return alert('Terjadi kesalahan koneksi database!');
+        if (data.length === 0) return alert('Data kosong pada periode tersebut!');
+
+        const excelData = data.map((x, i) => ({ "No": i+1, "Tanggal": x.tanggal, "Jenis": x.jenis, "Keterangan": x.kategori, "Pemasukan (Rp)": x.jenis==='Pemasukan'?Number(x.nominal):0, "Pengeluaran (Rp)": x.jenis==='Pengeluaran'?Number(x.nominal):0, "Tabungan (Rp)": x.jenis==='Tabungan'?Number(x.nominal):0 }));
+        const ws = XLSX.utils.json_to_sheet(excelData); const wb = XLSX.utils.book_new(); 
+        XLSX.utils.book_append_sheet(wb, ws, "Rekap"); XLSX.writeFile(wb, fileName);
+        
+        closeExcelModal();
+    }
+    // ---------------------------------
+
+    function setupMonthDropdown() {
+        const select = document.getElementById('filter-bulan'); const currentSelection = select.value;
+        let months = [...new Set(allData.map(x => x.tanggal.substring(0, 7)))];
+        const thisMonth = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }).substring(0, 7);
+        if (!months.includes(thisMonth)) months.push(thisMonth); months.sort().reverse(); 
+
+        select.innerHTML = '';
+        months.forEach(m => {
+            const dateObj = new Date(m + '-01'); const monthName = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+            select.innerHTML += `<option value="${m}">${monthName}</option>`;
+        });
+        if (months.includes(currentSelection)) select.value = currentSelection; else select.value = thisMonth;
+    }
+
+    function applyFilter() {
+        const listEl = document.getElementById('list-data'); const selectedMonth = document.getElementById('filter-bulan').value;
+        const monthName = document.getElementById('filter-bulan').options[document.getElementById('filter-bulan').selectedIndex].text;
+        
+        document.getElementById('label-bulan-dompet').innerText = monthName;
+        const monthlyData = allData.filter(x => x.tanggal.startsWith(selectedMonth));
+
+        let tMasuk=0, tKeluar=0, tTabungBulanIni=0, tTabungAllTime=0; 
+        allData.forEach(x => { if(x.jenis === 'Tabungan') tTabungAllTime += Number(x.nominal); });
+
+        listEl.innerHTML = '';
+        if (monthlyData.length === 0) {
+            listEl.innerHTML = `<p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Belum ada riwayat di bulan ${monthName}.</p>`;
+        } else {
+            monthlyData.forEach((x, i) => {
+                if(x.jenis === 'Pemasukan') tMasuk += Number(x.nominal); else if(x.jenis === 'Pengeluaran') tKeluar += Number(x.nominal); else if(x.jenis === 'Tabungan') tTabungBulanIni += Number(x.nominal);
+                
+                let ui = getUI(x.jenis), dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+                listEl.innerHTML += `
+                    <div class="list-item" style="animation-delay: ${i*30}ms;">
+                        <div class="l-left"><div class="l-icon" style="background:${ui.bg}">${ui.i}</div>
+                            <div><div class="l-title">${x.kategori}</div><div class="l-date">${dStr}</div></div>
+                        </div>
+                        <div class="l-right"><div class="l-amount" style="color:${ui.c}">${ui.s} ${rp(x.nominal)}</div>
+                            <button class="btn-hapus" onclick="hapusData(${x.id}, this)">🗑️</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        animateNumber('t-masuk', tMasuk); animateNumber('t-keluar', tKeluar);
+        animateNumber('t-dompet-aktif', (tMasuk - tKeluar)); animateNumber('t-tabung', tTabungAllTime); 
+        updateProgress(tTabungAllTime); renderChart(tMasuk, tKeluar, tTabungBulanIni);
+    }
+
     async function loadData() {
-        const listEl = document.getElementById('list-data');
         try {
             const { data, error } = await supa.from('transaksi').select('*').eq('nama_user', currentUser).order('tanggal', { ascending: false }).order('created_at', { ascending: false });
-            if (error) throw error;
-            let totalMasuk=0, totalKeluar=0, totalTabungan=0;
-            listEl.innerHTML = '';
-            if (data.length === 0) {
-                listEl.innerHTML = '<p style="text-align:center; color:#A0A0A0; font-size:13px; padding: 20px;">Belum ada riwayat transaksimu.</p>';
-            } else {
-                data.forEach((x, index) => {
-                    if(x.jenis === 'Pemasukan') totalMasuk += Number(x.nominal);
-                    else if(x.jenis === 'Pengeluaran') totalKeluar += Number(x.nominal);
-                    else if(x.jenis === 'Tabungan') totalTabungan += Number(x.nominal); 
-                    let ui = getUI(x.jenis);
-                    let dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
-                    const animationDelay = index * 50;
-                    listEl.innerHTML += `
-                        <div class="list-item" style="animation-delay: ${animationDelay}ms;">
-                            <div class="l-left"><div class="l-icon" style="background:${ui.bg}">${ui.i}</div>
-                                <div><div class="l-title">${x.kategori}</div><div class="l-date">${dStr}</div></div>
-                            </div>
-                            <div class="l-right"><div class="l-amount" style="color:${ui.c}">${ui.s} ${rp(x.nominal)}</div>
-                                <button class="btn-hapus" onclick="hapusData(${x.id}, this)" title="Hapus Data">🗑️</button>
-                            </div>
-                        </div>`;
-                });
-            }
-            animateNumber('t-masuk', totalMasuk); animateNumber('t-keluar', totalKeluar);
-            animateNumber('t-dompet-aktif', (totalMasuk - totalKeluar)); animateNumber('t-tabung', totalTabungan);
-            updateMotivasiDanProgress(totalTabungan);
-        } catch (err) {
-            listEl.innerHTML = `<p style="text-align:center; color:#F56565; font-size:13px; padding: 20px;">Gagal memuat data.</p>`;
-        }
+            if (error) throw error; allData = data; setupMonthDropdown(); applyFilter(); 
+        } catch (err) { document.getElementById('list-data').innerHTML = `<p style="text-align:center; color:#EF4444; font-size:12px; padding: 15px;">Gagal memuat data.</p>`; }
     }
 
     document.getElementById('app-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         let btn = document.getElementById('btn-save'); btn.innerText = 'Memproses... ⏳'; btn.disabled = true;
-        const p_jenis = document.getElementById('f-jenis').value, p_ket = document.getElementById('f-ket').value;
-        const p_nom = document.getElementById('f-nom').value, p_tgl = document.getElementById('f-tgl').value;
-        const { error } = await supa.from('transaksi').insert([{ jenis: p_jenis, kategori: p_ket, nominal: p_nom, tanggal: p_tgl, nama_user: currentUser }]);
-        if (error) alert("Gagal Simpan: " + error.message);
-        else {
-            const formCard = btn.closest('.card'); formCard.style.boxShadow = '0 0 20px rgba(72,187,120,0.3)';
-            setTimeout(() => formCard.style.boxShadow = 'var(--shadow-md)', 1000);
-            document.getElementById('f-ket').value = ''; document.getElementById('f-nom').value = ''; await loadData();
+        const j = document.getElementById('f-jenis').value, k = document.getElementById('f-ket').value, n = document.getElementById('f-nom').value, t = document.getElementById('f-tgl').value;
+        
+        const { error } = await supa.from('transaksi').insert([{ jenis: j, kategori: k, nominal: n, tanggal: t, nama_user: currentUser }]);
+        
+        if (error) {
+            alert("Gagal menyimpan data!");
+        } else { 
+            playSound(j); 
+            
+            if(j === 'Tabungan') {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#8B5CF6', '#F59E0B', '#34D399'] });
+            }
+
+            document.getElementById('f-ket').value = ''; document.getElementById('f-nom').value = ''; 
+            await loadData(); 
         }
         btn.innerText = 'Simpan Transaksi 🚀'; btn.disabled = false;
     });
 
     async function hapusData(id, btnEl) {
-        if (!confirm("Yakin ingin menghapus transaksi ini?")) return;
-        const listItem = btnEl.closest('.list-item');
+        if (!confirm("Yakin ingin menghapus riwayat ini?")) return;
         const { error } = await supa.from('transaksi').delete().eq('id', id);
-        if (error) alert("Gagal menghapus data.");
-        else {
-            listItem.style.animation = 'fadeIn 0.3s ease reverse forwards';
-            setTimeout(async () => { await loadData(); }, 300);
-        }
+        if (!error) { btnEl.closest('.list-item').style.animation = 'fadeIn 0.3s ease reverse forwards'; setTimeout(loadData, 300); }
     }
-
-    document.getElementById('btn-toggle-excel').addEventListener('click', function() {
-        const cardExcel = document.getElementById('card-excel');
-        if (cardExcel.style.display === 'none') {
-            cardExcel.style.display = 'block'; cardExcel.style.animation = 'slideUpIn 0.4s ease forwards'; this.innerText = '📂 Sembunyikan Menu Unduh Excel';
-        } else {
-            cardExcel.style.animation = 'fadeIn 0.3s ease reverse forwards';
-            setTimeout(() => { cardExcel.style.display = 'none'; this.innerText = '📂 Tampilkan Menu Unduh Excel'; }, 300);
-        }
-    });
-
-    document.getElementById('btn-excel').addEventListener('click', async () => {
-        const s = document.getElementById('ex-start').value, e = document.getElementById('ex-end').value;
-        if(!s || !e) return alert('Pilih tanggal awal dan akhir!');
-        const { data, error } = await supa.from('transaksi').select('*').eq('nama_user', currentUser).gte('tanggal', s).lte('tanggal', e).order('tanggal', { ascending: true });
-        if (error) return alert("Error Excel: " + error.message); if (data.length === 0) return alert('Datamu kosong pada tanggal tersebut!');
-        const excelData = data.map((x, i) => ({ "No": i + 1, "Tanggal": x.tanggal, "Kategori": x.kategori, "Pemasukan (Rp)": x.jenis === 'Pemasukan' ? Number(x.nominal) : 0, "Pengeluaran (Rp)": x.jenis === 'Pengeluaran' ? Number(x.nominal) : 0, "Tabungan (Rp)": x.jenis === 'Tabungan' ? Number(x.nominal) : 0 }));
-        const ws = XLSX.utils.json_to_sheet(excelData), wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Rekap"); XLSX.writeFile(wb, `Rekap_${currentUser}_${s}_ke_${e}.xlsx`);
-    });
 
     cekLogin();
 </script>
