@@ -85,12 +85,28 @@
         #main-container.show { opacity: 1; transform: translateY(0); }
 
         /* HEADER */
-        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;}
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .header-title-area {
+            flex: 1;
+            min-width: 0;
+        }
         .header-title-area h1 { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 2px;}
         .month-selector { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); font-size: 13px; font-weight: 600; color: #7C3AED; cursor: pointer; outline: none; padding: 6px 12px; border-radius: 12px; transition: var(--transition); backdrop-filter: blur(5px); }
         body.dark-mode .month-selector { color: #C4B5FD; border-color: rgba(196, 181, 253, 0.3); }
 
-        .header-actions { display: flex; gap: 10px; align-items: center; }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
         
         .btn-theme, .btn-export { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
         .btn-theme:active, .btn-export:active { transform: scale(0.9); }
@@ -169,6 +185,51 @@
         .radio-group label:has(input[type="radio"]:checked) { background: var(--card-bg); box-shadow: var(--shadow-md); }
         .btn-excel { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 20px;}
         .btn-excel:active { box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+    
+        /* ===========================
+           IPHONE HEADER FIX
+        =========================== */
+
+        @media (max-width: 430px) {
+
+            .header {
+                flex-wrap: nowrap;
+                align-items: flex-start;
+            }
+
+            .header-title-area h1 {
+                font-size: 20px;
+            }
+
+            .month-selector {
+                max-width: 120px;
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+
+            .btn-theme,
+            .btn-export {
+                width: 34px;
+                height: 34px;
+                font-size: 13px;
+            }
+
+            .user-badge {
+                padding: 4px 4px 4px 8px;
+                font-size: 10px;
+                gap: 4px;
+            }
+
+            .btn-logout {
+                width: 22px;
+                height: 22px;
+            }
+
+            #display-username {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -385,7 +446,7 @@
         requestAnimationFrame(anim);
     }
 
-    const TARGET = 5000000; 
+    const TARGET = 10000000; 
     const updateProgress = (tot) => {
         let p = Math.floor((tot / TARGET) * 100); if (p > 100) p = 100; if (p < 0) p = 0;
         document.getElementById('p-bar').style.width = p + '%'; document.getElementById('p-percent').innerText = p + '%';
