@@ -226,7 +226,11 @@
             }
 
             #display-username {
-                display: none;
+                display: inline-block; /* Memunculkan kembali teks */
+                max-width: 60px;       /* Membatasi lebar teks agar tidak mendorong tombol lain */
+                white-space: nowrap;   /* Mencegah teks turun ke baris baru */
+                overflow: hidden;      /* Menyembunyikan teks yang kelebihan */
+                text-overflow: ellipsis; /* Menambahkan titik-titik (...) jika teks terlalu panjang */
             }
         }
 
