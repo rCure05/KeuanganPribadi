@@ -85,29 +85,13 @@
         #main-container.show { opacity: 1; transform: translateY(0); }
 
         /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 25px;
-            gap: 10px;
-        }
-
-        .header-title-area {
-            flex: 1;
-            min-width: 0;
-        }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; gap: 10px; }
+        .header-title-area { flex: 1; min-width: 0; }
         .header-title-area h1 { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 2px;}
         .month-selector { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); font-size: 13px; font-weight: 600; color: #7C3AED; cursor: pointer; outline: none; padding: 6px 12px; border-radius: 12px; transition: var(--transition); backdrop-filter: blur(5px); }
         body.dark-mode .month-selector { color: #C4B5FD; border-color: rgba(196, 181, 253, 0.3); }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        
+        .header-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
         .btn-theme, .btn-export { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
         .btn-theme:active, .btn-export:active { transform: scale(0.9); }
         
@@ -158,22 +142,17 @@
         .l-date { font-size: 11px; color: var(--text-sub); margin-top: 2px;}
         .l-amount { font-size: 14px; font-weight: 800; }
         
-        .btn-hapus { background: none; border: none; padding: 8px; font-size: 18px; cursor: pointer; width: auto; margin: 0; opacity: 0.5; box-shadow: none; filter: grayscale(1); transition: var(--transition);}
-        .btn-hapus:active { filter: grayscale(0); opacity: 1; transform: scale(1.1); }
+        /* TOMBOL AKSI DI LIST */
+        .action-btns { display: flex; gap: 8px; justify-content: flex-end; }
+        .btn-hapus, .btn-edit { background: none; border: none; padding: 6px; font-size: 16px; cursor: pointer; width: auto; margin: 0; opacity: 0.5; box-shadow: none; transition: var(--transition); }
+        .btn-hapus { filter: grayscale(1); }
+        .btn-hapus:active, .btn-edit:active { opacity: 1; transform: scale(1.2); }
+        .btn-hapus:active { filter: grayscale(0); }
+        .btn-edit:active { color: #3B82F6; opacity: 1; }
 
-        /* MODAL EXCEL (POPUP) */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            z-index: 10000; display: flex; align-items: center; justify-content: center;
-            padding: 20px; transition: opacity 0.3s ease;
-        }
-        .modal-box {
-            background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--card-border); border-radius: 24px;
-            width: 100%; max-width: 400px; padding: 25px;
-            box-shadow: var(--shadow-lg); animation: slideUpIn 0.4s ease-out;
-        }
+        /* MODAL (POPUP) GENERAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; transition: opacity 0.3s ease; }
+        .modal-box { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); border-radius: 24px; width: 100%; max-width: 400px; padding: 25px; box-shadow: var(--shadow-lg); animation: slideUpIn 0.4s ease-out; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-header h3 { font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
         .btn-close { background: rgba(239, 68, 68, 0.1); border: none; width: 32px; height: 32px; border-radius: 50%; color: #EF4444; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: var(--transition); margin: 0; padding: 0; box-shadow: none; }
@@ -183,55 +162,19 @@
         .radio-group input[type="radio"] { display: none; }
         .radio-group input[type="radio"]:checked + span { color: #8B5CF6; }
         .radio-group label:has(input[type="radio"]:checked) { background: var(--card-bg); box-shadow: var(--shadow-md); }
-        .btn-excel { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 20px;}
-        .btn-excel:active { box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
-    
-        /* ===========================
-           IPHONE HEADER FIX
-        =========================== */
+        .btn-modal-action { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 20px;}
+        .btn-modal-action.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
+        .btn-modal-action:active { transform: scale(0.95); }
 
+        /* IPHONE HEADER FIX */
         @media (max-width: 430px) {
-
-            .header {
-                flex-wrap: nowrap;
-                align-items: flex-start;
-            }
-
-            .header-title-area h1 {
-                font-size: 20px;
-            }
-
-            .month-selector {
-                max-width: 120px;
-                font-size: 11px;
-                padding: 4px 8px;
-            }
-
-            .btn-theme,
-            .btn-export {
-                width: 34px;
-                height: 34px;
-                font-size: 13px;
-            }
-
-            .user-badge {
-                padding: 4px 4px 4px 8px;
-                font-size: 10px;
-                gap: 4px;
-            }
-
-            .btn-logout {
-                width: 22px;
-                height: 22px;
-            }
-
-            #display-username {
-                display: inline-block; /* Memunculkan kembali teks */
-                max-width: 60px;       /* Membatasi lebar teks agar tidak mendorong tombol lain */
-                white-space: nowrap;   /* Mencegah teks turun ke baris baru */
-                overflow: hidden;      /* Menyembunyikan teks yang kelebihan */
-                text-overflow: ellipsis; /* Menambahkan titik-titik (...) jika teks terlalu panjang */
-            }
+            .header { flex-wrap: nowrap; align-items: flex-start; }
+            .header-title-area h1 { font-size: 20px; }
+            .month-selector { max-width: 140px; font-size: 11px; padding: 6px 10px; }
+            .btn-theme, .btn-export { width: 34px; height: 34px; font-size: 13px; }
+            .user-badge { padding: 4px 4px 4px 8px; font-size: 10px; gap: 4px; }
+            .btn-logout { width: 22px; height: 22px; }
+            #display-username { display: inline-block; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         }
 
     </style>
@@ -247,6 +190,39 @@
         <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Masukkan namamu untuk membuka rekap keuangan khusus milikmu.</p>
         <input type="text" id="login-name" placeholder="Ketik namamu..." style="margin-bottom:20px; text-align:center; font-weight: 600;">
         <button onclick="masukDashboard()">Buka Aplikasi 🚀</button>
+    </div>
+</div>
+
+<div id="filter-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>📅 Filter Tampilan</h3>
+            <button class="btn-close" onclick="closeFilterModal()">✖</button>
+        </div>
+        <div class="modal-body">
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="fl_type" value="month" checked onchange="toggleDashFilterType()">
+                    <span>Per Bulan</span>
+                </label>
+                <label>
+                    <input type="radio" name="fl_type" value="date" onchange="toggleDashFilterType()">
+                    <span>Rentang Waktu</span>
+                </label>
+            </div>
+            
+            <div id="fl-month-view" class="form-group">
+                <label>Pilih Bulan</label>
+                <select id="fl-month"></select>
+            </div>
+            
+            <div id="fl-date-view" class="row" style="display: none;">
+                <div class="form-group"><label>Dari Tanggal</label><input type="date" id="fl-start"></div>
+                <div class="form-group"><label>Sampai Tanggal</label><input type="date" id="fl-end"></div>
+            </div>
+            
+            <button class="btn-modal-action blue" onclick="terapkanFilterDashboard()">Terapkan Filter ✨</button>
+        </div>
     </div>
 </div>
 
@@ -278,7 +254,7 @@
                 <div class="form-group"><label>Sampai Tanggal</label><input type="date" id="ex-end"></div>
             </div>
             
-            <button class="btn-excel" onclick="executeExcelDownload()">Unduh File (.xlsx) 📥</button>
+            <button class="btn-modal-action" id="btn-unduh-excel" onclick="executeExcelDownload()">Unduh File (.xlsx) 📥</button>
         </div>
     </div>
 </div>
@@ -287,7 +263,7 @@
     <div class="header">
         <div class="header-title-area">
             <h1>✨ RekapKu</h1>
-            <select id="filter-bulan" class="month-selector" onchange="applyFilter()" title="Pilih Bulan"></select>
+            <button id="btn-main-filter" class="month-selector" onclick="openFilterModal()" title="Pilih Rentang Waktu">Memuat...</button>
         </div>
         
         <div class="header-actions">
@@ -318,7 +294,7 @@
     </div>
 
     <div class="wallet-active-card">
-        <div class="wallet-title">💼 Saldo Dompet (<span id="label-bulan-dompet">Bulan Ini</span>)</div>
+        <div class="wallet-title">💼 Saldo Dompet (<span id="label-bulan-dompet">...</span>)</div>
         <div class="wallet-amount" id="t-dompet-aktif">Rp 0</div>
     </div>
 
@@ -348,7 +324,11 @@
             <div class="form-group"><label>Keterangan</label><input type="text" id="f-ket" placeholder="Cth: Gaji, Jajan Kopi, Belanja..." required autocomplete="off"></div>
             <div class="form-group"><label>Nominal (Hanya Angka)</label><input type="number" id="f-nom" placeholder="0" required inputmode="numeric"></div>
             <div class="form-group"><label>Tanggal</label><input type="date" id="f-tgl" required></div>
+            
             <button type="submit" id="btn-save">Simpan Transaksi 🚀</button>
+            <div id="btn-cancel-edit" style="display:none; text-align:center; margin-top:10px;">
+                <span style="font-size: 13px; color: #EF4444; font-weight: 600; cursor: pointer; padding: 10px;" onclick="batalEdit()">✖ Batal Edit</span>
+            </div>
         </form>
     </div>
 
@@ -368,6 +348,13 @@
     let chartInstance = null;
     let allData = []; 
     let currentUser = localStorage.getItem('rekapku_user');
+    
+    // Variabel state untuk Edit & Filter
+    let editTargetId = null;
+    let activeFilterMode = 'month'; // 'month' atau 'date'
+    let activeFilterMonth = '';
+    let activeFilterStart = '';
+    let activeFilterEnd = '';
 
     function playSound(type) {
         try {
@@ -375,11 +362,9 @@
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain); gain.connect(ctx.destination);
-            
             if(type === 'Pemasukan') { osc.frequency.setValueAtTime(600, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1); osc.type = 'sine'; } 
             else if(type === 'Pengeluaran') { osc.frequency.setValueAtTime(300, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2); osc.type = 'triangle'; } 
             else if(type === 'Tabungan') { osc.frequency.setValueAtTime(800, ctx.currentTime); osc.frequency.setValueAtTime(1200, ctx.currentTime + 0.1); osc.type = 'square'; }
-            
             osc.start(); gain.gain.setValueAtTime(0.1, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.3); osc.stop(ctx.currentTime + 0.3);
         } catch (e) {}
     }
@@ -455,7 +440,6 @@
         let p = Math.floor((tot / TARGET) * 100); if (p > 100) p = 100; if (p < 0) p = 0;
         document.getElementById('p-bar').style.width = p + '%'; document.getElementById('p-percent').innerText = p + '%';
         const mot = document.getElementById('t-motivasi'), em = document.getElementById('savings-emoji');
-        
         if (tot <= 0) { mot.innerText = "Yuk, mulai menabung!"; em.innerText = "🏦"; }
         else if (p < 50) { mot.innerText = "Awal yang bagus! Terus semangat! 🔥"; em.innerText = "📈"; }
         else if (p < 100) { mot.innerText = "Keren! Dikit lagi targetmu tercapai! ✨"; em.innerText = "💎"; }
@@ -475,7 +459,121 @@
         });
     }
 
-    // --- FITUR MODAL EXCEL BARU ---
+    // ==========================================
+    // FILTER DASHBOARD KUSTOM
+    // ==========================================
+    function setupInitialFilter() {
+        const thisMonth = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }).substring(0, 7);
+        if(!activeFilterMonth) activeFilterMonth = thisMonth;
+    }
+
+    function openFilterModal() {
+        const select = document.getElementById('fl-month');
+        let months = [...new Set(allData.map(x => x.tanggal.substring(0, 7)))];
+        const thisMonth = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }).substring(0, 7);
+        if (!months.includes(thisMonth)) months.push(thisMonth); months.sort().reverse(); 
+
+        select.innerHTML = '';
+        months.forEach(m => {
+            const dateObj = new Date(m + '-01'); const monthName = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+            select.innerHTML += `<option value="${m}">${monthName}</option>`;
+        });
+        
+        if(activeFilterMonth) select.value = activeFilterMonth; else select.value = thisMonth;
+        
+        document.getElementById('filter-modal').style.display = 'flex';
+        setTimeout(() => { document.getElementById('filter-modal').style.opacity = '1'; }, 10);
+    }
+
+    function closeFilterModal() {
+        document.getElementById('filter-modal').style.opacity = '0';
+        setTimeout(() => { document.getElementById('filter-modal').style.display = 'none'; }, 300);
+    }
+
+    function toggleDashFilterType() {
+        const type = document.querySelector('input[name="fl_type"]:checked').value;
+        document.getElementById('fl-month-view').style.display = type === 'month' ? 'block' : 'none';
+        document.getElementById('fl-date-view').style.display = type === 'date' ? 'flex' : 'none';
+    }
+
+    function terapkanFilterDashboard() {
+        const type = document.querySelector('input[name="fl_type"]:checked').value;
+        activeFilterMode = type;
+        
+        if (type === 'month') {
+            activeFilterMonth = document.getElementById('fl-month').value;
+        } else {
+            const start = document.getElementById('fl-start').value;
+            const end = document.getElementById('fl-end').value;
+            if(!start || !end) return alert("Harap isi kedua tanggal (Dari dan Sampai)!");
+            if(start > end) return alert("Tanggal Mulai tidak boleh lebih besar dari Tanggal Sampai!");
+            activeFilterStart = start;
+            activeFilterEnd = end;
+        }
+        
+        closeFilterModal();
+        applyFilter();
+    }
+
+    function applyFilter() {
+        const listEl = document.getElementById('list-data');
+        const btnFilter = document.getElementById('btn-main-filter');
+        const labelBulan = document.getElementById('label-bulan-dompet');
+        
+        let filteredData = [];
+        let labelText = '';
+
+        if (activeFilterMode === 'month') {
+            filteredData = allData.filter(x => x.tanggal.startsWith(activeFilterMonth));
+            const dateObj = new Date(activeFilterMonth + '-01'); 
+            labelText = dateObj.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
+        } else {
+            filteredData = allData.filter(x => x.tanggal >= activeFilterStart && x.tanggal <= activeFilterEnd);
+            const ds = new Date(activeFilterStart).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+            const de = new Date(activeFilterEnd).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+            labelText = `${ds} - ${de}`;
+        }
+        
+        btnFilter.innerText = labelText + ' ▾';
+        labelBulan.innerText = labelText;
+
+        let tMasuk=0, tKeluar=0, tTabungBulanIni=0, tTabungAllTime=0; 
+        allData.forEach(x => { if(x.jenis === 'Tabungan') tTabungAllTime += Number(x.nominal); });
+
+        listEl.innerHTML = '';
+        if (filteredData.length === 0) {
+            listEl.innerHTML = `<p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Belum ada riwayat pada periode ${labelText}.</p>`;
+        } else {
+            filteredData.forEach((x, i) => {
+                if(x.jenis === 'Pemasukan') tMasuk += Number(x.nominal); 
+                else if(x.jenis === 'Pengeluaran') tKeluar += Number(x.nominal); 
+                else if(x.jenis === 'Tabungan') tTabungBulanIni += Number(x.nominal);
+                
+                let ui = getUI(x.jenis), dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+                listEl.innerHTML += `
+                    <div class="list-item" style="animation-delay: ${i*30}ms;">
+                        <div class="l-left"><div class="l-icon" style="background:${ui.bg}">${ui.i}</div>
+                            <div><div class="l-title">${x.kategori}</div><div class="l-date">${dStr}</div></div>
+                        </div>
+                        <div class="l-right">
+                            <div class="l-amount" style="color:${ui.c}; text-align:right; margin-bottom:6px;">${ui.s} ${rp(x.nominal)}</div>
+                            <div class="action-btns">
+                                <button class="btn-edit" onclick="siapkanEdit(${x.id})" title="Edit">✏️</button>
+                                <button class="btn-hapus" onclick="hapusData(${x.id}, this)" title="Hapus">🗑️</button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        animateNumber('t-masuk', tMasuk); animateNumber('t-keluar', tKeluar);
+        animateNumber('t-dompet-aktif', (tMasuk - tKeluar)); animateNumber('t-tabung', tTabungAllTime); 
+        updateProgress(tTabungAllTime); renderChart(tMasuk, tKeluar, tTabungBulanIni);
+    }
+
+    // ==========================================
+    // EXPORT EXCEL
+    // ==========================================
     function openExcelModal() {
         const select = document.getElementById('ex-month');
         let months = [...new Set(allData.map(x => x.tanggal.substring(0, 7)))];
@@ -489,15 +587,12 @@
         });
         
         document.getElementById('excel-modal').style.display = 'flex';
-        // Delay dikit buat animasi fade in
         setTimeout(() => { document.getElementById('excel-modal').style.opacity = '1'; }, 10);
     }
-
     function closeExcelModal() {
         document.getElementById('excel-modal').style.opacity = '0';
         setTimeout(() => { document.getElementById('excel-modal').style.display = 'none'; }, 300);
     }
-
     function toggleExportType() {
         const type = document.querySelector('input[name="export_type"]:checked').value;
         document.getElementById('export-month-view').style.display = type === 'month' ? 'block' : 'none';
@@ -512,10 +607,7 @@
         if (type === 'month') {
             const m = document.getElementById('ex-month').value;
             if(!m) return alert('Pilih bulan yang ingin diunduh!');
-            
-            const [year, month] = m.split('-');
-            const lastDay = new Date(year, month, 0).getDate();
-            
+            const [year, month] = m.split('-'); const lastDay = new Date(year, month, 0).getDate();
             query = query.gte('tanggal', `${m}-01`).lte('tanggal', `${m}-${lastDay}`).order('tanggal', { ascending: true });
             fileName = `Rekap_${currentUser}_Bulan_${m}.xlsx`;
         } else {
@@ -525,7 +617,7 @@
             fileName = `Rekap_${currentUser}_${s}_sd_${e}.xlsx`;
         }
 
-        const btn = document.querySelector('.btn-excel');
+        const btn = document.getElementById('btn-unduh-excel');
         btn.innerText = "Memproses... ⏳"; btn.disabled = true;
 
         const { data, error } = await query;
@@ -537,87 +629,97 @@
         const excelData = data.map((x, i) => ({ "No": i+1, "Tanggal": x.tanggal, "Jenis": x.jenis, "Keterangan": x.kategori, "Pemasukan (Rp)": x.jenis==='Pemasukan'?Number(x.nominal):0, "Pengeluaran (Rp)": x.jenis==='Pengeluaran'?Number(x.nominal):0, "Tabungan (Rp)": x.jenis==='Tabungan'?Number(x.nominal):0 }));
         const ws = XLSX.utils.json_to_sheet(excelData); const wb = XLSX.utils.book_new(); 
         XLSX.utils.book_append_sheet(wb, ws, "Rekap"); XLSX.writeFile(wb, fileName);
-        
         closeExcelModal();
-    }
-    // ---------------------------------
-
-    function setupMonthDropdown() {
-        const select = document.getElementById('filter-bulan'); const currentSelection = select.value;
-        let months = [...new Set(allData.map(x => x.tanggal.substring(0, 7)))];
-        const thisMonth = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }).substring(0, 7);
-        if (!months.includes(thisMonth)) months.push(thisMonth); months.sort().reverse(); 
-
-        select.innerHTML = '';
-        months.forEach(m => {
-            const dateObj = new Date(m + '-01'); const monthName = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-            select.innerHTML += `<option value="${m}">${monthName}</option>`;
-        });
-        if (months.includes(currentSelection)) select.value = currentSelection; else select.value = thisMonth;
-    }
-
-    function applyFilter() {
-        const listEl = document.getElementById('list-data'); const selectedMonth = document.getElementById('filter-bulan').value;
-        const monthName = document.getElementById('filter-bulan').options[document.getElementById('filter-bulan').selectedIndex].text;
-        
-        document.getElementById('label-bulan-dompet').innerText = monthName;
-        const monthlyData = allData.filter(x => x.tanggal.startsWith(selectedMonth));
-
-        let tMasuk=0, tKeluar=0, tTabungBulanIni=0, tTabungAllTime=0; 
-        allData.forEach(x => { if(x.jenis === 'Tabungan') tTabungAllTime += Number(x.nominal); });
-
-        listEl.innerHTML = '';
-        if (monthlyData.length === 0) {
-            listEl.innerHTML = `<p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Belum ada riwayat di bulan ${monthName}.</p>`;
-        } else {
-            monthlyData.forEach((x, i) => {
-                if(x.jenis === 'Pemasukan') tMasuk += Number(x.nominal); else if(x.jenis === 'Pengeluaran') tKeluar += Number(x.nominal); else if(x.jenis === 'Tabungan') tTabungBulanIni += Number(x.nominal);
-                
-                let ui = getUI(x.jenis), dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
-                listEl.innerHTML += `
-                    <div class="list-item" style="animation-delay: ${i*30}ms;">
-                        <div class="l-left"><div class="l-icon" style="background:${ui.bg}">${ui.i}</div>
-                            <div><div class="l-title">${x.kategori}</div><div class="l-date">${dStr}</div></div>
-                        </div>
-                        <div class="l-right"><div class="l-amount" style="color:${ui.c}">${ui.s} ${rp(x.nominal)}</div>
-                            <button class="btn-hapus" onclick="hapusData(${x.id}, this)">🗑️</button>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        animateNumber('t-masuk', tMasuk); animateNumber('t-keluar', tKeluar);
-        animateNumber('t-dompet-aktif', (tMasuk - tKeluar)); animateNumber('t-tabung', tTabungAllTime); 
-        updateProgress(tTabungAllTime); renderChart(tMasuk, tKeluar, tTabungBulanIni);
     }
 
     async function loadData() {
         try {
             const { data, error } = await supa.from('transaksi').select('*').eq('nama_user', currentUser).order('tanggal', { ascending: false }).order('created_at', { ascending: false });
-            if (error) throw error; allData = data; setupMonthDropdown(); applyFilter(); 
+            if (error) throw error; 
+            allData = data; 
+            setupInitialFilter(); 
+            applyFilter(); 
         } catch (err) { document.getElementById('list-data').innerHTML = `<p style="text-align:center; color:#EF4444; font-size:12px; padding: 15px;">Gagal memuat data.</p>`; }
+    }
+
+    // ==========================================
+    // LOGIKA SIMPAN & EDIT DATA
+    // ==========================================
+    function siapkanEdit(id) {
+        const data = allData.find(x => x.id === id);
+        if(!data) return;
+        
+        document.getElementById('f-jenis').value = data.jenis;
+        document.getElementById('f-ket').value = data.kategori;
+        document.getElementById('f-nom').value = data.nominal;
+        document.getElementById('f-tgl').value = data.tanggal;
+        
+        editTargetId = id;
+        
+        // Ubah tampilan tombol simpan
+        const btn = document.getElementById('btn-save');
+        btn.innerText = 'Update Transaksi 🔄';
+        btn.style.background = 'linear-gradient(135deg, #F59E0B, #D97706)';
+        btn.style.boxShadow = '0 8px 20px rgba(245, 158, 11, 0.3)';
+        
+        // Tampilkan tombol batal edit
+        document.getElementById('btn-cancel-edit').style.display = 'block';
+        
+        // Scroll layar ke form
+        document.getElementById('app-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function batalEdit() {
+        editTargetId = null;
+        document.getElementById('f-ket').value = ''; 
+        document.getElementById('f-nom').value = '';
+        document.getElementById('f-tgl').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+        
+        const btn = document.getElementById('btn-save');
+        btn.innerText = 'Simpan Transaksi 🚀';
+        btn.style.background = 'linear-gradient(135deg, #8B5CF6, #6D28D9)';
+        btn.style.boxShadow = '0 8px 20px rgba(109, 40, 217, 0.3)';
+        document.getElementById('btn-cancel-edit').style.display = 'none';
     }
 
     document.getElementById('app-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        let btn = document.getElementById('btn-save'); btn.innerText = 'Memproses... ⏳'; btn.disabled = true;
-        const j = document.getElementById('f-jenis').value, k = document.getElementById('f-ket').value, n = document.getElementById('f-nom').value, t = document.getElementById('f-tgl').value;
+        let btn = document.getElementById('btn-save'); 
+        btn.innerText = 'Memproses... ⏳'; btn.disabled = true;
         
-        const { error } = await supa.from('transaksi').insert([{ jenis: j, kategori: k, nominal: n, tanggal: t, nama_user: currentUser }]);
+        const j = document.getElementById('f-jenis').value, 
+              k = document.getElementById('f-ket').value, 
+              n = document.getElementById('f-nom').value, 
+              t = document.getElementById('f-tgl').value;
         
-        if (error) {
-            alert("Gagal menyimpan data!");
-        } else { 
-            playSound(j); 
+        if (editTargetId) {
+            // Proses Edit Data
+            const { error } = await supa.from('transaksi').update({ jenis: j, kategori: k, nominal: n, tanggal: t }).eq('id', editTargetId);
             
-            if(j === 'Tabungan') {
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#8B5CF6', '#F59E0B', '#34D399'] });
+            if (error) {
+                alert("Gagal mengupdate data!");
+            } else {
+                batalEdit(); // Kembalikan form ke mode normal
+                await loadData();
             }
-
-            document.getElementById('f-ket').value = ''; document.getElementById('f-nom').value = ''; 
-            await loadData(); 
+        } else {
+            // Proses Input Data Baru
+            const { error } = await supa.from('transaksi').insert([{ jenis: j, kategori: k, nominal: n, tanggal: t, nama_user: currentUser }]);
+            
+            if (error) {
+                alert("Gagal menyimpan data!");
+            } else { 
+                playSound(j); 
+                if(j === 'Tabungan') { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#8B5CF6', '#F59E0B', '#34D399'] }); }
+                document.getElementById('f-ket').value = ''; document.getElementById('f-nom').value = ''; 
+                await loadData(); 
+            }
         }
-        btn.innerText = 'Simpan Transaksi 🚀'; btn.disabled = false;
+        
+        if(!editTargetId){
+           btn.innerText = 'Simpan Transaksi 🚀'; 
+        }
+        btn.disabled = false;
     });
 
     async function hapusData(id, btnEl) {
