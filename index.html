@@ -96,8 +96,10 @@
         .btn-theme:active, .btn-export:active { transform: scale(0.9); }
         
         .user-badge { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--text-main); padding: 6px 6px 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-md); border: 1px solid var(--card-border);}
-        .btn-logout { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
-        .btn-logout:hover, .btn-logout:active { background: #EF4444; color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+        
+        /* TOMBOL KELUAR DIPERJELAS */
+        .btn-logout { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; height: 28px; padding: 0 12px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 700; cursor: pointer; transition: var(--transition); }
+        .btn-logout:hover, .btn-logout:active { background: #EF4444; color: white; transform: scale(1.05); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
 
         /* KARTU */
         .card { background-color: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow-md); transition: var(--transition); border: 1px solid var(--card-border); }
@@ -142,7 +144,6 @@
         .l-date { font-size: 11px; color: var(--text-sub); margin-top: 2px;}
         .l-amount { font-size: 14px; font-weight: 800; }
         
-        /* TOMBOL AKSI DI LIST */
         .action-btns { display: flex; gap: 8px; justify-content: flex-end; }
         .btn-hapus, .btn-edit { background: none; border: none; padding: 6px; font-size: 16px; cursor: pointer; width: auto; margin: 0; opacity: 0.5; box-shadow: none; transition: var(--transition); }
         .btn-hapus { filter: grayscale(1); }
@@ -166,14 +167,60 @@
         .btn-modal-action.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
         .btn-modal-action:active { transform: scale(0.95); }
 
-        /* IPHONE HEADER FIX */
+        /* POPUP DEV PENGUMUMAN */
+        .dev-popup {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 400px;
+            background: linear-gradient(-45deg, rgba(255, 235, 205, 0.95), rgba(224, 255, 255, 0.95), rgba(240, 248, 255, 0.95), rgba(255, 228, 225, 0.95));
+            background-size: 400% 400%;
+            animation: gradientBGMoving 6s ease infinite, slideUpIn 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 0.5s;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 16px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            z-index: 10001;
+            border: 1px solid rgba(255,255,255,0.8);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        
+        body.dark-mode .dev-popup {
+            background: linear-gradient(-45deg, rgba(76, 29, 149, 0.9), rgba(30, 58, 138, 0.9), rgba(15, 118, 110, 0.9), rgba(146, 64, 14, 0.9));
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        @keyframes gradientBGMoving {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .dev-popup-icon { font-size: 28px; animation: floatIcon 3s ease-in-out infinite; }
+        .dev-popup-content { flex: 1; padding-top: 2px; }
+        .dev-popup-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; color: #1E293B; display: flex; align-items: center; gap: 5px; }
+        body.dark-mode .dev-popup-title { color: #F8FAFC; }
+        .dev-popup-text { font-size: 11px; line-height: 1.5; color: #475569; font-weight: 500; }
+        body.dark-mode .dev-popup-text { color: #CBD5E1; }
+        .dev-popup-close { background: rgba(0,0,0,0.06); border: none; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: #1E293B; transition: all 0.2s; margin-top: -4px; margin-right: -8px; box-shadow: none; padding: 0; }
+        body.dark-mode .dev-popup-close { background: rgba(255,255,255,0.15); color: #F8FAFC; }
+        .dev-popup-close:hover, .dev-popup-close:active { background: #EF4444; color: white; transform: scale(1.1); }
+
         @media (max-width: 430px) {
             .header { flex-wrap: nowrap; align-items: flex-start; }
             .header-title-area h1 { font-size: 20px; }
             .month-selector { max-width: 140px; font-size: 11px; padding: 6px 10px; }
             .btn-theme, .btn-export { width: 34px; height: 34px; font-size: 13px; }
             .user-badge { padding: 4px 4px 4px 8px; font-size: 10px; gap: 4px; }
-            .btn-logout { width: 22px; height: 22px; }
+            .btn-logout { height: 22px; padding: 0 8px; font-size: 9px; gap: 3px; }
             #display-username { display: inline-block; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         }
 
@@ -272,10 +319,7 @@
             <div class="user-badge">
                 👤 <span id="display-username">User</span>
                 <button class="btn-logout" onclick="keluarDashboard()" title="Keluar dari Akun">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                        <line x1="12" y1="2" x2="12" y2="12"></line>
-                    </svg>
+                    Keluar 🚪
                 </button>
             </div>
         </div>
@@ -338,6 +382,15 @@
     </div>
 </div>
 
+<div id="dev-popup" class="dev-popup">
+    <div class="dev-popup-icon">🐷</div>
+    <div class="dev-popup-content">
+        <div class="dev-popup-title">Halo, Pengguna! 💸✨</div>
+        <div class="dev-popup-text">Aplikasi ini masih dalam tahap pengembangan (Beta). Jika kamu menemukan <i>bug</i> 🐛 atau error, jangan ragu untuk hubungi Developer ya! 🛠️💖</div>
+    </div>
+    <button class="dev-popup-close" onclick="tutupDevPopup()">✖</button>
+</div>
+
 <script>
     const supabaseUrl = 'https://jgjixdbnbzfpnvooczew.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
@@ -351,7 +404,7 @@
     
     // Variabel state untuk Edit & Filter
     let editTargetId = null;
-    let activeFilterMode = 'month'; // 'month' atau 'date'
+    let activeFilterMode = 'month'; 
     let activeFilterMonth = '';
     let activeFilterStart = '';
     let activeFilterEnd = '';
@@ -459,9 +512,6 @@
         });
     }
 
-    // ==========================================
-    // FILTER DASHBOARD KUSTOM
-    // ==========================================
     function setupInitialFilter() {
         const thisMonth = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }).substring(0, 7);
         if(!activeFilterMonth) activeFilterMonth = thisMonth;
@@ -571,9 +621,6 @@
         updateProgress(tTabungAllTime); renderChart(tMasuk, tKeluar, tTabungBulanIni);
     }
 
-    // ==========================================
-    // EXPORT EXCEL
-    // ==========================================
     function openExcelModal() {
         const select = document.getElementById('ex-month');
         let months = [...new Set(allData.map(x => x.tanggal.substring(0, 7)))];
@@ -642,9 +689,6 @@
         } catch (err) { document.getElementById('list-data').innerHTML = `<p style="text-align:center; color:#EF4444; font-size:12px; padding: 15px;">Gagal memuat data.</p>`; }
     }
 
-    // ==========================================
-    // LOGIKA SIMPAN & EDIT DATA
-    // ==========================================
     function siapkanEdit(id) {
         const data = allData.find(x => x.id === id);
         if(!data) return;
@@ -656,16 +700,12 @@
         
         editTargetId = id;
         
-        // Ubah tampilan tombol simpan
         const btn = document.getElementById('btn-save');
         btn.innerText = 'Update Transaksi 🔄';
         btn.style.background = 'linear-gradient(135deg, #F59E0B, #D97706)';
         btn.style.boxShadow = '0 8px 20px rgba(245, 158, 11, 0.3)';
         
-        // Tampilkan tombol batal edit
         document.getElementById('btn-cancel-edit').style.display = 'block';
-        
-        // Scroll layar ke form
         document.getElementById('app-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
@@ -693,17 +733,15 @@
               t = document.getElementById('f-tgl').value;
         
         if (editTargetId) {
-            // Proses Edit Data
             const { error } = await supa.from('transaksi').update({ jenis: j, kategori: k, nominal: n, tanggal: t }).eq('id', editTargetId);
             
             if (error) {
                 alert("Gagal mengupdate data!");
             } else {
-                batalEdit(); // Kembalikan form ke mode normal
+                batalEdit(); 
                 await loadData();
             }
         } else {
-            // Proses Input Data Baru
             const { error } = await supa.from('transaksi').insert([{ jenis: j, kategori: k, nominal: n, tanggal: t, nama_user: currentUser }]);
             
             if (error) {
@@ -726,6 +764,14 @@
         if (!confirm("Yakin ingin menghapus riwayat ini?")) return;
         const { error } = await supa.from('transaksi').delete().eq('id', id);
         if (!error) { btnEl.closest('.list-item').style.animation = 'fadeIn 0.3s ease reverse forwards'; setTimeout(loadData, 300); }
+    }
+
+    /* FUNGSI TUTUP POPUP DEV */
+    function tutupDevPopup() {
+        const popup = document.getElementById('dev-popup');
+        popup.style.opacity = '0';
+        popup.style.transform = 'translate(-50%, 20px)';
+        setTimeout(() => { popup.style.display = 'none'; }, 400);
     }
 
     cekLogin();
