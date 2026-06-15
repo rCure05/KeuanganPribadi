@@ -167,12 +167,13 @@
         .btn-modal-action.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
         .btn-modal-action:active { transform: scale(0.95); }
 
-        /* POPUP DEV PENGUMUMAN */
+        /* POPUP DEV PENGUMUMAN - PUSATKAN */
         .dev-popup {
             position: fixed;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
+            margin: 0 auto;
             width: calc(100% - 40px);
             max-width: 400px;
             background: linear-gradient(-45deg, rgba(255, 235, 205, 0.95), rgba(224, 255, 255, 0.95), rgba(240, 248, 255, 0.95), rgba(255, 228, 225, 0.95));
@@ -766,11 +767,10 @@
         if (!error) { btnEl.closest('.list-item').style.animation = 'fadeIn 0.3s ease reverse forwards'; setTimeout(loadData, 300); }
     }
 
-    /* FUNGSI TUTUP POPUP DEV */
     function tutupDevPopup() {
         const popup = document.getElementById('dev-popup');
         popup.style.opacity = '0';
-        popup.style.transform = 'translate(-50%, 20px)';
+        popup.style.transform = 'translateY(20px)';
         setTimeout(() => { popup.style.display = 'none'; }, 400);
     }
 
