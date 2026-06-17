@@ -140,8 +140,13 @@
         .wallet-title { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
         .wallet-amount { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
 
+        /* PERBAIKAN TATA LETAK SUMMARY GRID */
         .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .summary-box { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); padding: 18px 16px; border-radius: 20px; text-align: left; border: 1px solid var(--card-border); box-shadow: var(--shadow-md); display: flex; flex-direction: column; justify-content: center;}
+        .summary-box { 
+            background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); 
+            padding: 18px 16px; border-radius: 20px; text-align: left; border: 1px solid var(--card-border); 
+            box-shadow: var(--shadow-md); display: flex; flex-direction: column; justify-content: flex-start; /* Diubah ke flex-start agar sejajar ke atas */
+        }
         .s-title { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; }
         .s-amount { font-size: 17px; font-weight: 800; margin-top: 6px; }
 
@@ -191,28 +196,13 @@
         .btn-modal-action.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
         .btn-modal-action:active { transform: scale(0.95); }
 
-        /* POPUP DEV */
-        .dev-popup {
-            position: fixed; bottom: 20px; left: 20px; right: auto; width: calc(100% - 40px); max-width: 320px; 
-            background: linear-gradient(-45deg, rgba(255, 235, 205, 0.95), rgba(224, 255, 255, 0.95), rgba(240, 248, 255, 0.95), rgba(255, 228, 225, 0.95));
-            background-size: 400% 400%; animation: gradientBGMoving 6s ease infinite, slideUpIn 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 0.5s;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; padding: 16px 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            z-index: 10001; border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: flex-start; gap: 12px; opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-        body.dark-mode .dev-popup {
-            background: linear-gradient(-45deg, rgba(76, 29, 149, 0.9), rgba(30, 58, 138, 0.9), rgba(15, 118, 110, 0.9), rgba(146, 64, 14, 0.9));
-            border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        }
-        @keyframes gradientBGMoving { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .dev-popup-icon { font-size: 28px; animation: floatIcon 3s ease-in-out infinite; }
-        .dev-popup-content { flex: 1; padding-top: 2px; }
-        .dev-popup-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; color: #1E293B; display: flex; align-items: center; gap: 5px; }
-        body.dark-mode .dev-popup-title { color: #F8FAFC; }
-        .dev-popup-text { font-size: 11px; line-height: 1.5; color: #475569; font-weight: 500; }
-        body.dark-mode .dev-popup-text { color: #CBD5E1; }
-        .dev-popup-close { background: rgba(0,0,0,0.06); border: none; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: #1E293B; transition: all 0.2s; margin-top: -4px; margin-right: -8px; box-shadow: none; padding: 0; }
-        body.dark-mode .dev-popup-close { background: rgba(255,255,255,0.15); color: #F8FAFC; }
-        .dev-popup-close:hover, .dev-popup-close:active { background: #EF4444; color: white; transform: scale(1.1); }
+        /* TOAST NOTIFICATION CSS */
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 10005; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); padding: 14px 20px; border-radius: 16px; box-shadow: var(--shadow-lg); font-size: 13px; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 12px; transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); pointer-events: auto; }
+        .toast.show { transform: translateX(0); opacity: 1; }
+        .toast-icon { font-size: 18px; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; }
+        .toast.success .toast-icon { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+        .toast.error .toast-icon { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
 
         @media (max-width: 430px) {
             .header-title-area h1 { font-size: 20px; }
@@ -221,6 +211,9 @@
             .user-badge { padding: 0 6px 0 10px; font-size: 11px; gap: 6px; height: 34px; }
             .btn-logout { width: 24px; height: 24px; font-size: 10px; }
             #display-username { display: inline-block; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .toast-container { bottom: 20px; left: 20px; right: 20px; align-items: center; }
+            .toast { width: 100%; justify-content: flex-start; transform: translateY(120%); }
+            .toast.show { transform: translateY(0); }
         }
 
     </style>
@@ -230,11 +223,11 @@
 <div class="bg-bubble bubble-1"></div>
 <div class="bg-bubble bubble-2"></div>
 
-<!-- LAYAR AUTENTIKASI -->
+<div id="toast-container" class="toast-container"></div>
+
 <div id="login-overlay">
     <div class="login-box" id="auth-box">
         
-        <!-- BAGIAN LOGIN -->
         <div id="view-login">
             <h2 style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Selamat Datang! 👋</h2>
             <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Masuk untuk melihat rekap keuangan Anda.</p>
@@ -248,7 +241,6 @@
             <p class="auth-toggle-text">Belum punya akun? <a class="auth-toggle-link" onclick="toggleAuthView('register')">Daftar di sini</a></p>
         </div>
 
-        <!-- BAGIAN REGISTER -->
         <div id="view-register" style="display: none;">
             <h2 style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Buat Akun Baru ✨</h2>
             <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Buat akun untuk akses dashboard rekapanmu.</p>
@@ -406,13 +398,13 @@
 
     <div class="summary-grid">
         <div class="summary-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; min-height: 24px;">
                 <div class="s-title">Pemasukan 🟢</div>
             </div>
             <div class="s-amount" style="color:#10B981" id="t-masuk">Rp 0</div>
         </div>
         <div class="summary-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; min-height: 24px;">
                 <div class="s-title">Pengeluaran 🔴</div>
                 <button class="btn-set-limit" onclick="openLimitModal()" title="Atur Limit">⚙️</button>
             </div>
@@ -436,14 +428,20 @@
         <form id="app-form">
             <div class="form-group">
                 <label>Jenis Transaksi</label>
-                <select id="f-jenis" required>
+                <select id="f-jenis" onchange="updateKategoriOptions()" required>
                     <option value="Pemasukan">Pemasukan 💰</option>
                     <option value="Pengeluaran">Pengeluaran 💸</option>
                     <option value="Tabungan">Tabungan (Simpan di Brankas) 🏦</option>
                 </select>
             </div>
-            <div class="form-group"><label>Keterangan</label><input type="text" id="f-ket" placeholder="Cth: Gaji, Jajan Kopi, Belanja..." required autocomplete="off"></div>
-            <div class="form-group"><label>Nominal (Hanya Angka)</label><input type="number" id="f-nom" placeholder="0" required inputmode="numeric"></div>
+            
+            <div class="form-group">
+                <label>Kategori</label>
+                <select id="f-ket" required>
+                    </select>
+            </div>
+            
+            <div class="form-group"><label>Nominal</label><input type="text" id="f-nom" placeholder="Contoh: 50.000" required inputmode="numeric"></div>
             <div class="form-group"><label>Tanggal</label><input type="date" id="f-tgl" required></div>
             
             <button type="submit" id="btn-save">Simpan Transaksi 🚀</button>
@@ -476,7 +474,66 @@
     let activeFilterStart = '';
     let activeFilterEnd = '';
 
-    // --- LOGIKA AUTENTIKASI (LOGIN & REGISTER) ---
+    // --- LOGIKA KATEGORI DINAMIS ---
+    const kategoriOptions = {
+        'Pemasukan': ['Gaji 💼', 'Bonus 🎉', 'Hasil Usaha 📈', 'Pemberian 🎁', 'Lainnya 💰'],
+        'Pengeluaran': ['Makanan & Minuman 🍔', 'Transportasi 🚗', 'Belanja 🛒', 'Tagihan & Utang 🧾', 'Hiburan 🎮', 'Kesehatan 💊', 'Lainnya 💸'],
+        'Tabungan': ['Dana Darurat 🚨', 'Investasi 📈', 'Impian / Target 🎯', 'Lainnya 🏦']
+    };
+
+    function updateKategoriOptions(selectedValue = null) {
+        const jenis = document.getElementById('f-jenis').value;
+        const katSelect = document.getElementById('f-ket');
+        
+        katSelect.innerHTML = ''; 
+        
+        let options = [...kategoriOptions[jenis]];
+        
+        if (selectedValue && !options.includes(selectedValue)) {
+            options.push(selectedValue); 
+        }
+        
+        options.forEach(opt => {
+            katSelect.innerHTML += `<option value="${opt}">${opt}</option>`;
+        });
+        
+        if (selectedValue) {
+            katSelect.value = selectedValue;
+        }
+    }
+    updateKategoriOptions();
+
+
+    // --- FUNGSI TOAST NOTIFICATION ---
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? '✓' : '✖';
+        toast.innerHTML = `<div class="toast-icon">${icon}</div><div>${message}</div>`;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+
+    // --- FORMAT INPUT RUPIAH OTOMATIS ---
+    const fNomInput = document.getElementById('f-nom');
+    fNomInput.addEventListener('input', function(e) {
+        let val = this.value.replace(/[^0-9]/g, ''); 
+        if(val) {
+            this.value = new Intl.NumberFormat('id-ID').format(val);
+        } else {
+            this.value = '';
+        }
+    });
+
+    // --- LOGIKA AUTENTIKASI ---
     function toggleAuthView(view) {
         if (view === 'register') {
             document.getElementById('view-login').style.display = 'none';
@@ -491,15 +548,14 @@
         const u = document.getElementById('reg-username').value.trim();
         const p = document.getElementById('reg-password').value.trim();
         
-        if (!u || !p) return alert("Username dan Password tidak boleh kosong!");
-        if (u.length < 3) return alert("Username minimal 3 karakter!");
+        if (!u || !p) return showToast("Username dan Password tidak boleh kosong!", "error");
+        if (u.length < 3) return showToast("Username minimal 3 karakter!", "error");
         
         const btn = document.getElementById('btn-register');
         const originalText = btn.innerText;
         btn.innerText = "Memproses... ⏳"; btn.disabled = true;
 
         try {
-            // 1. Cek apakah username sudah ada di tabel 'akun'
             const { data: existingUser, error: checkError } = await supa
                 .from('akun')
                 .select('username')
@@ -509,22 +565,21 @@
             if (checkError) throw checkError;
 
             if (existingUser && existingUser.length > 0) {
-                alert("❌ Username ini sudah terdaftar! Silakan gunakan username lain.");
+                showToast("Username ini sudah terdaftar!", "error");
             } else {
-                // 2. Jika belum ada, masukkan ke tabel 'akun'
                 const { error: insertError } = await supa
                     .from('akun')
                     .insert([{ username: u, password: p }]);
                 
                 if (insertError) throw insertError;
                 
-                alert("✅ Akun berhasil dibuat! Selamat datang di RekapKu.");
+                showToast("Akun berhasil dibuat! Selamat datang.", "success");
                 localStorage.setItem('rekapku_user', u); 
                 currentUser = u; 
                 cekLogin();
             }
         } catch (err) {
-            alert("Terjadi kesalahan sistem. Pastikan Anda sudah membuat tabel 'akun' di Supabase.");
+            showToast("Terjadi kesalahan sistem.", "error");
             console.error(err);
         }
         
@@ -535,14 +590,13 @@
         const u = document.getElementById('login-username').value.trim();
         const p = document.getElementById('login-password').value.trim();
         
-        if (!u || !p) return alert("Username dan Password tidak boleh kosong!");
+        if (!u || !p) return showToast("Username dan Password tidak boleh kosong!", "error");
 
         const btn = document.getElementById('btn-login');
         const originalText = btn.innerText;
         btn.innerText = "Memeriksa... ⏳"; btn.disabled = true;
 
         try {
-            // Cek kecocokan username dan password di tabel 'akun'
             const { data, error } = await supa
                 .from('akun')
                 .select('username')
@@ -553,16 +607,15 @@
             if (error) throw error;
 
             if (data && data.length > 0) {
-                // Berhasil login
+                showToast("Login berhasil!", "success");
                 localStorage.setItem('rekapku_user', u); 
                 currentUser = u; 
                 cekLogin();
             } else {
-                // Gagal login
-                alert("❌ Username atau Password salah!");
+                showToast("Username atau Password salah!", "error");
             }
         } catch (err) {
-            alert("Terjadi kesalahan sistem. Pastikan Anda sudah membuat tabel 'akun' di Supabase.");
+            showToast("Terjadi kesalahan sistem.", "error");
             console.error(err);
         }
         
@@ -570,12 +623,11 @@
     }
 
     function keluarDashboard() {
-        if(!confirm("Yakin ingin keluar? Anda bisa masuk lagi kapan saja dari perangkat manapun.")) return;
+        if(!confirm("Yakin ingin keluar? Anda bisa masuk lagi kapan saja.")) return;
         localStorage.removeItem('rekapku_user'); 
         currentUser = null; 
         document.getElementById('list-data').innerHTML = '';
         
-        // Reset input form login
         document.getElementById('login-username').value = '';
         document.getElementById('login-password').value = '';
         
@@ -599,7 +651,7 @@
             document.getElementById('login-overlay').style.opacity = '1';
             document.getElementById('main-container').classList.remove('show');
             setTimeout(() => document.getElementById('main-container').style.display = 'none', 300);
-            toggleAuthView('login'); // Pastikan selalu kembali ke layar login
+            toggleAuthView('login');
         }
     }
 
@@ -634,83 +686,88 @@
     initTheme();
 
     const rp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+    
+    // LOGIKA UI IKON DIPERBARUI - Tabungan menggunakan minus (-) untuk mempertegas pemotongan dompet
     const getUI = (j) => {
         if(j === 'Pemasukan') return { i:'💰', bg:'rgba(16, 185, 129, 0.2)', c:'#10B981', s:'+' };
         if(j === 'Pengeluaran') return { i:'💸', bg:'rgba(239, 68, 68, 0.2)', c:'#EF4444', s:'-' };
-        return { i:'🔒', bg:'rgba(139, 92, 246, 0.2)', c:'#8B5CF6', s:'⭐' };
+        return { i:'🔒', bg:'rgba(139, 92, 246, 0.2)', c:'#8B5CF6', s:'-' }; 
     };
 
+    // LOGIKA ANIMASI DIPERBAIKI - Agar pergerakan angka lebih stabil saat turun maupun naik
     function animateNumber(id, target) {
-        const el = document.getElementById(id); const start = parseInt(el.innerText.replace(/[^0-9-]/g, '')) || 0;
+        const el = document.getElementById(id); 
+        const start = parseInt(el.innerText.replace(/[^0-9-]/g, '')) || 0;
         const dur = 1000; let st = null;
         function anim(t) {
             if (!st) st = t; const p = t - st;
-            const cur = Math.min(Math.floor((p / dur) * (target - start) + start), target);
+            let fraction = p / dur; if (fraction > 1) fraction = 1;
+            const cur = Math.floor(start + (target - start) * fraction);
             el.innerText = rp(cur);
             if (p < dur) requestAnimationFrame(anim); else el.innerText = rp(target);
         }
         requestAnimationFrame(anim);
     }
 
+    // Modal Target Tabungan
     function openTargetModal() {
         let currentTarget = localStorage.getItem('target_' + currentUser);
         document.getElementById('input-target-nominal').value = currentTarget ? currentTarget : '';
         document.getElementById('target-modal').style.display = 'flex';
         setTimeout(() => { document.getElementById('target-modal').style.opacity = '1'; }, 10);
     }
-
     function closeTargetModal() {
         document.getElementById('target-modal').style.opacity = '0';
         setTimeout(() => { document.getElementById('target-modal').style.display = 'none'; }, 300);
     }
-
     function saveTarget() {
         let val = document.getElementById('input-target-nominal').value;
         if (val && val > 0) {
             localStorage.setItem('target_' + currentUser, val);
             closeTargetModal();
             applyFilter(); 
+            showToast("Target tabungan berhasil diatur!", "success");
         } else {
-            alert("Mohon masukkan nominal target yang valid!");
+            showToast("Nominal target tidak valid!", "error");
         }
     }
-
     function deleteTarget() {
         if(confirm("Yakin ingin menghapus target tabunganmu?")) {
             localStorage.removeItem('target_' + currentUser);
             closeTargetModal();
             applyFilter(); 
+            showToast("Target tabungan dihapus.", "success");
         }
     }
 
+    // Modal Limit Pengeluaran
     function openLimitModal() {
         let currentLimit = localStorage.getItem('limit_' + currentUser);
         document.getElementById('input-limit-nominal').value = currentLimit ? currentLimit : '';
         document.getElementById('limit-modal').style.display = 'flex';
         setTimeout(() => { document.getElementById('limit-modal').style.opacity = '1'; }, 10);
     }
-
     function closeLimitModal() {
         document.getElementById('limit-modal').style.opacity = '0';
         setTimeout(() => { document.getElementById('limit-modal').style.display = 'none'; }, 300);
     }
-
     function saveLimit() {
         let val = document.getElementById('input-limit-nominal').value;
         if (val && val > 0) {
             localStorage.setItem('limit_' + currentUser, val);
             closeLimitModal();
             applyFilter(); 
+            showToast("Limit pengeluaran berhasil diatur!", "success");
         } else {
-            alert("Mohon masukkan nominal limit yang valid!");
+            showToast("Nominal limit tidak valid!", "error");
         }
     }
-
     function deleteLimit() {
         if(confirm("Yakin ingin menghapus limit pengeluaranmu?")) {
             localStorage.removeItem('limit_' + currentUser);
             closeLimitModal();
             applyFilter(); 
+            showToast("Limit pengeluaran dihapus.", "success");
         }
     }
 
@@ -828,8 +885,8 @@
         } else {
             const start = document.getElementById('fl-start').value;
             const end = document.getElementById('fl-end').value;
-            if(!start || !end) return alert("Harap isi kedua tanggal (Dari dan Sampai)!");
-            if(start > end) return alert("Tanggal Mulai tidak boleh lebih besar dari Tanggal Sampai!");
+            if(!start || !end) return showToast("Harap isi kedua tanggal (Dari dan Sampai)!", "error");
+            if(start > end) return showToast("Tanggal Mulai tidak boleh lebih besar dari Tanggal Sampai!", "error");
             activeFilterStart = start;
             activeFilterEnd = end;
         }
@@ -889,8 +946,13 @@
             });
         }
 
-        animateNumber('t-masuk', tMasuk); animateNumber('t-keluar', tKeluar);
-        animateNumber('t-dompet-aktif', (tMasuk - tKeluar)); animateNumber('t-tabung', tTabungAllTime); 
+        animateNumber('t-masuk', tMasuk); 
+        animateNumber('t-keluar', tKeluar);
+        
+        // PERHITUNGAN BARU: Tabungan sekarang memotong Saldo Dompet
+        animateNumber('t-dompet-aktif', (tMasuk - tKeluar - tTabungBulanIni)); 
+        
+        animateNumber('t-tabung', tTabungAllTime); 
         updateProgress(tTabungAllTime, tKeluar); 
         renderChart(tMasuk, tKeluar, tTabungBulanIni);
     }
@@ -927,13 +989,13 @@
 
         if (type === 'month') {
             const m = document.getElementById('ex-month').value;
-            if(!m) return alert('Pilih bulan yang ingin diunduh!');
+            if(!m) return showToast('Pilih bulan yang ingin diunduh!', 'error');
             const [year, month] = m.split('-'); const lastDay = new Date(year, month, 0).getDate();
             query = query.gte('tanggal', `${m}-01`).lte('tanggal', `${m}-${lastDay}`).order('tanggal', { ascending: true });
             fileName = `Rekap_${currentUser}_Bulan_${m}.xlsx`;
         } else {
             const s = document.getElementById('ex-start').value, e = document.getElementById('ex-end').value;
-            if(!s || !e) return alert('Pilih rentang tanggal (Dari & Sampai)!');
+            if(!s || !e) return showToast('Pilih rentang tanggal (Dari & Sampai)!', 'error');
             query = query.gte('tanggal', s).lte('tanggal', e).order('tanggal', { ascending: true });
             fileName = `Rekap_${currentUser}_${s}_sd_${e}.xlsx`;
         }
@@ -944,13 +1006,14 @@
         const { data, error } = await query;
         btn.innerText = "Unduh File (.xlsx) 📥"; btn.disabled = false;
 
-        if (error) return alert('Terjadi kesalahan koneksi database!');
-        if (data.length === 0) return alert('Data kosong pada periode tersebut!');
+        if (error) return showToast('Terjadi kesalahan koneksi database!', 'error');
+        if (data.length === 0) return showToast('Data kosong pada periode tersebut!', 'error');
 
         const excelData = data.map((x, i) => ({ "No": i+1, "Tanggal": x.tanggal, "Jenis": x.jenis, "Keterangan": x.kategori, "Pemasukan (Rp)": x.jenis==='Pemasukan'?Number(x.nominal):0, "Pengeluaran (Rp)": x.jenis==='Pengeluaran'?Number(x.nominal):0, "Tabungan (Rp)": x.jenis==='Tabungan'?Number(x.nominal):0 }));
         const ws = XLSX.utils.json_to_sheet(excelData); const wb = XLSX.utils.book_new(); 
         XLSX.utils.book_append_sheet(wb, ws, "Rekap"); XLSX.writeFile(wb, fileName);
         closeExcelModal();
+        showToast("Laporan Excel berhasil diunduh!", "success");
     }
 
     async function loadData() {
@@ -960,7 +1023,10 @@
             allData = data; 
             setupInitialFilter(); 
             applyFilter(); 
-        } catch (err) { document.getElementById('list-data').innerHTML = `<p style="text-align:center; color:#EF4444; font-size:12px; padding: 15px;">Gagal memuat data.</p>`; }
+        } catch (err) { 
+            document.getElementById('list-data').innerHTML = `<p style="text-align:center; color:#EF4444; font-size:12px; padding: 15px;">Gagal memuat data.</p>`; 
+            showToast("Gagal memuat data dari database", "error");
+        }
     }
 
     function siapkanEdit(id) {
@@ -968,8 +1034,9 @@
         if(!data) return;
         
         document.getElementById('f-jenis').value = data.jenis;
-        document.getElementById('f-ket').value = data.kategori;
-        document.getElementById('f-nom').value = data.nominal;
+        updateKategoriOptions(data.kategori); 
+        
+        document.getElementById('f-nom').value = new Intl.NumberFormat('id-ID').format(data.nominal);
         document.getElementById('f-tgl').value = data.tanggal;
         
         editTargetId = id;
@@ -985,7 +1052,8 @@
 
     function batalEdit() {
         editTargetId = null;
-        document.getElementById('f-ket').value = ''; 
+        document.getElementById('f-jenis').value = 'Pemasukan'; 
+        updateKategoriOptions(); 
         document.getElementById('f-nom').value = '';
         document.getElementById('f-tgl').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
         
@@ -1001,17 +1069,19 @@
         let btn = document.getElementById('btn-save'); 
         btn.innerText = 'Memproses... ⏳'; btn.disabled = true;
         
-        const j = document.getElementById('f-jenis').value, 
-              k = document.getElementById('f-ket').value, 
-              n = document.getElementById('f-nom').value, 
-              t = document.getElementById('f-tgl').value;
+        const j = document.getElementById('f-jenis').value;
+        const k = document.getElementById('f-ket').value;
+        const nText = document.getElementById('f-nom').value;
+        const n = nText.replace(/\./g, ''); 
+        const t = document.getElementById('f-tgl').value;
         
         if (editTargetId) {
             const { error } = await supa.from('transaksi').update({ jenis: j, kategori: k, nominal: n, tanggal: t }).eq('id', editTargetId);
             
             if (error) {
-                alert("Gagal mengupdate data!");
+                showToast("Gagal mengupdate data!", "error");
             } else {
+                showToast("Data berhasil diperbarui!", "success");
                 batalEdit(); 
                 await loadData();
             }
@@ -1019,11 +1089,16 @@
             const { error } = await supa.from('transaksi').insert([{ jenis: j, kategori: k, nominal: n, tanggal: t, nama_user: currentUser }]);
             
             if (error) {
-                alert("Gagal menyimpan data!");
+                showToast("Gagal menyimpan data!", "error");
             } else { 
                 playSound(j); 
+                showToast("Transaksi berhasil disimpan!", "success");
                 if(j === 'Tabungan') { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#8B5CF6', '#F59E0B', '#34D399'] }); }
-                document.getElementById('f-ket').value = ''; document.getElementById('f-nom').value = ''; 
+                
+                document.getElementById('f-nom').value = ''; 
+                document.getElementById('f-jenis').value = 'Pemasukan';
+                updateKategoriOptions(); 
+                
                 await loadData(); 
             }
         }
@@ -1037,7 +1112,13 @@
     async function hapusData(id, btnEl) {
         if (!confirm("Yakin ingin menghapus riwayat ini?")) return;
         const { error } = await supa.from('transaksi').delete().eq('id', id);
-        if (!error) { btnEl.closest('.list-item').style.animation = 'fadeIn 0.3s ease reverse forwards'; setTimeout(loadData, 300); }
+        if (!error) { 
+            showToast("Transaksi dihapus.", "success");
+            btnEl.closest('.list-item').style.animation = 'fadeIn 0.3s ease reverse forwards'; 
+            setTimeout(loadData, 300); 
+        } else {
+            showToast("Gagal menghapus data.", "error");
+        }
     }
 
     cekLogin();
