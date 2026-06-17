@@ -76,15 +76,21 @@
 
         .ani-fade-in { animation: fadeIn 0.5s ease-out forwards; }
 
-        /* LAYAR LOGIN */
+        /* LAYAR LOGIN & REGISTER */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; transition: opacity 0.5s ease, background-color 0.4s ease; }
         .login-box { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); padding: 40px 25px; border-radius: 28px; box-shadow: var(--shadow-lg); width: 100%; max-width: 400px; text-align: center; opacity: 0; transform: scale(0.9); border: 1px solid var(--card-border); animation: floatOrganic 6s ease-in-out infinite, fadeInScale 0.5s ease-out forwards 0.2s; }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .auth-input-group { margin-bottom: 15px; }
+        .auth-input-group input { text-align: center; font-weight: 600; margin-bottom: 10px; }
+        .auth-toggle-text { font-size: 13px; color: var(--text-sub); margin-top: 20px; }
+        .auth-toggle-link { color: #8B5CF6; font-weight: 700; cursor: pointer; text-decoration: none; transition: var(--transition); }
+        .auth-toggle-link:hover { color: #6D28D9; text-decoration: underline; }
 
         #main-container { transition: var(--transition); opacity: 0; transform: translateY(10px); }
         #main-container.show { opacity: 1; transform: translateY(0); }
 
-        /* HEADER DIPRESISIKAN */
+        /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
         .header-title-area { flex: 1; min-width: 0; }
         .header-title-area h1 { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 2px;}
@@ -92,28 +98,15 @@
         body.dark-mode .month-selector { color: #C4B5FD; border-color: rgba(196, 181, 253, 0.3); }
 
         .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-        /* Ikon bulan & kertas dibuat 36x36 agar seragam */
         .btn-theme, .btn-export { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 15px; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
         .btn-theme:active, .btn-export:active { transform: scale(0.9); }
         
-        /* Tinggi kotak profil disamakan 36px */
         .user-badge { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--text-main); height: 36px; padding: 0 6px 0 14px; border-radius: 30px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); border: 1px solid var(--card-border);}
         
-        /* TOMBOL KELUAR DIPERBAIKI (LINGKARAN SEMPURNA) */
         .btn-logout { 
-            background: rgba(239, 68, 68, 0.15); 
-            color: #EF4444; 
-            border: none; 
-            width: 26px; /* Lebar sama dengan tinggi */
-            height: 26px; 
-            border-radius: 50%; /* Membulat sempurna */
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 11px; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            margin: 0; padding: 0; flex-shrink: 0; 
+            background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; width: 26px; height: 26px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; 
+            cursor: pointer; transition: var(--transition); margin: 0; padding: 0; flex-shrink: 0; 
         }
         .btn-logout:hover, .btn-logout:active { background: #EF4444; color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
 
@@ -127,15 +120,10 @@
         
         .savings-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
         
-        /* TOMBOL GEAR TARGET PINDAH SEJAJAR DENGAN TEKS (TIDAK NABRAK GAMBAR BANK) */
         .btn-setting-minimal {
-            background: rgba(255, 255, 255, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            width: 24px; height: 24px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 11px; cursor: pointer; transition: var(--transition);
-            color: inherit; margin: 0; padding: 0;
+            background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.4); width: 24px; height: 24px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; 
+            transition: var(--transition); color: inherit; margin: 0; padding: 0;
         }
         .btn-setting-minimal:hover { transform: rotate(45deg) scale(1.1); background: rgba(255, 255, 255, 0.4); }
 
@@ -157,11 +145,9 @@
         .s-title { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; }
         .s-amount { font-size: 17px; font-weight: 800; margin-top: 6px; }
 
-        /* TOMBOL LIMIT DIPERBAIKI MENJADI BULAT */
         .btn-set-limit {
-            background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2);
-            width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 11px; cursor: pointer; transition: var(--transition); margin: 0; padding: 0; flex-shrink: 0;
+            background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); width: 24px; height: 24px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; transition: var(--transition); margin: 0; padding: 0; flex-shrink: 0;
         }
         .btn-set-limit:hover { background: rgba(239, 68, 68, 0.2); transform: rotate(45deg) scale(1.1); }
 
@@ -205,7 +191,7 @@
         .btn-modal-action.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
         .btn-modal-action:active { transform: scale(0.95); }
 
-        /* POPUP DEV PENGUMUMAN */
+        /* POPUP DEV */
         .dev-popup {
             position: fixed; bottom: 20px; left: 20px; right: auto; width: calc(100% - 40px); max-width: 320px; 
             background: linear-gradient(-45deg, rgba(255, 235, 205, 0.95), rgba(224, 255, 255, 0.95), rgba(240, 248, 255, 0.95), rgba(255, 228, 225, 0.95));
@@ -213,14 +199,11 @@
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; padding: 16px 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             z-index: 10001; border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: flex-start; gap: 12px; opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        
         body.dark-mode .dev-popup {
             background: linear-gradient(-45deg, rgba(76, 29, 149, 0.9), rgba(30, 58, 138, 0.9), rgba(15, 118, 110, 0.9), rgba(146, 64, 14, 0.9));
             border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
-
         @keyframes gradientBGMoving { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
         .dev-popup-icon { font-size: 28px; animation: floatIcon 3s ease-in-out infinite; }
         .dev-popup-content { flex: 1; padding-top: 2px; }
         .dev-popup-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; color: #1E293B; display: flex; align-items: center; gap: 5px; }
@@ -247,13 +230,38 @@
 <div class="bg-bubble bubble-1"></div>
 <div class="bg-bubble bubble-2"></div>
 
+<!-- LAYAR AUTENTIKASI -->
 <div id="login-overlay">
-    <div class="login-box">
-        <h2 style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Selamat Datang! 👋</h2>
-        <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Masukkan namamu untuk membuka rekap keuangan khusus milikmu.</p>
-        <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">"Selalu ingat nama Dashboardmu ya."</p>
-        <input type="text" id="login-name" placeholder="Ketik namamu..." style="margin-bottom:20px; text-align:center; font-weight: 600;">
-        <button onclick="masukDashboard()">Buka Aplikasi 🚀</button>
+    <div class="login-box" id="auth-box">
+        
+        <!-- BAGIAN LOGIN -->
+        <div id="view-login">
+            <h2 style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Selamat Datang Kembali! 👋</h2>
+            <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Masuk untuk melihat rekap keuangan Anda.</p>
+            
+            <div class="auth-input-group">
+                <input type="text" id="login-username" placeholder="Ketik Username..." autocomplete="off">
+                <input type="password" id="login-password" placeholder="Ketik Password..." autocomplete="off">
+            </div>
+            
+            <button id="btn-login" onclick="prosesLogin()">Masuk 🚀</button>
+            <p class="auth-toggle-text">Belum punya akun? <a class="auth-toggle-link" onclick="toggleAuthView('register')">Daftar di sini</a></p>
+        </div>
+
+        <!-- BAGIAN REGISTER -->
+        <div id="view-register" style="display: none;">
+            <h2 style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Buat Akun Baru ✨</h2>
+            <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Buat akun untuk bisa akses dari device mana saja.</p>
+            
+            <div class="auth-input-group">
+                <input type="text" id="reg-username" placeholder="Buat Username Baru..." autocomplete="off">
+                <input type="password" id="reg-password" placeholder="Buat Password..." autocomplete="off">
+            </div>
+            
+            <button id="btn-register" onclick="prosesDaftar()">Daftar & Masuk 🚀</button>
+            <p class="auth-toggle-text">Sudah punya akun? <a class="auth-toggle-link" onclick="toggleAuthView('login')">Masuk di sini</a></p>
+        </div>
+
     </div>
 </div>
 
@@ -451,21 +459,6 @@
     </div>
 </div>
 
-<div id="dev-popup" class="dev-popup">
-    <div class="dev-popup-icon">🚀</div>
-    <div class="dev-popup-content">
-        <div class="dev-popup-title">Update Terbaru! (v1.1) ✨</div>
-        <div class="dev-popup-text">
-            <b>Apa yang baru di RekapKu?</b><br>
-            • <b>Limit Pengeluaran:</b> Atur batas pengeluaranmu dan pantau lewat indikator warna.<br>
-            • <b>Target Tabungan:</b> Pantau progres menabung lebih intuitif.<br>
-            • <b>UI yang Lebih Rapih:</b> Tampilan kini jauh lebih presisi dan nyaman dilihat.<br>
-            • <b>Mobile Optimized:</b> Pengalaman lebih lancar & stabil di smartphone kamu.
-        </div>
-    </div>
-    <button class="dev-popup-close" onclick="tutupDevPopup()">✖</button>
-</div>
-
 <script>
     const supabaseUrl = 'https://jgjixdbnbzfpnvooczew.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
@@ -477,12 +470,138 @@
     let allData = []; 
     let currentUser = localStorage.getItem('rekapku_user');
     
-    // Variabel state untuk Edit & Filter
     let editTargetId = null;
     let activeFilterMode = 'month'; 
     let activeFilterMonth = '';
     let activeFilterStart = '';
     let activeFilterEnd = '';
+
+    // --- LOGIKA AUTENTIKASI (LOGIN & REGISTER) ---
+    function toggleAuthView(view) {
+        if (view === 'register') {
+            document.getElementById('view-login').style.display = 'none';
+            document.getElementById('view-register').style.display = 'block';
+        } else {
+            document.getElementById('view-register').style.display = 'none';
+            document.getElementById('view-login').style.display = 'block';
+        }
+    }
+
+    async function prosesDaftar() {
+        const u = document.getElementById('reg-username').value.trim();
+        const p = document.getElementById('reg-password').value.trim();
+        
+        if (!u || !p) return alert("Username dan Password tidak boleh kosong!");
+        if (u.length < 3) return alert("Username minimal 3 karakter!");
+        
+        const btn = document.getElementById('btn-register');
+        const originalText = btn.innerText;
+        btn.innerText = "Memproses... ⏳"; btn.disabled = true;
+
+        try {
+            // 1. Cek apakah username sudah ada di tabel 'akun'
+            const { data: existingUser, error: checkError } = await supa
+                .from('akun')
+                .select('username')
+                .eq('username', u)
+                .limit(1);
+
+            if (checkError) throw checkError;
+
+            if (existingUser && existingUser.length > 0) {
+                alert("❌ Username ini sudah terdaftar! Silakan gunakan username lain.");
+            } else {
+                // 2. Jika belum ada, masukkan ke tabel 'akun'
+                const { error: insertError } = await supa
+                    .from('akun')
+                    .insert([{ username: u, password: p }]);
+                
+                if (insertError) throw insertError;
+                
+                alert("✅ Akun berhasil dibuat! Selamat datang di RekapKu.");
+                localStorage.setItem('rekapku_user', u); 
+                currentUser = u; 
+                cekLogin();
+            }
+        } catch (err) {
+            alert("Terjadi kesalahan sistem. Pastikan Anda sudah membuat tabel 'akun' di Supabase.");
+            console.error(err);
+        }
+        
+        btn.innerText = originalText; btn.disabled = false;
+    }
+
+    async function prosesLogin() {
+        const u = document.getElementById('login-username').value.trim();
+        const p = document.getElementById('login-password').value.trim();
+        
+        if (!u || !p) return alert("Username dan Password tidak boleh kosong!");
+
+        const btn = document.getElementById('btn-login');
+        const originalText = btn.innerText;
+        btn.innerText = "Memeriksa... ⏳"; btn.disabled = true;
+
+        try {
+            // Cek kecocokan username dan password di tabel 'akun'
+            const { data, error } = await supa
+                .from('akun')
+                .select('username')
+                .eq('username', u)
+                .eq('password', p)
+                .limit(1);
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                // Berhasil login
+                localStorage.setItem('rekapku_user', u); 
+                currentUser = u; 
+                cekLogin();
+            } else {
+                // Gagal login
+                alert("❌ Username atau Password salah!");
+            }
+        } catch (err) {
+            alert("Terjadi kesalahan sistem. Pastikan Anda sudah membuat tabel 'akun' di Supabase.");
+            console.error(err);
+        }
+        
+        btn.innerText = originalText; btn.disabled = false;
+    }
+
+    function keluarDashboard() {
+        if(!confirm("Yakin ingin keluar? Anda bisa masuk lagi kapan saja dari perangkat manapun.")) return;
+        localStorage.removeItem('rekapku_user'); 
+        currentUser = null; 
+        document.getElementById('list-data').innerHTML = '';
+        
+        // Reset input form login
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        
+        if(chartInstance) chartInstance.destroy(); 
+        cekLogin();
+    }
+
+    function cekLogin() {
+        if (currentUser) {
+            document.getElementById('login-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-container').style.display = 'block';
+                setTimeout(() => document.getElementById('main-container').classList.add('show'), 50);
+            }, 500);
+            document.getElementById('display-username').innerText = currentUser;
+            document.getElementById('f-tgl').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+            loadData();
+        } else {
+            document.getElementById('login-overlay').style.display = 'flex';
+            document.getElementById('login-overlay').style.opacity = '1';
+            document.getElementById('main-container').classList.remove('show');
+            setTimeout(() => document.getElementById('main-container').style.display = 'none', 300);
+            toggleAuthView('login'); // Pastikan selalu kembali ke layar login
+        }
+    }
 
     function playSound(type) {
         try {
@@ -514,36 +633,6 @@
     }
     initTheme();
 
-    function cekLogin() {
-        if (currentUser) {
-            document.getElementById('login-overlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('main-container').style.display = 'block';
-                setTimeout(() => document.getElementById('main-container').classList.add('show'), 50);
-            }, 500);
-            document.getElementById('display-username').innerText = currentUser;
-            document.getElementById('f-tgl').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
-            loadData();
-        } else {
-            document.getElementById('login-overlay').style.display = 'flex';
-            document.getElementById('login-overlay').style.opacity = '1';
-            document.getElementById('main-container').classList.remove('show');
-            setTimeout(() => document.getElementById('main-container').style.display = 'none', 300);
-        }
-    }
-
-    function masukDashboard() {
-        const inputNama = document.getElementById('login-name').value.trim();
-        if (inputNama === "") return;
-        localStorage.setItem('rekapku_user', inputNama); currentUser = inputNama; cekLogin();
-    }
-    function keluarDashboard() {
-        if(!confirm("Yakin ingin keluar dari akunmu?")) return;
-        localStorage.removeItem('rekapku_user'); currentUser = null; document.getElementById('list-data').innerHTML = '';
-        if(chartInstance) chartInstance.destroy(); cekLogin();
-    }
-
     const rp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
     const getUI = (j) => {
         if(j === 'Pemasukan') return { i:'💰', bg:'rgba(16, 185, 129, 0.2)', c:'#10B981', s:'+' };
@@ -563,7 +652,6 @@
         requestAnimationFrame(anim);
     }
 
-    // --- LOGIKA TARGET TABUNGAN ---
     function openTargetModal() {
         let currentTarget = localStorage.getItem('target_' + currentUser);
         document.getElementById('input-target-nominal').value = currentTarget ? currentTarget : '';
@@ -595,7 +683,6 @@
         }
     }
 
-    // --- LOGIKA LIMIT PENGELUARAN ---
     function openLimitModal() {
         let currentLimit = localStorage.getItem('limit_' + currentUser);
         document.getElementById('input-limit-nominal').value = currentLimit ? currentLimit : '';
@@ -628,7 +715,6 @@
     }
 
     const updateProgress = (totTabung, totKeluar) => {
-        // Update Target Tabungan UI
         let targetRaw = localStorage.getItem('target_' + currentUser);
         let pBar = document.getElementById('p-bar');
         let pPercent = document.getElementById('p-percent');
@@ -655,7 +741,6 @@
             em.innerText = "🏦";
         }
 
-        // Update Limit Pengeluaran UI
         let limitRaw = localStorage.getItem('limit_' + currentUser);
         let lBar = document.getElementById('p-bar-limit');
         let lLabel = document.getElementById('t-limit-label');
@@ -669,16 +754,16 @@
 
             if (totKeluar > limit) {
                 lLabel.innerText = "⚠️ Melebihi Batas: " + rp(limit);
-                lLabel.style.color = "#EF4444"; // Merah bahaya
+                lLabel.style.color = "#EF4444"; 
                 lBar.style.background = "#EF4444"; 
             } else if (pLimit > 80) {
                 lLabel.innerText = "Batas: " + rp(limit) + " (Hati-hati!)";
-                lLabel.style.color = "#F59E0B"; // Oranye peringatan
+                lLabel.style.color = "#F59E0B"; 
                 lBar.style.background = "#F59E0B";
             } else {
                 lLabel.innerText = "Batas: " + rp(limit);
-                lLabel.style.color = "var(--text-sub)"; // Normal
-                lBar.style.background = "#10B981"; // Hijau aman
+                lLabel.style.color = "var(--text-sub)"; 
+                lBar.style.background = "#10B981"; 
             }
         } else {
             lLabel.innerText = "Batas: Belum diatur";
@@ -953,13 +1038,6 @@
         if (!confirm("Yakin ingin menghapus riwayat ini?")) return;
         const { error } = await supa.from('transaksi').delete().eq('id', id);
         if (!error) { btnEl.closest('.list-item').style.animation = 'fadeIn 0.3s ease reverse forwards'; setTimeout(loadData, 300); }
-    }
-
-    function tutupDevPopup() {
-        const popup = document.getElementById('dev-popup');
-        popup.style.opacity = '0';
-        popup.style.transform = 'translateY(20px)';
-        setTimeout(() => { popup.style.display = 'none'; }, 400);
     }
 
     cekLogin();
