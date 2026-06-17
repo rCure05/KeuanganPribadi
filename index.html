@@ -84,39 +84,67 @@
         #main-container { transition: var(--transition); opacity: 0; transform: translateY(10px); }
         #main-container.show { opacity: 1; transform: translateY(0); }
 
-        /* HEADER */
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; gap: 10px; }
+        /* HEADER DIPRESISIKAN */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
         .header-title-area { flex: 1; min-width: 0; }
         .header-title-area h1 { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 2px;}
-        .month-selector { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); font-size: 13px; font-weight: 600; color: #7C3AED; cursor: pointer; outline: none; padding: 6px 12px; border-radius: 12px; transition: var(--transition); backdrop-filter: blur(5px); }
+        .month-selector { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); font-size: 12px; font-weight: 600; color: #7C3AED; cursor: pointer; outline: none; padding: 6px 14px; border-radius: 12px; transition: var(--transition); backdrop-filter: blur(5px); }
         body.dark-mode .month-selector { color: #C4B5FD; border-color: rgba(196, 181, 253, 0.3); }
 
-        .header-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-        .btn-theme, .btn-export { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
+        .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        /* Ikon bulan & kertas dibuat 36x36 agar seragam */
+        .btn-theme, .btn-export { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 15px; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
         .btn-theme:active, .btn-export:active { transform: scale(0.9); }
         
-        .user-badge { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--text-main); padding: 6px 6px 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-md); border: 1px solid var(--card-border);}
+        /* Tinggi kotak profil disamakan 36px */
+        .user-badge { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--text-main); height: 36px; padding: 0 6px 0 14px; border-radius: 30px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); border: 1px solid var(--card-border);}
         
-        /* TOMBOL KELUAR DIPERJELAS */
-        .btn-logout { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; height: 28px; padding: 0 12px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 700; cursor: pointer; transition: var(--transition); }
-        .btn-logout:hover, .btn-logout:active { background: #EF4444; color: white; transform: scale(1.05); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+        /* TOMBOL KELUAR DIPERBAIKI (LINGKARAN SEMPURNA) */
+        .btn-logout { 
+            background: rgba(239, 68, 68, 0.15); 
+            color: #EF4444; 
+            border: none; 
+            width: 26px; /* Lebar sama dengan tinggi */
+            height: 26px; 
+            border-radius: 50%; /* Membulat sempurna */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 11px; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            margin: 0; padding: 0; flex-shrink: 0; 
+        }
+        .btn-logout:hover, .btn-logout:active { background: #EF4444; color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
 
         /* KARTU */
         .card { background-color: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow-md); transition: var(--transition); border: 1px solid var(--card-border); }
         .card-header { font-size: 16px; font-weight: 700; margin-bottom: 18px; color: var(--text-main); }
         
-        .savings-highlight-card { background: var(--pastel-blue-grad); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 28px; padding: 28px; margin-bottom: 20px; color: #FFFFFF; position: relative; overflow: hidden; animation: floatOrganic 5s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.2); box-shadow: var(--shadow-md); }
+        .savings-highlight-card { background: var(--pastel-blue-grad); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 28px; padding: 25px; margin-bottom: 20px; color: #FFFFFF; position: relative; overflow: hidden; animation: floatOrganic 5s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.2); box-shadow: var(--shadow-md); }
         body:not(.dark-mode) .savings-highlight-card { color: #1E293B; } 
-        .savings-top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .savings-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .btn-set-target { background: rgba(255, 255, 255, 0.3); border: none; padding: 4px 10px; border-radius: 12px; color: inherit; font-size: 10px; font-weight: 700; cursor: pointer; backdrop-filter: blur(4px); transition: var(--transition); }
-        .btn-set-target:hover { background: rgba(255, 255, 255, 0.5); transform: scale(1.05); }
-        .savings-amount { font-size: 30px; font-weight: 800; letter-spacing: -1px; }
-        .savings-icon { font-size: 34px; background: rgba(255, 255, 255, 0.4); width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); animation: floatIcon 4s ease-in-out infinite 0.5s; border: 1px solid rgba(255,255,255,0.5); margin-top: 10px; }
+        .savings-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        
+        .savings-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        
+        /* TOMBOL GEAR TARGET PINDAH SEJAJAR DENGAN TEKS (TIDAK NABRAK GAMBAR BANK) */
+        .btn-setting-minimal {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; cursor: pointer; transition: var(--transition);
+            color: inherit; margin: 0; padding: 0;
+        }
+        .btn-setting-minimal:hover { transform: rotate(45deg) scale(1.1); background: rgba(255, 255, 255, 0.4); }
 
-        .progress-container { background: rgba(0, 0, 0, 0.1); padding: 5px; border-radius: 20px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        .savings-amount { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+        .savings-icon { font-size: 34px; background: rgba(255, 255, 255, 0.4); width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); animation: floatIcon 4s ease-in-out infinite 0.5s; border: 1px solid rgba(255,255,255,0.5); flex-shrink: 0;}
+
+        .progress-container { background: rgba(0, 0, 0, 0.1); padding: 4px; border-radius: 20px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); margin-top: 5px; }
         body:not(.dark-mode) .progress-container { background: rgba(255,255,255,0.5); }
-        .progress-bar { height: 12px; background: linear-gradient(90deg, #8B5CF6, #F59E0B); border-radius: 20px; width: 0%; transition: width 1.5s cubic-bezier(0.1, 0.8, 0.25, 1); position: relative; overflow: hidden;}
+        .progress-bar { height: 10px; background: linear-gradient(90deg, #8B5CF6, #F59E0B); border-radius: 20px; width: 0%; transition: width 1.5s cubic-bezier(0.1, 0.8, 0.25, 1); position: relative; overflow: hidden;}
         .progress-text { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; opacity: 0.9; margin-top: 8px; }
 
         .wallet-active-card { background: var(--active-wallet-grad); backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 20px 24px; margin-bottom: 20px; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.2); animation: floatOrganic 6s ease-in-out infinite 1s; box-shadow: var(--shadow-md); }
@@ -125,18 +153,26 @@
         .wallet-amount { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
 
         .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .summary-box { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); padding: 18px; border-radius: 20px; text-align: center; border: 1px solid var(--card-border); box-shadow: var(--shadow-md); }
+        .summary-box { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); padding: 18px 16px; border-radius: 20px; text-align: left; border: 1px solid var(--card-border); box-shadow: var(--shadow-md); display: flex; flex-direction: column; justify-content: center;}
         .s-title { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; }
-        .s-amount { font-size: 16px; font-weight: 800; margin-top: 6px; }
+        .s-amount { font-size: 17px; font-weight: 800; margin-top: 6px; }
+
+        /* TOMBOL LIMIT DIPERBAIKI */
+        .btn-set-limit {
+            background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 4px 10px; border-radius: 12px; font-size: 9px; font-weight: 700; cursor: pointer;
+            width: fit-content; margin: 0; transition: var(--transition); flex-shrink: 0;
+        }
+        .btn-set-limit:hover { background: rgba(239, 68, 68, 0.2); transform: scale(1.05); }
 
         /* FORM */
         .form-group { margin-bottom: 16px; position: relative; }
         label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text-sub); }
-        input, select { width: 100%; padding: 15px 18px; border: 2px solid var(--input-border); border-radius: 16px; font-size: 16px !important; background: var(--input-bg); color: var(--text-main); outline: none; transition: var(--transition); -webkit-appearance: none; }
+        input, select { width: 100%; padding: 15px 18px; border: 2px solid var(--input-border); border-radius: 16px; font-size: 15px !important; background: var(--input-bg); color: var(--text-main); outline: none; transition: var(--transition); -webkit-appearance: none; }
         input:focus, select:focus { border-color: #8B5CF6; background: var(--card-bg); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); transform: translateY(-2px); }
         .row { display: flex; gap: 12px; flex-wrap: wrap; } .row .form-group { flex: 1; min-width: 45%; }
 
-        button { width: 100%; padding: 18px; background: linear-gradient(135deg, #8B5CF6, #6D28D9); color: white; border: none; border-radius: 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: var(--transition); margin-top: 8px; box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3); text-transform: uppercase; letter-spacing: 1px; }
+        button { width: 100%; padding: 16px; background: linear-gradient(135deg, #8B5CF6, #6D28D9); color: white; border: none; border-radius: 20px; font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition); margin-top: 8px; box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3); text-transform: uppercase; letter-spacing: 1px; }
         button:active { transform: scale(0.95); box-shadow: 0 4px 10px rgba(109, 40, 217, 0.2); }
         
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--input-bg); border-radius: 16px; margin-bottom: 10px; transition: var(--transition); border: 1px solid var(--card-border); }
@@ -169,7 +205,7 @@
         .btn-modal-action.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
         .btn-modal-action:active { transform: scale(0.95); }
 
-        /* POPUP DEV PENGUMUMAN - POSISI KIRI */
+        /* POPUP DEV PENGUMUMAN */
         .dev-popup {
             position: fixed; bottom: 20px; left: 20px; right: auto; width: calc(100% - 40px); max-width: 320px; 
             background: linear-gradient(-45deg, rgba(255, 235, 205, 0.95), rgba(224, 255, 255, 0.95), rgba(240, 248, 255, 0.95), rgba(255, 228, 225, 0.95));
@@ -196,12 +232,11 @@
         .dev-popup-close:hover, .dev-popup-close:active { background: #EF4444; color: white; transform: scale(1.1); }
 
         @media (max-width: 430px) {
-            .header { flex-wrap: nowrap; align-items: flex-start; }
             .header-title-area h1 { font-size: 20px; }
             .month-selector { max-width: 140px; font-size: 11px; padding: 6px 10px; }
-            .btn-theme, .btn-export { width: 34px; height: 34px; font-size: 13px; }
-            .user-badge { padding: 4px 4px 4px 8px; font-size: 10px; gap: 4px; }
-            .btn-logout { height: 22px; padding: 0 8px; font-size: 9px; gap: 3px; }
+            .btn-theme, .btn-export { width: 34px; height: 34px; font-size: 14px; }
+            .user-badge { padding: 0 6px 0 10px; font-size: 11px; gap: 6px; height: 34px; }
+            .btn-logout { width: 24px; height: 24px; font-size: 10px; }
             #display-username { display: inline-block; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         }
 
@@ -305,7 +340,25 @@
     </div>
 </div>
 
+<div id="limit-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>💸 Atur Limit Pengeluaran</h3>
+            <button class="btn-close" onclick="closeLimitModal()">✖</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Batas maksimal pengeluaranmu? (Hanya Angka)</label>
+                <input type="number" id="input-limit-nominal" placeholder="Contoh: 3000000" inputmode="numeric">
+            </div>
+            <button class="btn-modal-action blue" onclick="saveLimit()" style="background: linear-gradient(135deg, #EF4444, #B91C1C); box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);">Simpan Limit ✨</button>
+            <button class="btn-modal-action" style="background: rgba(239, 68, 68, 0.15); color: #EF4444; margin-top: 10px; box-shadow: none;" onclick="deleteLimit()">Hapus Limit</button>
+        </div>
+    </div>
+</div>
+
 <div class="container ani-fade-in" id="main-container" style="display: none;">
+    
     <div class="header">
         <div class="header-title-area">
             <h1>✨ RekapKu</h1>
@@ -326,8 +379,8 @@
         <div class="savings-top-row">
             <div class="savings-info" style="flex: 1;">
                 <div class="savings-title">
-                    <span>🎯 Tabungan Utama</span>
-                    <button class="btn-set-target" onclick="openTargetModal()">⚙️ SET TARGET</button>
+                    <span>🎯 TABUNGAN UTAMA</span>
+                    <button class="btn-setting-minimal" onclick="openTargetModal()" title="Atur Target">⚙️</button>
                 </div>
                 <div class="savings-amount" id="t-tabung">Rp 0</div>
             </div>
@@ -344,8 +397,23 @@
     </div>
 
     <div class="summary-grid">
-        <div class="summary-box"><div class="s-title">Pemasukan 🟢</div><div class="s-amount" style="color:#10B981" id="t-masuk">Rp 0</div></div>
-        <div class="summary-box"><div class="s-title">Pengeluaran 🔴</div><div class="s-amount" style="color:#EF4444" id="t-keluar">Rp 0</div></div>
+        <div class="summary-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div class="s-title">Pemasukan 🟢</div>
+            </div>
+            <div class="s-amount" style="color:#10B981" id="t-masuk">Rp 0</div>
+        </div>
+        <div class="summary-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div class="s-title">Pengeluaran 🔴</div>
+                <button class="btn-set-limit" onclick="openLimitModal()">⚙️ LIMIT</button>
+            </div>
+            <div class="s-amount" style="color:#EF4444" id="t-keluar">Rp 0</div>
+            <div id="t-limit-label" style="font-size: 10px; font-weight: 600; color: var(--text-sub); margin-top: 8px;">Batas: Belum diatur</div>
+            <div class="progress-container" style="height: 6px; margin-top: 6px; padding: 1px; background: rgba(239, 68, 68, 0.1);">
+                <div class="progress-bar" id="p-bar-limit" style="height: 100%; background: #EF4444; width: 0%; border-radius: 10px; transition: all 1s ease;"></div>
+            </div>
+        </div>
     </div>
 
     <div class="card" id="card-chart">
@@ -384,10 +452,16 @@
 </div>
 
 <div id="dev-popup" class="dev-popup">
-    <div class="dev-popup-icon">💰</div>
+    <div class="dev-popup-icon">🚀</div>
     <div class="dev-popup-content">
-        <div class="dev-popup-title">Halo, Pengguna! 💸✨</div>
-        <div class="dev-popup-text">Aplikasi ini masih dalam tahap pengembangan (Beta). Jika kamu menemukan <i>bug</i> 🐛 atau error, jangan ragu untuk hubungi Developer ya! 🛠️💖</div>
+        <div class="dev-popup-title">Update Terbaru! (v1.1) ✨</div>
+        <div class="dev-popup-text">
+            <b>Apa yang baru di RekapKu?</b><br>
+            • <b>Limit Pengeluaran:</b> Atur batas pengeluaranmu dan pantau lewat indikator warna.<br>
+            • <b>Target Tabungan:</b> Pantau progres menabung lebih intuitif.<br>
+            • <b>UI yang Lebih Rapih:</b> Tampilan kini jauh lebih presisi dan nyaman dilihat.<br>
+            • <b>Mobile Optimized:</b> Pengalaman lebih lancar & stabil di smartphone kamu.
+        </div>
     </div>
     <button class="dev-popup-close" onclick="tutupDevPopup()">✖</button>
 </div>
@@ -489,7 +563,7 @@
         requestAnimationFrame(anim);
     }
 
-    // --- LOGIKA TARGET TABUNGAN BARU ---
+    // --- LOGIKA TARGET TABUNGAN ---
     function openTargetModal() {
         let currentTarget = localStorage.getItem('target_' + currentUser);
         document.getElementById('input-target-nominal').value = currentTarget ? currentTarget : '';
@@ -507,7 +581,7 @@
         if (val && val > 0) {
             localStorage.setItem('target_' + currentUser, val);
             closeTargetModal();
-            applyFilter(); // Memperbarui tampilan progres bar
+            applyFilter(); 
         } else {
             alert("Mohon masukkan nominal target yang valid!");
         }
@@ -517,11 +591,44 @@
         if(confirm("Yakin ingin menghapus target tabunganmu?")) {
             localStorage.removeItem('target_' + currentUser);
             closeTargetModal();
-            applyFilter(); // Memperbarui tampilan kembali ke 0
+            applyFilter(); 
         }
     }
 
-    const updateProgress = (tot) => {
+    // --- LOGIKA LIMIT PENGELUARAN ---
+    function openLimitModal() {
+        let currentLimit = localStorage.getItem('limit_' + currentUser);
+        document.getElementById('input-limit-nominal').value = currentLimit ? currentLimit : '';
+        document.getElementById('limit-modal').style.display = 'flex';
+        setTimeout(() => { document.getElementById('limit-modal').style.opacity = '1'; }, 10);
+    }
+
+    function closeLimitModal() {
+        document.getElementById('limit-modal').style.opacity = '0';
+        setTimeout(() => { document.getElementById('limit-modal').style.display = 'none'; }, 300);
+    }
+
+    function saveLimit() {
+        let val = document.getElementById('input-limit-nominal').value;
+        if (val && val > 0) {
+            localStorage.setItem('limit_' + currentUser, val);
+            closeLimitModal();
+            applyFilter(); 
+        } else {
+            alert("Mohon masukkan nominal limit yang valid!");
+        }
+    }
+
+    function deleteLimit() {
+        if(confirm("Yakin ingin menghapus limit pengeluaranmu?")) {
+            localStorage.removeItem('limit_' + currentUser);
+            closeLimitModal();
+            applyFilter(); 
+        }
+    }
+
+    const updateProgress = (totTabung, totKeluar) => {
+        // Update Target Tabungan UI
         let targetRaw = localStorage.getItem('target_' + currentUser);
         let pBar = document.getElementById('p-bar');
         let pPercent = document.getElementById('p-percent');
@@ -532,27 +639,53 @@
         if (targetRaw && targetRaw > 0) {
             let target = parseFloat(targetRaw);
             tLabel.innerText = "Target: " + rp(target);
-            
-            let p = Math.floor((tot / target) * 100); 
+            let p = Math.floor((totTabung / target) * 100); 
             if (p > 100) p = 100; if (p < 0) p = 0;
-            
             pBar.style.width = p + '%'; 
             pPercent.innerText = p + '%';
 
-            if (tot <= 0) { mot.innerText = "Yuk, mulai menabung!"; em.innerText = "🏦"; }
+            if (totTabung <= 0) { mot.innerText = "Yuk, mulai menabung!"; em.innerText = "🏦"; }
             else if (p < 50) { mot.innerText = "Awal yang bagus! Terus semangat! 🔥"; em.innerText = "📈"; }
             else if (p < 100) { mot.innerText = "Keren! Dikit lagi targetmu tercapai! ✨"; em.innerText = "💎"; }
             else { mot.innerText = "Luar biasa! Target tabungan terpenuhi! 🎉"; em.innerText = "👑"; }
         } else {
-            // Jika target belum diatur atau dihapus
             tLabel.innerText = "Target: Belum diatur";
-            pBar.style.width = '0%';
-            pPercent.innerText = '0%';
-            mot.innerText = tot > 0 ? "Tabunganmu terus bertambah! ✨" : "Belum ada tabungan.";
+            pBar.style.width = '0%'; pPercent.innerText = '0%';
+            mot.innerText = totTabung > 0 ? "Tabunganmu terus bertambah! ✨" : "Belum ada tabungan.";
             em.innerText = "🏦";
         }
+
+        // Update Limit Pengeluaran UI
+        let limitRaw = localStorage.getItem('limit_' + currentUser);
+        let lBar = document.getElementById('p-bar-limit');
+        let lLabel = document.getElementById('t-limit-label');
+
+        if (limitRaw && limitRaw > 0) {
+            let limit = parseFloat(limitRaw);
+            let pLimit = Math.floor((totKeluar / limit) * 100);
+            if (pLimit > 100) pLimit = 100;
+
+            lBar.style.width = pLimit + '%';
+
+            if (totKeluar > limit) {
+                lLabel.innerText = "⚠️ Melebihi Batas: " + rp(limit);
+                lLabel.style.color = "#EF4444"; // Merah bahaya
+                lBar.style.background = "#EF4444"; 
+            } else if (pLimit > 80) {
+                lLabel.innerText = "Batas: " + rp(limit) + " (Hati-hati!)";
+                lLabel.style.color = "#F59E0B"; // Oranye peringatan
+                lBar.style.background = "#F59E0B";
+            } else {
+                lLabel.innerText = "Batas: " + rp(limit);
+                lLabel.style.color = "var(--text-sub)"; // Normal
+                lBar.style.background = "#10B981"; // Hijau aman
+            }
+        } else {
+            lLabel.innerText = "Batas: Belum diatur";
+            lLabel.style.color = "var(--text-sub)";
+            lBar.style.width = '0%';
+        }
     };
-    // -----------------------------------
 
     function renderChart(masuk, keluar, tabung) {
         const ctx = document.getElementById('myChart').getContext('2d');
@@ -673,7 +806,8 @@
 
         animateNumber('t-masuk', tMasuk); animateNumber('t-keluar', tKeluar);
         animateNumber('t-dompet-aktif', (tMasuk - tKeluar)); animateNumber('t-tabung', tTabungAllTime); 
-        updateProgress(tTabungAllTime); renderChart(tMasuk, tKeluar, tTabungBulanIni);
+        updateProgress(tTabungAllTime, tKeluar); 
+        renderChart(tMasuk, tKeluar, tTabungBulanIni);
     }
 
     function openExcelModal() {
@@ -833,4 +967,3 @@
 
 </body>
 </html>
-
