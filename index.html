@@ -102,21 +102,6 @@
 
         .ani-fade-in { animation: fadeIn 0.5s ease-out forwards; }
 
-        /* FLOATING DISCORD BUTTON */
-        .btn-discord-float {
-            position: fixed; bottom: 20px; left: 20px; width: 48px; height: 48px; 
-            background-color: #5865F2; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4); z-index: 10010; 
-            transition: var(--transition); text-decoration: none; border: 2px solid rgba(255,255,255,0.2);
-            animation: slideUpIn 0.5s ease-out forwards 0.5s; opacity: 0;
-        }
-        .btn-discord-float:hover {
-            transform: translateY(-5px) rotate(-8deg) scale(1.1);
-            box-shadow: 0 12px 30px rgba(88, 101, 242, 0.6);
-        }
-        .btn-discord-float:active { transform: scale(0.9); }
-        .btn-discord-float svg { width: 26px; height: 26px; fill: #FFFFFF; }
-
         /* LAYAR LOGIN & REGISTER */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; transition: opacity 0.5s ease, background-color 0.4s ease; }
         
@@ -158,7 +143,7 @@
         #main-container { transition: var(--transition); opacity: 0; transform: translateY(10px); }
         #main-container.show { opacity: 1; transform: translateY(0); }
 
-        /* --- HEADER BARU YANG LEBIH RAPIH (TWO-TIER) --- */
+        /* HEADER DENGAN DUA BARIS */
         .header-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 25px; }
         
         .header-top { display: flex; justify-content: space-between; align-items: center; }
@@ -175,7 +160,6 @@
         .header-actions { display: flex; align-items: center; gap: 10px; }
         .btn-action-circle { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 16px; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
         .btn-action-circle:active { transform: scale(0.9); }
-        /* ----------------------------------------------- */
 
         /* KARTU */
         .card { background-color: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow-md); transition: var(--transition); border: 1px solid var(--card-border); }
@@ -266,10 +250,52 @@
         .btn-hapus:active { filter: grayscale(0); }
         .btn-edit:active { color: #3B82F6; opacity: 1; }
         
-        /* CSS KHUSUS SEARCH BAR */
         .search-container { position: relative; margin-bottom: 15px; }
         .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-sub); font-size: 16px; pointer-events: none; }
         .search-container input { padding-left: 45px; }
+
+        /* --- CSS FOOTER DISCORD TERBARU --- */
+        .footer-discord {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px dashed var(--card-border);
+            animation: slideUpIn 0.8s ease-out;
+        }
+        .footer-discord p {
+            font-size: 12px;
+            color: var(--text-sub);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .btn-discord-static {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #5865F2;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 12px 24px;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+        .btn-discord-static:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+            background-color: #4752C4;
+        }
+        .btn-discord-static:active {
+            transform: scale(0.95);
+        }
+        .btn-discord-static svg {
+            width: 22px;
+            height: 22px;
+            fill: #FFFFFF;
+        }
 
         /* MODAL (POPUP) GENERAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; transition: opacity 0.3s ease; }
@@ -294,33 +320,6 @@
         .toast-icon { font-size: 18px; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; }
         .toast.success .toast-icon { background: rgba(16, 185, 129, 0.2); color: #10B981; }
         .toast.error .toast-icon { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
-
-        /* CSS POPUP UPDATE (DEV POPUP) */
-        .dev-popup {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%); width: calc(100% - 40px); max-width: 400px; 
-            background: linear-gradient(-45deg, rgba(255, 235, 205, 0.95), rgba(224, 255, 255, 0.95), rgba(240, 248, 255, 0.95), rgba(255, 228, 225, 0.95));
-            background-size: 400% 400%; animation: gradientBGMoving 6s ease infinite;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; padding: 16px 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            z-index: 10001; border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: flex-start; gap: 12px; opacity: 0; transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .dev-popup.show {
-            transform: translateX(-50%) translateY(0); opacity: 1;
-        }
-        body.dark-mode .dev-popup {
-            background: linear-gradient(-45deg, rgba(76, 29, 149, 0.9), rgba(30, 58, 138, 0.9), rgba(15, 118, 110, 0.9), rgba(146, 64, 14, 0.9));
-            border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 15px 35px rgba(0,0,0,0.4); background-size: 400% 400%; animation: gradientBGMoving 6s ease infinite;
-        }
-        @keyframes gradientBGMoving { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .dev-popup-icon { font-size: 28px; animation: floatIcon 3s ease-in-out infinite; }
-        .dev-popup-content { flex: 1; padding-top: 2px; }
-        .dev-popup-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; color: #1E293B; display: flex; align-items: center; gap: 5px; }
-        body.dark-mode .dev-popup-title { color: #F8FAFC; }
-        .dev-popup-text { font-size: 11px; line-height: 1.5; color: #475569; font-weight: 500; }
-        body.dark-mode .dev-popup-text { color: #CBD5E1; }
-        .dev-popup-text ul { margin-left: 15px; margin-top: 4px; }
-        .dev-popup-close { background: rgba(0,0,0,0.06); border: none; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: #1E293B; transition: all 0.2s; margin-top: -4px; margin-right: -8px; box-shadow: none; padding: 0; }
-        body.dark-mode .dev-popup-close { background: rgba(255,255,255,0.15); color: #F8FAFC; }
-        .dev-popup-close:hover, .dev-popup-close:active { background: #EF4444; color: white; transform: scale(1.1); }
 
         /* TEMA SELECTION BUTTONS IN MODAL */
         .theme-option-btn {
@@ -350,8 +349,6 @@
             .toast-container { bottom: 20px; left: 20px; right: 20px; align-items: center; }
             .toast { width: 100%; justify-content: flex-start; transform: translateY(120%); }
             .toast.show { transform: translateY(0); }
-            .btn-discord-float { width: 44px; height: 44px; bottom: 20px; left: 15px; }
-            .btn-discord-float svg { width: 22px; height: 22px; }
         }
 
     </style>
@@ -361,31 +358,28 @@
 <div class="bg-bubble bubble-1"></div>
 <div class="bg-bubble bubble-2"></div>
 
-<a href="https://discord.gg/49EK46Hbad" target="_blank" class="btn-discord-float" title="Laporkan Bug (Discord)">
-    <svg viewBox="0 0 127.14 96.36">
-        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c0,0,0.04-.06,0.04-.06C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.33,46,96.22,53,91.17,65.69,84.69,65.69Z"/>
-    </svg>
-</a>
-
 <div id="toast-container" class="toast-container"></div>
 
-<div id="update-popup" class="dev-popup">
-    <div class="dev-popup-icon">🚀</div>
-    <div class="dev-popup-content">
-        <div class="dev-popup-title">Update RekapKu v2.0!</div>
-        <div class="dev-popup-text">
-            Ada fitur baru yang bisa kamu nikmati:
-            <ul>
-                <li>Dropdown kategori transaksi dinamis.</li>
-                <li>Tabungan kini otomatis memotong dompet.</li>
-                <li>Tampilan tata letak lebih rapi & presisi.</li>
-                <li>Opsi warna yang beragam.</li>
-                <li>Ai Assistant untuk mengukur pengeluaranmu.</li>
-                <li>Tambahan fitur pencarian transaksi.</li>
-            </ul>
+<div id="modal-pengumuman" class="modal-overlay" style="display: none;">
+    <div class="modal-box" style="border: 2px solid #8B5CF6;">
+        <div class="modal-header">
+            <h3>🚀 Update Terbaru! (<span id="versi-update"></span>)</h3>
+            <button class="btn-close" onclick="tutupPengumuman()">✖</button>
+        </div>
+        <div class="modal-body">
+            
+            <div style="font-size: 13px; line-height: 1.6; color: var(--text-main); margin-bottom: 20px;">
+                Halo! Di pembaruan kali ini, ada penyesuaian baru untukmu:
+                <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-sub);">
+                    <li><strong>Tombol Bantuan:</strong> Tersedia contact discord di bawah halaman, agar pengaduan eror dan bug bisa langsung teratasi.</li>
+                    <li><strong>UI Lebih Rapih:</strong> Tampilan menjadi lebih ringan dan kompatible di segala jenis handpone.</li>
+                    <li><strong>Sistem Pengumuman:</strong> Popup catatan update terbaru untuk semua update yang diperbarui!</li>
+                </ul>
+                <p style="margin-top: 10px;">Terima kasih sudah menggunakan RekapKu! ❤️</p>
+            </div>
+            <button class="btn-modal-action blue" onclick="tutupPengumuman()">Paham, Lanjutkan! ✨</button>
         </div>
     </div>
-    <button class="dev-popup-close" onclick="closeUpdatePopup()">✖</button>
 </div>
 
 <div id="login-overlay">
@@ -432,7 +426,7 @@
         </div>
         <div class="modal-body">
             <button class="theme-option-btn active" id="btn-theme-default" onclick="changeColorTheme('default')">
-                <span class="color-circle circle-default"></span> Default (Ungu-Biru)
+                <span class="color-circle circle-default"></span> Bawaan (Ungu-Biru)
             </button>
             <button class="theme-option-btn" id="btn-theme-sporty" onclick="changeColorTheme('sporty')">
                 <span class="color-circle circle-sporty"></span> Merah Sporty
@@ -662,9 +656,18 @@
 
         <div id="list-data"><p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Memuat data...</p></div>
     </div>
-</div>
+    
+    <div class="footer-discord">
+        <p>Hubungi developer jika menemukan bug 🐛</p>
+        <a href="https://discord.gg/LINK_KAMU_DISINI" target="_blank" class="btn-discord-static" title="Laporkan Bug ke Discord">
+            <svg viewBox="0 0 127.14 96.36">
+                <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c0,0,0.04-.06,0.04-.06C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.33,46,96.22,53,91.17,65.69,84.69,65.69Z"/>
+            </svg>
+            Gabung Discord
+        </a>
+    </div>
 
-<script>
+</div> <script>
     const supabaseUrl = 'https://jgjixdbnbzfpnvooczew.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
     const supa = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -681,6 +684,27 @@
     let activeFilterMonth = '';
     let activeFilterStart = '';
     let activeFilterEnd = '';
+
+    // === PENGATURAN VERSI UPDATE ===
+    // Ganti teks di bawah ini (misal jadi "v2.2") setiap kali kamu melakukan pembaruan web.
+    // Ini akan memicu popup muncul kembali ke semua user.
+    const VERSI_APLIKASI = "v1.1"; 
+
+    function cekUpdateBaru() {
+        const versiTersimpan = localStorage.getItem('rekapku_versi_terakhir');
+        
+        if (versiTersimpan !== VERSI_APLIKASI) {
+            document.getElementById('versi-update').innerText = VERSI_APLIKASI;
+            document.getElementById('modal-pengumuman').style.display = 'flex';
+            setTimeout(() => { document.getElementById('modal-pengumuman').style.opacity = '1'; }, 10);
+        }
+    }
+
+    function tutupPengumuman() {
+        localStorage.setItem('rekapku_versi_terakhir', VERSI_APLIKASI);
+        document.getElementById('modal-pengumuman').style.opacity = '0';
+        setTimeout(() => { document.getElementById('modal-pengumuman').style.display = 'none'; }, 300);
+    }
 
     // --- LOGIKA TEMA WARNA KUSTOM ---
     function openColorThemeModal() {
@@ -753,23 +777,6 @@
 
         const elSapaan = document.getElementById('teks-sapaan-login');
         if(elSapaan) elSapaan.innerText = sapaan;
-    }
-
-    // --- LOGIKA POPUP UPDATE ---
-    function checkAndShowUpdatePopup() {
-        const updateVersion = 'rekapku_update_v2'; 
-        if (!localStorage.getItem(updateVersion)) {
-            const popup = document.getElementById('update-popup');
-            setTimeout(() => {
-                popup.classList.add('show');
-            }, 1000);
-        }
-    }
-
-    function closeUpdatePopup() {
-        const popup = document.getElementById('update-popup');
-        popup.classList.remove('show');
-        localStorage.setItem('rekapku_update_v2', 'true'); 
     }
 
     // --- LOGIKA KATEGORI DINAMIS ---
@@ -944,7 +951,7 @@
                 document.getElementById('main-container').style.display = 'block';
                 setTimeout(() => document.getElementById('main-container').classList.add('show'), 50);
                 
-                checkAndShowUpdatePopup();
+                cekUpdateBaru(); // Memanggil popup catatan update jika ada versi baru
             }, 500);
             document.getElementById('display-username').innerText = currentUser;
             document.getElementById('f-tgl').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
