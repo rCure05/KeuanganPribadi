@@ -51,6 +51,32 @@
             --item-hover: rgba(51, 65, 85, 0.8);
         }
 
+        /* --- CSS TEMA WARNA KUSTOM --- */
+        body.theme-sporty {
+            --pastel-blue-grad: linear-gradient(135deg, rgba(239, 68, 68, 0.85) 0%, rgba(220, 38, 38, 0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(254, 226, 226, 0.85) 0%, rgba(252, 165, 165, 0.85) 100%);
+        }
+        body.dark-mode.theme-sporty {
+            --pastel-blue-grad: linear-gradient(135deg, rgba(153, 27, 27, 0.85) 0%, rgba(127, 29, 29, 0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(69, 10, 10, 0.85) 0%, rgba(127, 29, 29, 0.85) 100%);
+        }
+        body.theme-nusantara {
+            --pastel-blue-grad: linear-gradient(135deg, rgba(180, 83, 9, 0.85) 0%, rgba(146, 64, 14, 0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(254, 243, 199, 0.85) 0%, rgba(253, 230, 138, 0.85) 100%);
+        }
+        body.dark-mode.theme-nusantara {
+            --pastel-blue-grad: linear-gradient(135deg, rgba(113, 63, 18, 0.85) 0%, rgba(69, 26, 3, 0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(69, 26, 3, 0.85) 0%, rgba(120, 53, 15, 0.85) 100%);
+        }
+        body.theme-cyber {
+            --pastel-blue-grad: linear-gradient(135deg, rgba(16, 185, 129, 0.85) 0%, rgba(5, 150, 105, 0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(209, 250, 229, 0.85) 0%, rgba(167, 243, 208, 0.85) 100%);
+        }
+        body.dark-mode.theme-cyber {
+            --pastel-blue-grad: linear-gradient(135deg, rgba(6, 78, 59, 0.85) 0%, rgba(4, 120, 87, 0.85) 100%);
+            --active-wallet-grad: linear-gradient(135deg, rgba(6, 78, 59, 0.85) 0%, rgba(5, 150, 105, 0.85) 100%);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
@@ -75,6 +101,21 @@
         body.dark-mode .bubble-2 { background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(220, 38, 38, 0.2)); }
 
         .ani-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+
+        /* FLOATING DISCORD BUTTON */
+        .btn-discord-float {
+            position: fixed; bottom: 20px; left: 20px; width: 48px; height: 48px; 
+            background-color: #5865F2; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4); z-index: 10010; 
+            transition: var(--transition); text-decoration: none; border: 2px solid rgba(255,255,255,0.2);
+            animation: slideUpIn 0.5s ease-out forwards 0.5s; opacity: 0;
+        }
+        .btn-discord-float:hover {
+            transform: translateY(-5px) rotate(-8deg) scale(1.1);
+            box-shadow: 0 12px 30px rgba(88, 101, 242, 0.6);
+        }
+        .btn-discord-float:active { transform: scale(0.9); }
+        .btn-discord-float svg { width: 26px; height: 26px; fill: #FFFFFF; }
 
         /* LAYAR LOGIN & REGISTER */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; transition: opacity 0.5s ease, background-color 0.4s ease; }
@@ -117,31 +158,30 @@
         #main-container { transition: var(--transition); opacity: 0; transform: translateY(10px); }
         #main-container.show { opacity: 1; transform: translateY(0); }
 
-        /* HEADER */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
-        .header-title-area { flex: 1; min-width: 0; }
-        .header-title-area h1 { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 2px;}
-        .month-selector { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); font-size: 12px; font-weight: 600; color: #7C3AED; cursor: pointer; outline: none; padding: 6px 14px; border-radius: 12px; transition: var(--transition); backdrop-filter: blur(5px); }
-        body.dark-mode .month-selector { color: #C4B5FD; border-color: rgba(196, 181, 253, 0.3); }
-
-        .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-        .btn-theme, .btn-export { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 15px; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
-        .btn-theme:active, .btn-export:active { transform: scale(0.9); }
+        /* --- HEADER BARU YANG LEBIH RAPIH (TWO-TIER) --- */
+        .header-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 25px; }
         
-        .user-badge { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--text-main); height: 36px; padding: 0 6px 0 14px; border-radius: 30px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); border: 1px solid var(--card-border);}
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .header-top h1 { font-size: 26px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin: 0;}
         
-        .btn-logout { 
-            background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; width: 26px; height: 26px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; 
-            cursor: pointer; transition: var(--transition); margin: 0; padding: 0; flex-shrink: 0; 
-        }
+        .user-badge { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--text-main); height: 38px; padding: 0 6px 0 14px; border-radius: 30px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); border: 1px solid var(--card-border);}
+        .btn-logout { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: none; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; transition: var(--transition); margin: 0; padding: 0; flex-shrink: 0; }
         .btn-logout:hover, .btn-logout:active { background: #EF4444; color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+
+        .header-bottom { display: flex; justify-content: space-between; align-items: center; }
+        .month-selector { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); font-size: 13px; font-weight: 600; color: #7C3AED; cursor: pointer; outline: none; padding: 8px 16px; border-radius: 12px; transition: var(--transition); backdrop-filter: blur(5px); }
+        body.dark-mode .month-selector { color: #C4B5FD; border-color: rgba(196, 181, 253, 0.3); }
+        
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .btn-action-circle { background: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); color: var(--text-main); font-size: 16px; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); margin: 0; padding: 0;}
+        .btn-action-circle:active { transform: scale(0.9); }
+        /* ----------------------------------------------- */
 
         /* KARTU */
         .card { background-color: var(--card-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow-md); transition: var(--transition); border: 1px solid var(--card-border); }
         .card-header { font-size: 16px; font-weight: 700; margin-bottom: 18px; color: var(--text-main); }
         
-        .savings-highlight-card { background: var(--pastel-blue-grad); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 28px; padding: 25px; margin-bottom: 20px; color: #FFFFFF; position: relative; overflow: hidden; animation: floatOrganic 5s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.2); box-shadow: var(--shadow-md); }
+        .savings-highlight-card { background: var(--pastel-blue-grad); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 28px; padding: 25px; margin-bottom: 20px; color: #FFFFFF; position: relative; overflow: hidden; animation: floatOrganic 5s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.2); box-shadow: var(--shadow-md); transition: background 0.5s ease;}
         body:not(.dark-mode) .savings-highlight-card { color: #1E293B; } 
         .savings-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         
@@ -162,7 +202,7 @@
         .progress-bar { height: 10px; background: linear-gradient(90deg, #8B5CF6, #F59E0B); border-radius: 20px; width: 0%; transition: width 1.5s cubic-bezier(0.1, 0.8, 0.25, 1); position: relative; overflow: hidden;}
         .progress-text { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; opacity: 0.9; margin-top: 8px; }
 
-        .wallet-active-card { background: var(--active-wallet-grad); backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 20px 24px; margin-bottom: 20px; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.2); animation: floatOrganic 6s ease-in-out infinite 1s; box-shadow: var(--shadow-md); }
+        .wallet-active-card { background: var(--active-wallet-grad); backdrop-filter: var(--glass-blur); border-radius: 24px; padding: 20px 24px; margin-bottom: 20px; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.2); animation: floatOrganic 6s ease-in-out infinite 1s; box-shadow: var(--shadow-md); transition: background 0.5s ease;}
         body:not(.dark-mode) .wallet-active-card { color: #5C4A33; }
         .wallet-title { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
         .wallet-amount { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
@@ -182,6 +222,25 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; transition: var(--transition); margin: 0; padding: 0; flex-shrink: 0;
         }
         .btn-set-limit:hover { background: rgba(239, 68, 68, 0.2); transform: rotate(45deg) scale(1.1); }
+
+        /* CSS INSIGHT CERDAS */
+        .insight-card {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(59, 130, 246, 0.15));
+            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 16px; padding: 14px 18px; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: var(--shadow-md);
+            animation: slideUpIn 0.5s ease-out;
+        }
+        body.dark-mode .insight-card {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(37, 99, 235, 0.15));
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+        .insight-icon { font-size: 24px; animation: floatIcon 3s ease-in-out infinite; }
+        .insight-text { font-size: 12px; font-weight: 600; color: var(--text-main); line-height: 1.5; }
+        .insight-text span.bad { color: #EF4444; font-weight: 800; }
+        .insight-text span.good { color: #10B981; font-weight: 800; }
 
         /* FORM */
         .form-group { margin-bottom: 16px; position: relative; }
@@ -206,6 +265,11 @@
         .btn-hapus:active, .btn-edit:active { opacity: 1; transform: scale(1.2); }
         .btn-hapus:active { filter: grayscale(0); }
         .btn-edit:active { color: #3B82F6; opacity: 1; }
+        
+        /* CSS KHUSUS SEARCH BAR */
+        .search-container { position: relative; margin-bottom: 15px; }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-sub); font-size: 16px; pointer-events: none; }
+        .search-container input { padding-left: 45px; }
 
         /* MODAL (POPUP) GENERAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; transition: opacity 0.3s ease; }
@@ -258,16 +322,36 @@
         body.dark-mode .dev-popup-close { background: rgba(255,255,255,0.15); color: #F8FAFC; }
         .dev-popup-close:hover, .dev-popup-close:active { background: #EF4444; color: white; transform: scale(1.1); }
 
+        /* TEMA SELECTION BUTTONS IN MODAL */
+        .theme-option-btn {
+            width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 16px; border: 2px solid transparent;
+            background: var(--input-bg); color: var(--text-main); font-weight: 600; font-size: 13px;
+            display: flex; align-items: center; gap: 10px; cursor: pointer; transition: var(--transition);
+        }
+        .theme-option-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .theme-option-btn.active { border-color: #8B5CF6; background: var(--card-bg); }
+        .color-circle { width: 20px; height: 20px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.1); }
+        
+        .circle-default { background: linear-gradient(135deg, #A78BFA, #60A5FA); }
+        .circle-sporty { background: linear-gradient(135deg, #EF4444, #DC2626); }
+        .circle-nusantara { background: linear-gradient(135deg, #B45309, #92400E); }
+        .circle-cyber { background: linear-gradient(135deg, #10B981, #059669); }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
         @media (max-width: 430px) {
-            .header-title-area h1 { font-size: 20px; }
-            .month-selector { max-width: 140px; font-size: 11px; padding: 6px 10px; }
-            .btn-theme, .btn-export { width: 34px; height: 34px; font-size: 14px; }
+            .header-top h1 { font-size: 22px; }
             .user-badge { padding: 0 6px 0 10px; font-size: 11px; gap: 6px; height: 34px; }
             .btn-logout { width: 24px; height: 24px; font-size: 10px; }
-            #display-username { display: inline-block; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            #display-username { display: inline-block; max-width: 65px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            
+            .month-selector { max-width: 150px; font-size: 11px; padding: 6px 12px; }
+            .btn-action-circle { width: 34px; height: 34px; font-size: 14px; }
+            
             .toast-container { bottom: 20px; left: 20px; right: 20px; align-items: center; }
             .toast { width: 100%; justify-content: flex-start; transform: translateY(120%); }
             .toast.show { transform: translateY(0); }
+            .btn-discord-float { width: 44px; height: 44px; bottom: 20px; left: 15px; }
+            .btn-discord-float svg { width: 22px; height: 22px; }
         }
 
     </style>
@@ -277,36 +361,40 @@
 <div class="bg-bubble bubble-1"></div>
 <div class="bg-bubble bubble-2"></div>
 
-<!-- TOAST CONTAINER -->
+<a href="https://discord.gg/yMuR3cwDtw" target="_blank" class="btn-discord-float" title="Laporkan Bug (Discord)">
+    <svg viewBox="0 0 127.14 96.36">
+        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c0,0,0.04-.06,0.04-.06C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.33,46,96.22,53,91.17,65.69,84.69,65.69Z"/>
+    </svg>
+</a>
+
 <div id="toast-container" class="toast-container"></div>
 
-<!-- POPUP UPDATE -->
 <div id="update-popup" class="dev-popup">
     <div class="dev-popup-icon">🚀</div>
     <div class="dev-popup-content">
-        <div class="dev-popup-title">Update RekapKu v1.0!</div>
+        <div class="dev-popup-title">Update RekapKu v2.0!</div>
         <div class="dev-popup-text">
             Ada fitur baru yang bisa kamu nikmati:
             <ul>
                 <li>Dropdown kategori transaksi dinamis.</li>
                 <li>Tabungan kini otomatis memotong dompet.</li>
                 <li>Tampilan tata letak lebih rapi & presisi.</li>
+                <li>Opsi warna yang beragam.</li>
+                <li>Ai Assistant untuk mengukur pengeluaranmu.</li>
+                <li>Tambahan fitur pencarian transaksi.</li>
             </ul>
         </div>
     </div>
     <button class="dev-popup-close" onclick="closeUpdatePopup()">✖</button>
 </div>
 
-<!-- LAYAR AUTENTIKASI -->
 <div id="login-overlay">
     <div class="login-box" id="auth-box">
         
-        <!-- ELEMENT AVATAR 3D -->
         <div class="auth-avatar-container">
             <span class="auth-avatar-emoji" id="auth-avatar-emoji">👋</span>
         </div>
         
-        <!-- BAGIAN LOGIN -->
         <div id="view-login">
             <h2 id="teks-sapaan-login" style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Selamat Datang!</h2>
             <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Masuk untuk melihat rekap keuangan Anda.</p>
@@ -320,7 +408,6 @@
             <p class="auth-toggle-text">Belum punya akun? <a class="auth-toggle-link" onclick="toggleAuthView('register')">Daftar di sini</a></p>
         </div>
 
-        <!-- BAGIAN REGISTER -->
         <div id="view-register" style="display: none;">
             <h2 style="font-size: 26px; margin-bottom: 10px; font-weight: 800;">Buat Akun Baru ✨</h2>
             <p style="font-size:13px; color:var(--text-sub); margin-bottom:25px; line-height: 1.6;">Buat akun untuk akses dashboard rekapanmu.</p>
@@ -334,6 +421,29 @@
             <p class="auth-toggle-text">Sudah punya akun? <a class="auth-toggle-link" onclick="toggleAuthView('login')">Masuk di sini</a></p>
         </div>
 
+    </div>
+</div>
+
+<div id="color-theme-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>🎨 Pilih Tema Warna</h3>
+            <button class="btn-close" onclick="closeColorThemeModal()">✖</button>
+        </div>
+        <div class="modal-body">
+            <button class="theme-option-btn active" id="btn-theme-default" onclick="changeColorTheme('default')">
+                <span class="color-circle circle-default"></span> Default (Ungu-Biru)
+            </button>
+            <button class="theme-option-btn" id="btn-theme-sporty" onclick="changeColorTheme('sporty')">
+                <span class="color-circle circle-sporty"></span> Merah Sporty
+            </button>
+            <button class="theme-option-btn" id="btn-theme-nusantara" onclick="changeColorTheme('nusantara')">
+                <span class="color-circle circle-nusantara"></span> Bumi Nusantara
+            </button>
+            <button class="theme-option-btn" id="btn-theme-cyber" onclick="changeColorTheme('cyber')">
+                <span class="color-circle circle-cyber"></span> Neon Cyber
+            </button>
+        </div>
     </div>
 </div>
 
@@ -439,20 +549,26 @@
 
 <div class="container ani-fade-in" id="main-container" style="display: none;">
     
-    <div class="header">
-        <div class="header-title-area">
-            <h1>✨ RekapKu</h1>
-            <button id="btn-main-filter" class="month-selector" onclick="openFilterModal()" title="Pilih Rentang Waktu">Memuat...</button>
-        </div>
+    <div class="header-container">
         
-        <div class="header-actions">
-            <button id="btn-export" class="btn-export" onclick="openExcelModal()" title="Unduh Data Excel">📄</button>
-            <button id="btn-theme" class="btn-theme" onclick="toggleTheme()" title="Ganti Tema">🌙</button>
+        <div class="header-top">
+            <h1>✨ RekapKu</h1>
             <div class="user-badge">
                 👤 <span id="display-username">User</span>
                 <button class="btn-logout" onclick="keluarDashboard()" title="Keluar dari Akun">🚪</button>
             </div>
         </div>
+        
+        <div class="header-bottom">
+            <button id="btn-main-filter" class="month-selector" onclick="openFilterModal()" title="Pilih Rentang Waktu">Memuat...</button>
+            
+            <div class="header-actions">
+                <button id="btn-color-theme" class="btn-action-circle" onclick="openColorThemeModal()" title="Pilih Tema Warna">🎨</button>
+                <button id="btn-export" class="btn-action-circle" onclick="openExcelModal()" title="Unduh Data Excel">📄</button>
+                <button id="btn-theme" class="btn-action-circle" onclick="toggleTheme()" title="Ganti Mode Gelap/Terang">🌙</button>
+            </div>
+        </div>
+        
     </div>
 
     <div class="savings-highlight-card">
@@ -496,6 +612,11 @@
         </div>
     </div>
 
+    <div class="insight-card" id="card-insight" style="display: none;">
+        <div class="insight-icon">🤖</div>
+        <div class="insight-text" id="teks-insight">Menganalisis data...</div>
+    </div>
+
     <div class="card" id="card-chart">
         <div class="card-header">Statistik Keuangan 📊</div>
         <div style="position: relative; height: 180px; width: 100%; display: flex; justify-content: center; align-items: center;">
@@ -518,8 +639,7 @@
             <div class="form-group">
                 <label>Kategori</label>
                 <select id="f-ket" required>
-                    <!-- Opsi akan diisi otomatis oleh Javascript -->
-                </select>
+                    </select>
             </div>
             
             <div class="form-group"><label>Nominal</label><input type="text" id="f-nom" placeholder="Contoh: 50.000" required inputmode="numeric"></div>
@@ -534,6 +654,12 @@
 
     <div class="card">
         <div class="card-header">Riwayat Transaksi ⏳</div>
+        
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-history" placeholder="Cari transaksi (Gaji, Kopi...)" onkeyup="cariRiwayat()">
+        </div>
+
         <div id="list-data"><p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Memuat data...</p></div>
     </div>
 </div>
@@ -547,6 +673,7 @@
     const metaThemeColor = document.getElementById('meta-theme-color');
     let chartInstance = null;
     let allData = []; 
+    let currentViewData = []; 
     let currentUser = localStorage.getItem('rekapku_user');
     
     let editTargetId = null;
@@ -554,6 +681,60 @@
     let activeFilterMonth = '';
     let activeFilterStart = '';
     let activeFilterEnd = '';
+
+    // --- LOGIKA TEMA WARNA KUSTOM ---
+    function openColorThemeModal() {
+        document.getElementById('color-theme-modal').style.display = 'flex';
+        setTimeout(() => { document.getElementById('color-theme-modal').style.opacity = '1'; }, 10);
+        updateActiveThemeButton(localStorage.getItem('rekapku_color_theme') || 'default');
+    }
+
+    function closeColorThemeModal() {
+        document.getElementById('color-theme-modal').style.opacity = '0';
+        setTimeout(() => { document.getElementById('color-theme-modal').style.display = 'none'; }, 300);
+    }
+
+    function updateActiveThemeButton(themeName) {
+        document.querySelectorAll('.theme-option-btn').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById(`btn-theme-${themeName}`);
+        if(activeBtn) activeBtn.classList.add('active');
+    }
+
+    function changeColorTheme(themeName) {
+        document.body.classList.remove('theme-sporty', 'theme-nusantara', 'theme-cyber');
+        
+        if(themeName !== 'default') {
+            document.body.classList.add(`theme-${themeName}`);
+        }
+        
+        localStorage.setItem('rekapku_color_theme', themeName);
+        updateActiveThemeButton(themeName);
+        
+        setTimeout(() => {
+            closeColorThemeModal();
+            showToast("Tema warna berhasil diubah!", "success");
+        }, 300);
+    }
+
+    function initTheme() {
+        if(localStorage.getItem('rekapku_theme') === 'dark') {
+            document.body.classList.add('dark-mode'); btnTheme.innerText = '☀️'; updateMetaColor(true);
+        }
+        
+        const savedColorTheme = localStorage.getItem('rekapku_color_theme');
+        if(savedColorTheme && savedColorTheme !== 'default') {
+            document.body.classList.add(`theme-${savedColorTheme}`);
+        }
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('rekapku_theme', isDark ? 'dark' : 'light');
+        btnTheme.innerText = isDark ? '☀️' : '🌙'; updateMetaColor(isDark);
+        if(chartInstance) { chartInstance.options.plugins.legend.labels.color = isDark ? '#F8FAFC' : '#1E293B'; chartInstance.update(); }
+    }
+    initTheme();
 
     // --- LOGIKA SAPAAN WAKTU DINAMIS ---
     function setSapaanWaktu() {
@@ -576,13 +757,12 @@
 
     // --- LOGIKA POPUP UPDATE ---
     function checkAndShowUpdatePopup() {
-        // Ganti 'v2' menjadi 'v3' jika nanti ada update besar lagi
         const updateVersion = 'rekapku_update_v2'; 
         if (!localStorage.getItem(updateVersion)) {
             const popup = document.getElementById('update-popup');
             setTimeout(() => {
                 popup.classList.add('show');
-            }, 1000); // Muncul 1 detik setelah berhasil login
+            }, 1000);
         }
     }
 
@@ -657,11 +837,11 @@
         if (view === 'register') {
             document.getElementById('view-login').style.display = 'none';
             document.getElementById('view-register').style.display = 'block';
-            avatarEmoji.innerText = '✨'; // Ubah emoji saat mau daftar
+            avatarEmoji.innerText = '✨';
         } else {
             document.getElementById('view-register').style.display = 'none';
             document.getElementById('view-login').style.display = 'block';
-            avatarEmoji.innerText = '👋'; // Kembalikan emoji saat login
+            avatarEmoji.innerText = '👋';
         }
     }
 
@@ -792,21 +972,6 @@
     }
 
     function updateMetaColor(isDark) { metaThemeColor.setAttribute("content", isDark ? "#0F172A" : "#F8FAFC"); }
-
-    function initTheme() {
-        if(localStorage.getItem('rekapku_theme') === 'dark') {
-            document.body.classList.add('dark-mode'); btnTheme.innerText = '☀️'; updateMetaColor(true);
-        }
-    }
-
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('rekapku_theme', isDark ? 'dark' : 'light');
-        btnTheme.innerText = isDark ? '☀️' : '🌙'; updateMetaColor(isDark);
-        if(chartInstance) { chartInstance.options.plugins.legend.labels.color = isDark ? '#F8FAFC' : '#1E293B'; chartInstance.update(); }
-    }
-    initTheme();
 
     const rp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
     
@@ -948,6 +1113,46 @@
         }
     };
 
+    function updateInsight() {
+        const cardInsight = document.getElementById('card-insight');
+        const teksInsight = document.getElementById('teks-insight');
+
+        if (activeFilterMode !== 'month' || !activeFilterMonth) {
+            cardInsight.style.display = 'none';
+            return;
+        }
+
+        let [year, month] = activeFilterMonth.split('-');
+        let prevDate = new Date(year, parseInt(month) - 1 - 1, 1); 
+        let prevMonthStr = prevDate.getFullYear() + '-' + String(prevDate.getMonth() + 1).padStart(2, '0');
+
+        let currentData = allData.filter(x => x.tanggal.startsWith(activeFilterMonth));
+        let prevData = allData.filter(x => x.tanggal.startsWith(prevMonthStr));
+
+        let keluarCur = 0, keluarPrev = 0;
+        currentData.forEach(x => { if (x.jenis === 'Pengeluaran') keluarCur += Number(x.nominal); });
+        prevData.forEach(x => { if (x.jenis === 'Pengeluaran') keluarPrev += Number(x.nominal); });
+
+        cardInsight.style.display = 'flex';
+
+        if (keluarPrev === 0 && keluarCur > 0) {
+            teksInsight.innerHTML = "Belum ada rekap pengeluaran di bulan lalu untuk dibandingkan. Semangat mencatat! 📝";
+        } else if (keluarPrev === 0 && keluarCur === 0) {
+            teksInsight.innerHTML = "Belum ada aktivitas pengeluaran di bulan ini. Yuk, kelola uangmu dengan baik! 🚀";
+        } else {
+            let diff = keluarCur - keluarPrev;
+            let percent = Math.abs((diff / keluarPrev) * 100).toFixed(1);
+
+            if (diff > 0) {
+                teksInsight.innerHTML = `Analisis: Pengeluaranmu bulan ini <span class="bad">naik ${percent}%</span> dibanding bulan lalu. Waktunya lebih berhemat! 🚨`;
+            } else if (diff < 0) {
+                teksInsight.innerHTML = `Hebat! Pengeluaranmu bulan ini <span class="good">turun ${percent}%</span> dari bulan lalu. Terus pertahankan! 🎉`;
+            } else {
+                teksInsight.innerHTML = `Pengeluaranmu bulan ini stabil, persis sama dengan bulan sebelumnya. ⚖️`;
+            }
+        }
+    }
+
     function renderChart(masuk, keluar, tabung) {
         const ctx = document.getElementById('myChart').getContext('2d');
         const isDark = document.body.classList.contains('dark-mode');
@@ -1014,40 +1219,14 @@
         applyFilter();
     }
 
-    function applyFilter() {
+    function renderHistoryList(dataToRender) {
         const listEl = document.getElementById('list-data');
-        const btnFilter = document.getElementById('btn-main-filter');
-        const labelBulan = document.getElementById('label-bulan-dompet');
-        
-        let filteredData = [];
-        let labelText = '';
-
-        if (activeFilterMode === 'month') {
-            filteredData = allData.filter(x => x.tanggal.startsWith(activeFilterMonth));
-            const dateObj = new Date(activeFilterMonth + '-01'); 
-            labelText = dateObj.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
-        } else {
-            filteredData = allData.filter(x => x.tanggal >= activeFilterStart && x.tanggal <= activeFilterEnd);
-            const ds = new Date(activeFilterStart).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
-            const de = new Date(activeFilterEnd).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
-            labelText = `${ds} - ${de}`;
-        }
-        
-        btnFilter.innerText = labelText + ' ▾';
-        labelBulan.innerText = labelText;
-
-        let tMasuk=0, tKeluar=0, tTabungBulanIni=0, tTabungAllTime=0; 
-        allData.forEach(x => { if(x.jenis === 'Tabungan') tTabungAllTime += Number(x.nominal); });
-
         listEl.innerHTML = '';
-        if (filteredData.length === 0) {
-            listEl.innerHTML = `<p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Belum ada riwayat pada periode ${labelText}.</p>`;
+        
+        if (dataToRender.length === 0) {
+            listEl.innerHTML = `<p style="text-align:center; font-size:12px; color:var(--text-sub); padding: 15px;">Tidak ada transaksi ditemukan.</p>`;
         } else {
-            filteredData.forEach((x, i) => {
-                if(x.jenis === 'Pemasukan') tMasuk += Number(x.nominal); 
-                else if(x.jenis === 'Pengeluaran') tKeluar += Number(x.nominal); 
-                else if(x.jenis === 'Tabungan') tTabungBulanIni += Number(x.nominal);
-                
+            dataToRender.forEach((x, i) => {
                 let ui = getUI(x.jenis), dStr = new Date(x.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
                 listEl.innerHTML += `
                     <div class="list-item" style="animation-delay: ${i*30}ms;">
@@ -1064,12 +1243,53 @@
                     </div>`;
             });
         }
+    }
+
+    function cariRiwayat() {
+        const query = document.getElementById('search-history').value.toLowerCase();
+        const filtered = currentViewData.filter(x => x.kategori.toLowerCase().includes(query));
+        renderHistoryList(filtered);
+    }
+
+    function applyFilter() {
+        const btnFilter = document.getElementById('btn-main-filter');
+        const labelBulan = document.getElementById('label-bulan-dompet');
+        let labelText = '';
+
+        if (activeFilterMode === 'month') {
+            currentViewData = allData.filter(x => x.tanggal.startsWith(activeFilterMonth));
+            const dateObj = new Date(activeFilterMonth + '-01'); 
+            labelText = dateObj.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
+        } else {
+            currentViewData = allData.filter(x => x.tanggal >= activeFilterStart && x.tanggal <= activeFilterEnd);
+            const ds = new Date(activeFilterStart).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+            const de = new Date(activeFilterEnd).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+            labelText = `${ds} - ${de}`;
+        }
+        
+        btnFilter.innerText = labelText + ' ▾';
+        labelBulan.innerText = labelText;
+
+        document.getElementById('search-history').value = '';
+
+        let tMasuk=0, tKeluar=0, tTabungBulanIni=0, tTabungAllTime=0; 
+        
+        allData.forEach(x => { if(x.jenis === 'Tabungan') tTabungAllTime += Number(x.nominal); });
+        
+        currentViewData.forEach(x => {
+            if(x.jenis === 'Pemasukan') tMasuk += Number(x.nominal); 
+            else if(x.jenis === 'Pengeluaran') tKeluar += Number(x.nominal); 
+            else if(x.jenis === 'Tabungan') tTabungBulanIni += Number(x.nominal);
+        });
+
+        renderHistoryList(currentViewData);
 
         animateNumber('t-masuk', tMasuk); 
         animateNumber('t-keluar', tKeluar);
         animateNumber('t-dompet-aktif', (tMasuk - tKeluar - tTabungBulanIni)); 
         animateNumber('t-tabung', tTabungAllTime); 
         updateProgress(tTabungAllTime, tKeluar); 
+        updateInsight(); 
         renderChart(tMasuk, tKeluar, tTabungBulanIni);
     }
 
@@ -1237,7 +1457,6 @@
         }
     }
 
-    // Eksekusi fungsi Sapaan Waktu saat script pertama kali jalan
     setSapaanWaktu();
     cekLogin();
 </script>
