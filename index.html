@@ -371,9 +371,8 @@
             <div style="font-size: 13px; line-height: 1.6; color: var(--text-main); margin-bottom: 20px;">
                 Halo! Di pembaruan kali ini, ada penyesuaian baru untukmu:
                 <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-sub);">
+                    <li><strong>Kategori Custom:</strong> Kini kamu bisa menuliskan nama kategori sendiri jika memilih "Lainnya" saat mencatat transaksi! ✨</li>
                     <li><strong>Tombol Bantuan:</strong> Tersedia contact discord di bawah halaman, agar pengaduan eror dan bug bisa langsung teratasi.</li>
-                    <li><strong>UI Lebih Rapih:</strong> Tampilan menjadi lebih ringan dan kompatible di segala jenis handpone.</li>
-                    <li><strong>Sistem Pengumuman:</strong> Popup catatan update terbaru untuk semua update yang diperbarui!</li>
                 </ul>
                 <p style="margin-top: 10px;">Terima kasih sudah menggunakan RekapKu! ❤️</p>
             </div>
@@ -632,8 +631,13 @@
             
             <div class="form-group">
                 <label>Kategori</label>
-                <select id="f-ket" required>
+                <select id="f-ket" onchange="cekKategoriCustom()" required>
                     </select>
+            </div>
+            
+            <div class="form-group" id="grup-ket-custom" style="display: none; animation: slideUpIn 0.3s ease-out;">
+                <label>Tulis Kategori Custom ✨</label>
+                <input type="text" id="f-ket-custom" placeholder="Contoh: Beli Kado, Servis Motor...">
             </div>
             
             <div class="form-group"><label>Nominal</label><input type="text" id="f-nom" placeholder="Contoh: 50.000" required inputmode="numeric"></div>
@@ -667,7 +671,9 @@
         </a>
     </div>
 
-</div> <script>
+</div> 
+
+<script>
     const supabaseUrl = 'https://jgjixdbnbzfpnvooczew.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impnaml4ZGJuYnpmcG52b29jemV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NTQ0OTEsImV4cCI6MjA5NjAzMDQ5MX0.npVGc6YPMWQYW8q1CvGDDluMlNsQarAtql433icPdx0';
     const supa = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -686,13 +692,12 @@
     let activeFilterEnd = '';
 
     // === PENGATURAN VERSI UPDATE ===
-    // Ganti teks di bawah ini (misal jadi "v2.2") setiap kali kamu melakukan pembaruan web.
-    // Ini akan memicu popup muncul kembali ke semua user.
-    const VERSI_APLIKASI = "v1.1"; 
+    const VERSI_APLIKASI = "v1.1"; // Saya ubah v1.2 agar popup info update kategori custom muncul
 
     function cekUpdateBaru() {
-        const versiTersimpan = localStorage.getItem('rekapku_versi_terakhir');
-        
+        // Ganti localStorage menjadi sessionStorage
+        const versiTersimpan = sessionStorage.getItem('rekapku_versi_terakhir');
+    
         if (versiTersimpan !== VERSI_APLIKASI) {
             document.getElementById('versi-update').innerText = VERSI_APLIKASI;
             document.getElementById('modal-pengumuman').style.display = 'flex';
@@ -701,7 +706,9 @@
     }
 
     function tutupPengumuman() {
-        localStorage.setItem('rekapku_versi_terakhir', VERSI_APLIKASI);
+        // Ganti localStorage menjadi sessionStorage
+        sessionStorage.setItem('rekapku_versi_terakhir', VERSI_APLIKASI);
+    
         document.getElementById('modal-pengumuman').style.opacity = '0';
         setTimeout(() => { document.getElementById('modal-pengumuman').style.display = 'none'; }, 300);
     }
@@ -805,8 +812,27 @@
         if (selectedValue) {
             katSelect.value = selectedValue;
         }
+        
+        cekKategoriCustom(); // Panggil fungsi cek custom setiap kali update opsi
     }
     updateKategoriOptions();
+
+    // === FITUR KATEGORI CUSTOM ===
+    function cekKategoriCustom() {
+        const val = document.getElementById('f-ket').value;
+        const customGroup = document.getElementById('grup-ket-custom');
+        const customInput = document.getElementById('f-ket-custom');
+        
+        // Jika teks yang dipilih mengandung kata "Lainnya"
+        if (val.includes('Lainnya')) {
+            customGroup.style.display = 'block';
+            customInput.required = true;
+        } else {
+            customGroup.style.display = 'none';
+            customInput.required = false;
+            customInput.value = '';
+        }
+    }
 
     // --- FUNGSI TOAST NOTIFICATION ---
     function showToast(message, type = 'success') {
@@ -1124,6 +1150,7 @@
         const cardInsight = document.getElementById('card-insight');
         const teksInsight = document.getElementById('teks-insight');
 
+        // Robot disembunyikan jika filter menggunakan "Rentang Waktu"
         if (activeFilterMode !== 'month' || !activeFilterMonth) {
             cardInsight.style.display = 'none';
             return;
@@ -1142,22 +1169,34 @@
 
         cardInsight.style.display = 'flex';
 
-        if (keluarPrev === 0 && keluarCur > 0) {
-            teksInsight.innerHTML = "Belum ada rekap pengeluaran di bulan lalu untuk dibandingkan. Semangat mencatat! 📝";
-        } else if (keluarPrev === 0 && keluarCur === 0) {
-            teksInsight.innerHTML = "Belum ada aktivitas pengeluaran di bulan ini. Yuk, kelola uangmu dengan baik! 🚀";
+        let pesan = "";
+
+        if (keluarPrev === 0 && keluarCur === 0) {
+            pesan = "Belum ada catatan pengeluaran di bulan ini. Yuk mulai catat keuanganmu agar bisa dianalisis! 🤖";
+        } else if (keluarPrev === 0 && keluarCur > 0) {
+            // Perbaikan: Robot tetap lapor angka meskipun bulan lalu kosong
+            pesan = `Pengeluaranmu bulan ini sejauh ini <b>${rp(keluarCur)}</b>. Sayangnya, tidak ada data bulan lalu untuk dibandingkan. Terus catat ya! 🤖📝`;
         } else {
+            // Perbaikan: Robot memberitahu selisih tepat nominal rupiahnya
             let diff = keluarCur - keluarPrev;
             let percent = Math.abs((diff / keluarPrev) * 100).toFixed(1);
 
             if (diff > 0) {
-                teksInsight.innerHTML = `Analisis: Pengeluaranmu bulan ini <span class="bad">naik ${percent}%</span> dibanding bulan lalu. Waktunya lebih berhemat! 🚨`;
+                pesan = `Pengeluaran bulan ini <span class="bad">naik ${percent}%</span> (<b>+${rp(diff)}</b>) dibanding bulan lalu. Waktunya lebih berhemat! 🤖🚨`;
             } else if (diff < 0) {
-                teksInsight.innerHTML = `Hebat! Pengeluaranmu bulan ini <span class="good">turun ${percent}%</span> dari bulan lalu. Terus pertahankan! 🎉`;
+                pesan = `Hebat! Pengeluaran bulan ini <span class="good">turun ${percent}%</span> (<b>-${rp(Math.abs(diff))}</b>) dari bulan lalu. Pertahankan! 🤖🎉`;
             } else {
-                teksInsight.innerHTML = `Pengeluaranmu bulan ini stabil, persis sama dengan bulan sebelumnya. ⚖️`;
+                pesan = `Pengeluaranmu bulan ini stabil, sama persis dengan bulan lalu (<b>${rp(keluarCur)}</b>). 🤖⚖️`;
             }
         }
+
+        // Efek transisi halus saat teks berganti
+        teksInsight.style.opacity = '0';
+        setTimeout(() => {
+            teksInsight.innerHTML = pesan;
+            teksInsight.style.opacity = '1';
+            teksInsight.style.transition = 'opacity 0.4s ease';
+        }, 150);
     }
 
     function renderChart(masuk, keluar, tabung) {
@@ -1377,7 +1416,7 @@
         if(!data) return;
         
         document.getElementById('f-jenis').value = data.jenis;
-        updateKategoriOptions(data.kategori); 
+        updateKategoriOptions(data.kategori); // Otomatis menambah & memilih custom kategori jika belum ada di list
         
         document.getElementById('f-nom').value = new Intl.NumberFormat('id-ID').format(data.nominal);
         document.getElementById('f-tgl').value = data.tanggal;
@@ -1400,6 +1439,10 @@
         document.getElementById('f-nom').value = '';
         document.getElementById('f-tgl').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
         
+        // Sembunyikan field custom input
+        document.getElementById('grup-ket-custom').style.display = 'none';
+        document.getElementById('f-ket-custom').value = '';
+        
         const btn = document.getElementById('btn-save');
         btn.innerText = 'Simpan Transaksi 🚀';
         btn.style.background = 'linear-gradient(135deg, #8B5CF6, #6D28D9)';
@@ -1413,7 +1456,19 @@
         btn.innerText = 'Memproses... ⏳'; btn.disabled = true;
         
         const j = document.getElementById('f-jenis').value;
-        const k = document.getElementById('f-ket').value;
+        let k = document.getElementById('f-ket').value;
+        
+        // === LOGIKA PENYIMPANAN KATEGORI CUSTOM ===
+        if (k.includes('Lainnya')) {
+            k = document.getElementById('f-ket-custom').value.trim();
+            if(!k) { // Cegah jika input teks kosong
+                showToast("Kategori custom tidak boleh kosong!", "error");
+                btn.innerText = editTargetId ? 'Update Transaksi 🔄' : 'Simpan Transaksi 🚀'; 
+                btn.disabled = false;
+                return;
+            }
+        }
+        
         const nText = document.getElementById('f-nom').value;
         const n = nText.replace(/\./g, ''); 
         const t = document.getElementById('f-tgl').value;
